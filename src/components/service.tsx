@@ -18,7 +18,7 @@ export function Service() {
 
   return (
     <div
-      className="h-[400vh]  w-full  relative pt-40 overflow-clip"
+      className="h-[400vh]   w-full  relative pt-40 overflow-clip"
       ref={ref}
     >
       <GoogleGeminiEffect

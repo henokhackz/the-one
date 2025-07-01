@@ -4,6 +4,8 @@ import { cn } from "@/lib/utils";
 import { motion, MotionValue } from "motion/react";
 import Image from "next/image";
 import React from "react";
+import { StackCard } from "../stack-card";
+import StackIcon from "tech-stack-icons";
 
 const transition = {
   duration: 0,
@@ -33,15 +35,23 @@ export const GoogleGeminiEffect = ({
     <div className={cn("sticky top-20 z-10", className)}>
       <div className="relative flex flex-col md:flex-row items-center justify-between gap-4 lg:gap-12  w-full px-4 md:px-16">
         {/* Left Services */}
-        <div className="w-full md:w-1/4 flex flex-col md:items-end">
-          <ServiceCard
-            title="Frontend"
-            description="Modern web interface using React and TypeScript."
-          />
-          <ServiceCard
-            title="UI/UX"
-            description="Clean design and great user experience."
-          />
+        <div className="w-full md:w-1/4 flex flex-col md:items-end space-y-6">
+        <StackCard
+          title="Frontend Developement"
+          description="Modern, fast, and responsive UI with Next.js and Tailwind CSS."
+          icons={[<StackIcon name="nextjs" className="w-10 h-10 p-1 text-white bg-white rounded-full" />, <StackIcon name="react" className="w-10 h-10"/>, <StackIcon name="tailwindcss" className="w-10 h-10" />, <StackIcon name="shadcnui" className="w-10 h-10"/>]}
+/>    
+<StackCard
+  title="Backend Development"
+  description="Powerful and scalable APIs with Node.js, Prisma, and advanced architecture."
+  icons={[
+    <StackIcon name="nodejs" className="w-10 h-10" />,
+    <StackIcon name="prisma" className="w-10 h-10" />,
+    <StackIcon name="express" className="w-10 h-10" />,
+    <StackIcon name="nestjs" className="w-10 h-10" />,
+  ]}
+/>
+          
         </div>
 
         {/* Center SVG and Image */}
@@ -109,15 +119,27 @@ export const GoogleGeminiEffect = ({
         </div>
 
         {/* Right Services */}
-        <div className="w-full md:w-1/4 flex flex-col md:items-start">
-          <ServiceCard
-            title="Backend"
-            description="Robust and scalable server-side development."
-          />
-          <ServiceCard
-            title="Database"
-            description="Efficient and reliable data storage solutions."
-          />
+        <div className="w-full md:w-1/4 flex flex-col md:items-start space-y-6">
+        <StackCard
+  title="Database Management"
+  description="Reliable data modeling and fast querying with PostgreSQL and SQLite."
+  icons={[
+    <StackIcon name="postgresql" className="w-10 h-10" />,
+    <StackIcon name="sqlite" className="w-10 h-10" />,
+    <StackIcon name="planetscale" className="w-10 h-10" />,
+    <StackIcon name="mysql" className="w-10 h-10" />,
+  ]}
+/>
+<StackCard
+  title="UI/UX Design"
+  description="User-centered interfaces crafted with Figma and design systems."
+  icons={[
+    <StackIcon name="figma" className="w-10 h-10" />,
+    <StackIcon name="lucide" className="w-10 h-10" />,
+    <StackIcon name="framer" className="w-10 h-10" />,
+    <StackIcon name="css" className="w-10 h-10" />,
+  ]}
+/>
         </div>
       </div>
     </div>

@@ -40,7 +40,7 @@ export function Navbar() {
   ];
 
   return (
-    <div className="relative w-full z-50">
+    <div className="relative w-full z-50 ">
       <FloatingNav navItems={navItems} />
     </div>
   );
