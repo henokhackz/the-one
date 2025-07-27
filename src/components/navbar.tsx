@@ -39,10 +39,10 @@ const Navbar = () => {
 
       <div className="relative z-10 flex flex-wrap justify-between items-center gap-4">
         {/* Logo */}
-        <div className="text-2xl font-extrabold bg-gradient-to-r from-fuchsia-500 to-cyan-500 bg-clip-text text-transparent">
+        <Link href="/" className="text-2xl font-extrabold bg-gradient-to-r from-fuchsia-500 to-cyan-500 bg-clip-text text-transparent">
           <span>L</span>
           <span>P</span>
-        </div>
+        </Link>
 
         {/* Nav links */}
         <nav className=" gap-4 flex-wrap hidden md:flex">

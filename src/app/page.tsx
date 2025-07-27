@@ -8,14 +8,13 @@ import React from 'react'
 
 const Home = () => {
   return (
-    <div className='w-full'>
+    <div className='w-full lg:px-8 lg:py-16 p-3 space-y-12'>
       <Hero/>
       <Technologies/>
       <Projects/>
       <Experience/>
       <Blogs/>
       <CTA/>
-    
     </div>
   )
 }

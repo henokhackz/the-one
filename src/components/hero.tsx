@@ -7,11 +7,10 @@ import { FaUpwork } from "react-icons/fa6";
 
 export function Hero() {
   return (
-    <section className="relative flex flex-col md:flex-row items-center justify-between gap-12 min-h-screen px-6 py-12 bg-gray-100 dark:bg-slate-900 overflow-hidden">
+    <section className="relative mt-6 flex flex-col md:flex-row items-center justify-between gap-12 min-h-screen  bg-gray-100 dark:bg-slate-900 overflow-hidden">
 
       {/* 🔙 Background Layer */}
       <div className="absolute inset-0 z-0 bg-[url(/dot-background.png)] bg-cover bg-center opacity-10 dark:opacity-20 pointer-events-none" />
-
       {/* ✨ Main Content */}
       <div className="relative z-10 flex flex-col md:flex-row items-center justify-between w-full gap-12">
         
@@ -76,7 +75,7 @@ export function Hero() {
         </div>
 
         {/* 🖼️ Hero Image */}
-        <div className="relative w-full lg:w-1/2 hidden lg:flex justify-center">
+        <div className="relative w-full lg:w-1/2 flex justify-center">
           <div className="rounded-2xl max-w-full  max-h-full   items-center justify-center flex">
            <img src='/hero.png' className="h-full w-full rounded-full  object-cover "  alt="lantumo profile picture h-full"/>
           </div>

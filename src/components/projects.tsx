@@ -16,12 +16,12 @@ export function Projects() {
     : allProjects.filter((p) => p.featured)
 
   return (
-    <section className="w-full px-8 py-16 bg-gray-100 dark:bg-slate-900" id="projects">
-      <h2 className="text-3xl font-extrabold text-center mb-12 bg-gradient-to-r from-fuchsia-500 to-cyan-500 bg-clip-text text-transparent">
+    <section className="w-full  bg-gray-100 dark:bg-slate-900" id="projects">
+      <h2 className="text-xl lg:text-3xl font-extrabold text-center mb-12 bg-gradient-to-r from-fuchsia-500 to-cyan-500 bg-clip-text text-transparent">
         Featured Projects
       </h2>
 
-      <div className="grid gap-10 md:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-10 md:grid-cols-2 xl:grid-cols-3 w-full">
         {projectsToShow.map((project) => (
           <div
             key={project.id}

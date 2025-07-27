@@ -8,7 +8,7 @@ import { FaUpwork } from 'react-icons/fa6';
 
 const CTA = () => {
   return (
-    <section className="w-full px-8 py-16 bg-gray-100 dark:bg-slate-900 flex flex-col md:flex-row items-center justify-between gap-10">
+    <section className="w-full  bg-gray-100 dark:bg-slate-900 flex flex-col md:flex-row items-center justify-between gap-10">
       {/* Image Section */}
       <div className="w-full md:w-1/2 flex items-center justify-center">
         <div className="relative w-64 h-64 rounded-full overflow-hidden shadow-xl border-4 border-transparent bg-gradient-to-r from-fuchsia-500 to-cyan-500 p-1">

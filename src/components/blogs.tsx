@@ -14,7 +14,7 @@ const Blogs = () => {
   }
 
   return (
-    <section className="w-full px-6 py-12 bg-gray-100 dark:bg-slate-900">
+    <section className="w-full  bg-gray-100 dark:bg-slate-900">
       <h2 className="text-3xl font-extrabold text-center mb-10 bg-gradient-to-r from-fuchsia-500 to-cyan-500 bg-clip-text text-transparent">
         Latest Blogs
       </h2>

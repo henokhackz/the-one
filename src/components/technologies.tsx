@@ -42,7 +42,7 @@ const techStack = {
 
 const Technologies = () => {
   return (
-    <section className="w-full px-6 py-12 bg-gray-100 dark:bg-slate-900">
+    <section className="w-full  bg-gray-100 dark:bg-slate-900">
       <div className="max-w-6xl mx-auto">
         <h2 className="text-3xl font-extrabold text-center mb-10 bg-gradient-to-r from-fuchsia-500 to-cyan-500 bg-clip-text text-transparent">
           My Tech Stack
