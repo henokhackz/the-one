@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ui/theme-provider";
+import Navbar from "@/components/navbar";
+import { Footer } from "@/components/footer";
+import DownloadResumeButton from "@/components/cv";
+import MobileNavbar from "@/components/mobile-navbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,8 +18,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "lantumo birhanu || the one",
-  description: "lantumo birhanu ||  the developer || nextjs  ",
+  title: "lantumo birhanu || fullstack developer",
+  description: "lantumo birhanu |  the developer | next.js | node.js ",
 };
 
 export default function RootLayout({
@@ -31,11 +35,19 @@ export default function RootLayout({
       >
        <ThemeProvider
             attribute="class"
-            defaultTheme="dark"
+            defaultTheme="system"
             enableSystem
             disableTransitionOnChange
           >
-            {children}
+
+            <div className='w-full px-8 py-6 bg-gray-100  dark:bg-slate-900 min-h-screen flex flex-col overflow-x-hidden'>
+                <Navbar/>
+                {children}
+                <Footer/>
+                <DownloadResumeButton/>
+                <MobileNavbar/>
+               </div>
+
           </ThemeProvider>
       </body>
     </html>

@@ -1,110 +1,79 @@
-"use client";
-import React from "react";
-import { Timeline } from "@/components/ui/timeline";
+'use client'
 
-export function WorkExpriance() {
-    const data = [
-        {
-            title: "2025 – Present",
-            content: (
-                <div className="p-4 rounded-lg bg-transparent shadow-lg  backdrop-blur-sm">
-                    <p className="mb-6 text-sm font-medium text-gray-700 dark:text-blue-500">
-                        <strong className="text-lg text-blue-300">Upwork</strong> – Full Stack Web Developer | Freelancer
-                        <br />
-          </p>
-          <p className="mb-4 text-xs font-normal text-neutral-800 md:text-sm dark:text-neutral-200">
-          Built a
-            wishlist, and Stripe integration. Developed a secure backend with Node.js and
-            Express, and frontend with React.js and Tailwind CSS.
-          </p>
+import React from 'react'
+import { Briefcase } from 'lucide-react'
 
-          <div className="grid grid-cols-2 gap-4">
-            <img src="/amazon-new.png" alt="E-commerce UI" className="h-20 w-full rounded-lg object-cover shadow-md md:h-44 lg:h-60" />
-            <img src="/amazon-new.png" alt="Admin dashboard" className="h-20 w-full rounded-lg object-cover shadow-md md:h-44 lg:h-60" />
-          </div>
-        </div>
-      ),
+const experiences = [
+    {
+        role: 'Fullstack Freelancer',
+        company: 'Freelance Consultant',
+        date: 'June 2025 – current',
+        location: 'Addis Ababa, Ethiopia',
+        description:
+            'Delivered end-to-end solutions using the MERN stack and Next.js with TypeScript and JavaScript. Focused on performance optimization, scalable workflows, and modern web practices.',
+        technologies: ['MongoDB', 'Express', 'React', 'Node.js', 'Next.js', 'TypeScript', 'JavaScript'],
     },
     {
-      title: "2025",
-      content: (
-        <div>
-          <p className="mb-6 text-sm font-medium text-gray-700 dark:text-blue-500">
-            <strong className="text-lg text-blue-300">Nile Technology</strong> – Full Stack Web Developer Intern
- 
-          </p>
-          <p className="mb-4 text-xs font-normal text-neutral-800 md:text-sm dark:text-neutral-200"> Worked on a full-featured e-learning platform with secure role-based access,
-            RESTful APIs, and responsive React components. Collaborated with cross-functional
-            teams using Git and Agile practices.</p>
-          <div className="grid grid-cols-2 gap-4">
-            <img src="/e-learning.png" alt="E-learning UI" className="h-20 w-full rounded-lg object-cover shadow-md md:h-44 lg:h-60" />
-            <img src="/e-learning.png" alt="Course dashboard" className="h-20 w-full rounded-lg object-cover shadow-md md:h-44 lg:h-60" />
-          </div>
-        </div>
-      ),
+        role: 'Full Stack Developer Intern',
+        company: 'Ethio Telecom',
+        date: 'Jan 2024 – March 2025',
+        location: 'On site in Hawassa, Ethiopia',
+        description:
+            'Developed internal tools and built REST APIs. Integrated frontend and backend systems with proper authentication and state management. Participated in weekly code reviews and deployments.',
+        technologies: ['Next.js', 'Node.js', 'Prisma', 'PostgreSQL'],
     },
     {
-      title: "2024 – 2025",
-      content: (
-        <div>
-          <p className="mb-6 text-sm font-medium text-gray-700 dark:text-blue-500">
-            <strong className="text-lg text-blue-300">Ethio Telecom</strong> – Feedback Management Portal
-            
-            
-          </p>
-          <p className="mb-4 text-xs font-normal text-neutral-800 md:text-sm dark:text-neutral-200">
-          Built and deployed a portal to collect and visualize employee feedback,
-          increasing response rate by 3x and improving communication with custom dashboards.
-          </p>
-          <div className="grid grid-cols-2 gap-4">
-            <img src="/ethio-voice.png" alt="Feedback Chart" className="h-20 w-full rounded-lg object-cover shadow-md md:h-44 lg:h-60" />
-            <img src="/ethio-voice.png" alt="Management Dashboard" className="h-20 w-full rounded-lg object-cover shadow-md md:h-44 lg:h-60" />
-          </div>
-        </div>
-      ),
+        role: ' Web Developer Intern',
+        company: 'Nile Techonologies',
+        date: 'sempt 15 - 2025',
+        location: 'Remote',
+        description:
+            ' building landing pages for AI-based online learning  platform.Designed fast, SEO-friendly web interfaces.',
+        technologies: ['Markdown', 'SEO', 'Next.js', 'Tailwind CSS', 'Content Writing'],
     },
-    
-    {
-      title: "2024",
-      content: (
-        <div >
-            <p className="mb-6 text-sm font-medium text-gray-700 dark:text-blue-500">
-                <strong className="text-lg text-blue-300">Instagram Clone</strong>
-                
-               
-            </p>
-            <p className="mb-4 text-xs font-normal text-neutral-800 md:text-sm dark:text-neutral-200">
-            Developed a fully functional Instagram clone featuring photo sharing, likes, and comments, with a responsive design optimized for mobile and desktop.
-            </p>
-            <div className="grid grid-cols-2 gap-4">
-                <img src="/instagram.png" alt="Instagram Feed" className="h-20 w-full rounded-lg object-cover shadow-md md:h-44 lg:h-60" />
-                <img src="/instagram.png" alt="Instagram Story" className="h-20 w-full rounded-lg object-cover shadow-md md:h-44 lg:h-60" />
-            </div>
-        </div>
-      ),
-    },
-    {
-      title: "2020 – 2025",
-      content: (
-        <div>
-          <p className="mb-6 text-sm font-medium text-gray-700 dark:text-blue-500">
-            <strong className="text-lg text-blue-300">Arbaminch University</strong> – Cafeteria Automation System
-          
-          </p>
-          <p className="mb-4 text-xs font-normal text-neutral-800 md:text-sm dark:text-neutral-200">Developed a campus-wide meal tracking and QR-based attendance system with real-time
-          chat and role-based access, reducing manual entry by 80%.</p>
-          <div className="grid grid-cols-2 gap-4">
-            <img src="/cafe-management.png" alt="Cafeteria App UI" className="h-20 w-full rounded-lg object-cover shadow-md md:h-44 lg:h-60" />
-            <img src="/automation.png" alt="QR Attendance" className="h-20 w-full rounded-lg object-cover shadow-md md:h-44 lg:h-60" />
-          </div>
-        </div>
-      ),
-    },
-  ];
+]
 
+const Experience = () => {
   return (
-    <div className="relative w-full overflow-clip">
-      <Timeline data={data} />
-    </div>
-  );
+    <section className="w-full px-6 md:px-12 lg:px-24 py-16 space-y-12">
+      <div className="text-center">
+        <h2 className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-fuchsia-500 to-cyan-500 bg-clip-text text-transparent">
+          Experience
+        </h2>
+        <p className="mt-2 text-gray-600 dark:text-gray-400 text-lg max-w-2xl mx-auto">
+          A journey of hands-on learning, professional collaboration, and impact-driven work.
+        </p>
+      </div>
+
+      <div className="space-y-12">
+        {experiences.map((exp, index) => (
+          <div
+            key={index}
+            className="border-l-4 border-fuchsia-500 pl-6 relative group hover:border-cyan-500 transition-all rounded-2xl"
+          > 
+            <div className="absolute -left-[50px] top-1/2 flex items-center justify-center bg-gradient-to-r from-fuchsia-500 to-cyan-500 rounded-full w-8 h-8 text-white shadow-md">
+              <Briefcase className="w-4 h-4" />
+            </div>
+            <h3 className="text-2xl font-semibold text-gray-900 dark:text-white">{exp.role}</h3>
+            <div className="text-sm text-gray-600 dark:text-gray-400 font-medium mb-2">
+              {exp.company} • {exp.location} • {exp.date}
+            </div>
+            <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-2">{exp.description}</p>
+            <div className="flex flex-wrap gap-2">
+              {exp.technologies.map((tech, i) => (
+                <span
+                  key={i}
+                  className="bg-gray-200 dark:bg-gray-800 text-sm px-3 py-1 rounded-full text-gray-800 dark:text-gray-200"
+                >
+                  {tech}
+                </span>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  )
 }
+
+export default Experience
