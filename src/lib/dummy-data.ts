@@ -329,6 +329,33 @@ const allProjects = [
       ]
     }
   },
+  {
+    id: '11',
+    title: "Form Genie AI",
+    description: "Helps users create forms with AI-powered form generation and data validation.",
+    technologies: ["Next.js", "Tailwind CSS", "javascript", "Prisma"],
+    image: "/form-genie.png",
+    github: "https://github.com/henokhackz/form_genie",
+    live: "https://form-genie-nu.vercel.app/",
+    featured: true,
+    status: "100% Finished",
+    caseStudy: {
+      problem: "Form Genie AI helps users create forms with AI-powered form generation and data validation.",
+      solution: "A platform for creating and sharing AI generated form content.",
+      features: [
+        "AI-driven form and module generation",
+        "User-friendly dashboard for managing form content",
+        "Tailwind-powered responsive design",
+        "Prisma for form management",
+      ],
+      role: "Backend and Frontend Developer",
+      lessons: [
+        "Built user-based access control with Next.js",
+        "Designed a responsive UI using Tailwind",
+        "Improved Prisma and javascript development skills",
+      ]
+    }
+  },
 ];
 
 

@@ -2,10 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ui/theme-provider";
-import Navbar from "@/components/navbar";
-import { Footer } from "@/components/footer";
-import DownloadResumeButton from "@/components/cv";
-import MobileNavbar from "@/components/mobile-navbar";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -41,14 +38,9 @@ export default function RootLayout({
           >
 
             <div className='w-full px-8 py-6 bg-gray-100  dark:bg-slate-900 min-h-screen flex flex-col overflow-x-hidden'>
-                <Navbar/>
-                <div className="w-full flex-1 py-4">
-                {children}
-                </div>
-                <Footer/>
-                <DownloadResumeButton/>
-                <MobileNavbar/>
-               </div>
+              {children}
+            </div>
+               
 
           </ThemeProvider>
       </body>

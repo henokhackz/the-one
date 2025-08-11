@@ -1,5 +1,6 @@
 import Blogs from '@/components/blogs'
 import CTA from '@/components/cta'
+import { Education } from '@/components/education'
 import Experience from '@/components/expriance'
 import { Hero } from '@/components/hero'
 import { Projects } from '@/components/projects'
@@ -13,6 +14,7 @@ const Home = () => {
       <Technologies/>
       <Projects/>
       <Experience/>
+      <Education/>
       <Blogs/>
       <CTA/>
     </div>
