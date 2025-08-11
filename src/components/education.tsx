@@ -19,7 +19,7 @@ export function Education() {
 
       {/* University Card */}
       <div className="flex w-full items-center bg-white dark:bg-slate-800 rounded-xl shadow-md p-6 mb-12 max-w-4xl mx-auto gap-6">
-        <div className="relative w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden border border-gray-200 dark:border-slate-700">
+        <div className="hidden md:block relative w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden border border-gray-200 dark:border-slate-700">
           <Image
             src={educationData.university.logo || '/arbaminch-logo.png'}
             alt={`${educationData.university.name} Logo`}
@@ -29,7 +29,7 @@ export function Education() {
           />
         </div>
         <div className="flex flex-col justify-center">
-          <h3 className="text-2xl font-semibold text-gray-800 dark:text-white">
+          <h3 className="text-lg lg:text-2xl font-semibold text-gray-800 dark:text-white">
             {educationData.university.name}
           </h3>
           <p className="text-gray-600 dark:text-gray-300 font-medium">
