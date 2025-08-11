@@ -29,9 +29,9 @@ export const navItems = [
     university: {
       name: "Arbaminch University",
       degree: "Bachelor of Computer Engineering",
-      period: "2019 - 2025",
+      period: "2020 - 2025",
       description:
-        "Pursuing a Bachelor’s degree focused on software development, system design, and data structures.",
+        "Bachelor’s degree in Computer Science with a focus on software development, system design, and data structures.",
       logo: "/arbaminch-logo.png", 
     },
     udemyCourses: [
