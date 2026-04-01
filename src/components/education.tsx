@@ -142,7 +142,7 @@ function CourseCard({ course, accent }: { course: any, accent: string }) {
       rel="noopener noreferrer"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="group relative flex flex-col h-full bg-[#0a0a0a] transition-all duration-500 overflow-hidden block"
+      className="group relative flex flex-col h-full bg-[#0a0a0a] transition-all duration-500 overflow-hidden"
       style={{
         border: `1px solid ${hovered ? accent + '40' : '#ffffff10'}`,
         boxShadow: hovered ? `0 10px 40px -10px ${accent}15` : 'none',

@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { Shield, Globe, Cpu as Chip, Zap, User, Code, Terminal, Briefcase, GraduationCap } from 'lucide-react'
+import { Shield, Globe, Cpu as Chip, Zap, User, Code, Terminal, Briefcase, GraduationCap, Mail } from 'lucide-react'
 import Experience from '@/components/expriance'
 import { Education } from '@/components/education'
 import Technologies from '@/components/technologies'
