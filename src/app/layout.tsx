@@ -15,6 +15,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  icons: {
+    icon: '/logo.png',
+  },
   title: "lantumo birhanu || fullstack developer",
   description: "lantumo birhanu |  the developer | next.js | node.js ",
 };
@@ -30,14 +33,14 @@ export default function RootLayout({
        
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-       <ThemeProvider
+          <ThemeProvider
             attribute="class"
-            defaultTheme="system"
-            enableSystem
+            defaultTheme="dark"
+            enableSystem={false}
             disableTransitionOnChange
           >
 
-            <div className='w-full px-8 py-6 bg-gray-100  dark:bg-slate-900 min-h-screen flex flex-col overflow-x-hidden'>
+            <div className='w-full min-h-screen flex flex-col overflow-x-hidden bg-[#050505] text-white grid-lines-dark'>
               {children}
             </div>
                

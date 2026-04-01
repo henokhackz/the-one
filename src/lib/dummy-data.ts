@@ -2,19 +2,19 @@ const blogs: BlogPost[] = [
     {
       id: 1,
       slug: 'react-server-components',
-      title: 'Understanding React Server Components',
+      title: 'Architecting for the Edge: React Server Components',
       content:
-        'React Server Components offer a way to build faster, more scalable applications by splitting rendering between the client and server...',
+        'React Server Components represent a paradigm shift in full-stack architecture. By splitting rendering between the server and client, we can radically reduce bundle sizes while improving SEO and core web vitals...',
       images: [
         {
           id: 1,
           image:
-            'https://images.unsplash.com/photo-1511485977113-f34c92461ad9?auto=format&fit=crop&w=1170&q=80',
+            'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1170&q=80',
           publicId: 'rsc-image-1',
         },
       ],
-      author: 'Henok Lantu',
-      category: 'React',
+      author: 'Lantumo Birhanu',
+      category: 'Architecture',
       tags: ['React', 'Server Components', 'Next.js'],
       type: 'tutorial',
       readingTime: '6 min',
@@ -25,15 +25,23 @@ const blogs: BlogPost[] = [
     },
     {
       id: 2,
-      slug: 'why-tailwind',
-      title: 'Why Tailwind CSS is Better for Developers',
+      slug: 'scalable-webgl',
+      title: 'High-Performance 3D rendering with Three.js',
       content:
-        'Tailwind CSS helps developers build beautiful UIs without leaving the HTML, speeding up development with utility-first classes...',
-      author: 'Henok Lantu',
-      category: 'CSS',
-      tags: ['Tailwind', 'CSS', 'UI Design'],
+        'Building immersive web experiences requires more than just calling WebGL APIs. It requires deep optimization of geometry, shader management, and understanding the rendering pipeline to maintain 60fps on low-end devices...',
+      images: [
+        {
+          id: 2,
+          image:
+            'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1170&q=80',
+          publicId: 'threejs-image-1',
+        },
+      ],
+      author: 'Lantumo Birhanu',
+      category: 'WebGL',
+      tags: ['Three.js', 'WebGL', 'Performance'],
       type: 'opinion',
-      readingTime: '4 min',
+      readingTime: '8 min',
       updatedAt: '2023-06-25',
       createdAt: '2023-06-24',
       isFeatured: false,
@@ -41,13 +49,21 @@ const blogs: BlogPost[] = [
     },
     {
       id: 3,
-      slug: 'how-to-use-usememo',
-      title: 'How and When to Use useMemo in React',
+      slug: 'ai-driven-development',
+      title: 'Integrating LLMs into Production Next.js Apps',
       content:
-        'The useMemo hook helps improve performance by memoizing expensive calculations, but it should be used wisely...',
-      author: 'Henok Lantu',
-      category: 'React',
-      tags: ['React', 'Hooks', 'Performance'],
+        'The integration of Large Language Models (LLMs) into modern web stacks requires a careful balance of prompt engineering, streaming responses, and edge computing to ensure a seamless and performant user experience...',
+      images: [
+        {
+          id: 3,
+          image:
+            'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=1170&q=80',
+          publicId: 'ai-image-1',
+        },
+      ],
+      author: 'Lantumo Birhanu',
+      category: 'AI Integration',
+      tags: ['LLM', 'Next.js', 'OpenAI'],
       type: 'guide',
       readingTime: '5 min',
       updatedAt: '2023-06-21',

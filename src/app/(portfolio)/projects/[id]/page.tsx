@@ -24,19 +24,19 @@
         <div className="flex flex-col lg:flex-row gap-12 items-start justify-between">
           {/* 🔸 Text Content */}
           <div className="w-full lg:w-1/2 space-y-6">
-            <h1 className="text-4xl md:text-5xl font-extrabold leading-tight bg-gradient-to-r from-fuchsia-500 to-cyan-500 bg-clip-text text-transparent">
+            <h1 className="text-4xl md:text-5xl font-extrabold leading-tight text-white uppercase tracking-tighter">
               {title}
             </h1>
-            <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed">{description}</p>
+            <p className="text-gray-400 text-lg leading-relaxed">{description}</p>
 
             {/* 🛠️ Tech Stack */}
             <div>
-              <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Tech Stack:</h4>
+              <h4 className="text-lg font-semibold text-white">Tech Stack:</h4>
               <ul className="flex flex-wrap gap-2 mt-2">
                 {technologies.map((tech, index) => (
                   <li
                     key={index}
-                    className="px-3 py-1 bg-gray-200 dark:bg-gray-800 text-sm rounded-full text-gray-800 dark:text-gray-200"
+                    className="px-3 py-1 bg-white/5 border border-white/10 text-sm rounded text-gray-300 uppercase tracking-widest text-[10px]"
                   >
                     {tech}
                   </li>
@@ -45,15 +45,15 @@
             </div>
 
             {/* 📌 Status */}
-            <p className="text-md font-medium text-gray-700 dark:text-gray-300 mt-4">📌 Status: {status}</p>
+            <p className="text-md font-medium text-gray-400 mt-4 uppercase tracking-widest text-xs">📌 Status: {status}</p>
 
             {/* 🔗 Links */}
             <div className="flex gap-6 mt-4">
-              <Link href={github} target="_blank" className="text-blue-600 hover:underline text-base">
+              <Link href={github} target="_blank" className="text-white hover:underline text-xs uppercase tracking-widest border-b border-white/20 pb-1">
                 🔗 View Code
               </Link>
               {live && (
-                <Link href={live} target="_blank" className="text-green-600 hover:underline text-base">
+                <Link href={live} target="_blank" className="text-white hover:underline text-xs uppercase tracking-widest border-b border-white/20 pb-1">
                   🚀 Live Site
                 </Link>
               )}
@@ -62,13 +62,13 @@
 
           {/* 🔸 Project Image */}
           <div className="w-full lg:w-1/2 flex justify-center">
-            <div className="rounded-2xl overflow-hidden border-4 border-transparent bg-gradient-to-r from-fuchsia-500 to-cyan-500 p-1 shadow-lg">
+            <div className="rounded-2xl overflow-hidden border border-white/10 bg-white/5 p-1 shadow-2xl">
               <Image
                 src={image}
                 alt={title}
                 width={500}
                 height={500}
-                className="rounded-2xl object-cover"
+                className="rounded-2xl object-cover filter grayscale hover:grayscale-0 transition-all duration-700"
                 priority
               />
             </div>
@@ -77,20 +77,20 @@
 
         {/* 📚 Case Study */}
         {caseStudy && (
-          <div className="max-w-4xl mx-auto space-y-10 border border-fuchsia-800/20 p-8 rounded-2xl">
+          <div className="max-w-4xl mx-auto space-y-10 border border-white/10 p-8 rounded-2xl glass-panel">
             <div>
-              <h2 className="text-2xl font-bold text-fuchsia-500 mb-2">🚩 Problem</h2>
-              <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{caseStudy.problem}</p>
+              <h2 className="text-2xl font-bold text-white mb-2 uppercase tracking-tight">🚩 Problem</h2>
+              <p className="text-gray-400 leading-relaxed">{caseStudy.problem}</p>
             </div>
 
             <div>
-              <h2 className="text-2xl font-bold text-cyan-500 mb-2">💡 Solution</h2>
-              <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{caseStudy.solution}</p>
+              <h2 className="text-2xl font-bold text-white mb-2 uppercase tracking-tight">💡 Solution</h2>
+              <p className="text-gray-400 leading-relaxed">{caseStudy.solution}</p>
             </div>
 
             <div>
-              <h2 className="text-2xl font-bold text-green-500 mb-2">🚀 Features</h2>
-              <ul className="list-disc list-inside space-y-1 text-gray-700 dark:text-gray-300">
+              <h2 className="text-2xl font-bold text-white mb-2 uppercase tracking-tight">🚀 Features</h2>
+              <ul className="list-disc list-inside space-y-1 text-gray-400">
                 {caseStudy.features.map((feature, i) => (
                   <li key={i}>{feature}</li>
                 ))}
@@ -98,13 +98,13 @@
             </div>
 
             <div>
-              <h2 className="text-2xl font-bold text-orange-500 mb-2">👨‍💻 Role</h2>
-              <p className="text-gray-700 dark:text-gray-300 leading-relaxed">{caseStudy.role}</p>
+              <h2 className="text-2xl font-bold text-white mb-2 uppercase tracking-tight">👨‍💻 Role</h2>
+              <p className="text-gray-400 leading-relaxed">{caseStudy.role}</p>
             </div>
 
             <div>
-              <h2 className="text-2xl font-bold text-blue-500 mb-2">📘 Lessons Learned</h2>
-              <ul className="list-disc list-inside space-y-1 text-gray-700 dark:text-gray-300">
+              <h2 className="text-2xl font-bold text-white mb-2 uppercase tracking-tight">📘 Lessons Learned</h2>
+              <ul className="list-disc list-inside space-y-1 text-gray-400">
                 {caseStudy.lessons.map((lesson, i) => (
                   <li key={i}>{lesson}</li>
                 ))}

@@ -6,7 +6,7 @@ import { FaTelegramPlane } from 'react-icons/fa';
 
 export function Footer() {
   return (
-    <footer className="w-full bg-from-white dark:bg-slate-900 border rounded-2xl border-fuchsia-800/20 dark:border-fuchisa-800 px-6 py-10">
+    <footer className="w-full bg-black/40 backdrop-blur-md border border-white/10 rounded-2xl px-6 py-10">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-neutral-600 dark:text-neutral-400">
         
         {/* Left Text */}
