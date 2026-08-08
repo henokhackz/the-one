@@ -1,90 +1,118 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, ArrowDown } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
 import Badge from "./badge";
 
 export function Hero() {
   return (
-    <section className="relative w-full px-16 mx-auto  min-h-screen bg-black overflow-hidden text-white flex flex-col justify-center">
-      {/* Background Lighting & Elements */}
-      <div className="h-full w-1 bg-yellow-200/10 absolute bottom-0 left-1/3"></div>
-      <div className="h-full w-1 bg-yellow-200/10 absolute bottom-0 right-1/3"></div>
-      <div className="relative z-10 w-full mx-auto flex flex-col justify-center flex-1">
-        {/* Top Mini Labels */}
-        <div className="flex flex-row justify-between items-center w-full mb-16 md:mb-24 text-[9px] md:text-xs tracking-widest text-white  uppercase font-medium">
-          <span>[ HIGH PERFORMANCE ]</span>
-          <span> [ FRONTEND ARCHITECTURE ]</span>
-          <span>[ PIXEL PERFECT ]</span>
+    <section className="relative w-full min-h-[80vh] bg-black overflow-hidden text-white flex flex-col">
+      {/* ── Portrait Photo (right side, full-bleed) ── */}
+      <div className="absolute inset-0 z-0">
+        {/* Photo – covers right ~65% */}
+        <div className="absolute right-0 top-0 h-full w-[65%]">
+          <Image
+            src="/me.png"
+            alt="Lantumo Birhanu"
+            fill
+            priority
+            className="object-cover object-top"
+          />
+          {/* Gradient: solid black on left, transparent on right */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent" />
+          {/* Bottom fade for text legibility */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
         </div>
 
-        {/* Main Content Area */}
-        <div className="w-full flex justify-between items-end">
-          {/* Typography */}
-          <div className="text-2xl md:text-5xl lg:text-7xl xl:text-[10rem] text-bold font-black uppercase tracking-tighter">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-            >
-              I'M
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
-              className="text-[#f59e0b] "
-            >
-              FRONTEND
-            </motion.div>
+        {/* Hard black panel on the left 35% so headline always reads */}
+        <div className="absolute left-0 top-0 h-full w-[36%] bg-black" />
+      </div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-            >
-              DEVELOPER
-            </motion.div>
+      {/* ── Vertical grid lines ── */}
+      <div className="absolute inset-0 z-[1] pointer-events-none">
+        <div className="h-full w-px bg-white/8 absolute left-1/3" />
+        <div className="h-full w-px bg-white/8 absolute right-1/3" />
+      </div>
+
+      {/* ── Main content ── */}
+      <div className="relative z-10 flex flex-col flex-1 px-6 md:px-12 xl:px-16">
+        {/* Top label bar */}
+        <motion.div
+          initial={{ opacity: 0, y: -12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+          className="flex justify-between items-center pt-10 md:pt-14 text-[9px] md:text-[11px] tracking-[0.3em] text-white/50 uppercase font-medium"
+        >
+          <span>[ HIGH PERFORMANCE ]</span>
+          <span>FRONTEND ARCHITECTURE</span>
+          <span>[ PIXEL PERFECT ]</span>
+        </motion.div>
+
+        {/* ── Body row: fills remaining vertical space ── */}
+        <div className="flex flex-1 flex-col justify-end pb-12 md:pb-16">
+          <div className="flex items-end justify-between w-full gap-8">
+            {/* Left: Massive 3-line headline */}
+            <div className="relative flex-shrink-0">
+              {/* ® mark */}
+              <span className="absolute -top-5 right-0 text-[10px] text-white/40 font-light">
+                ®
+              </span>
+
+              <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.1, ease: "easeOut" }}
+                className="text-[13vw] md:text-[11vw] lg:text-[10vw] xl:text-[9rem] font-black uppercase tracking-tighter leading-[0.88] select-none"
+              >
+                <div className="text-white">ENGINEER</div>
+                <div className="text-[#f59e0b]">FOR FRONTEND</div>
+                <div className="text-white">DELIVER</div>
+              </motion.div>
+            </div>
+
+            {/* Right: Description + CTA + Badge */}
+            <div className="flex flex-col items-start gap-8 w-full max-w-xs md:max-w-sm xl:max-w-md pb-2 flex-shrink-0">
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.9, delay: 0.45 }}
+                className="text-sm md:text-base text-white/70 leading-relaxed font-light"
+              >
+                I am a Frontend Developer focusing on high-performance web
+                applications. I craft immersive, intuitive interfaces with a
+                dedication to seamless user experiences, helping startups ship
+                products that scale.
+              </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.6 }}
+                className="flex items-stretch h-12 md:h-14 gap-2"
+              >
+                <Link
+                  href="/contact"
+                  className="bg-white text-black text-xs md:text-sm font-bold tracking-widest uppercase px-5 md:px-7 flex items-center justify-center hover:bg-gray-200 transition-colors h-full rounded-sm whitespace-nowrap"
+                >
+                  LET'S CONTACT
+                </Link>
+                <Link
+                  href="/contact"
+                  className="bg-[#f59e0b] text-black w-12 md:w-14 flex items-center justify-center hover:bg-[#d97706] transition-colors h-full rounded-sm flex-shrink-0"
+                >
+                  <ArrowUpRight className="w-5 h-5" />
+                </Link>
+              </motion.div>
+            </div>
           </div>
 
-          {/* Right Side Content */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.5 }}
-            className="w-full lg:w-[32%] xl:w-[28%] flex flex-col items-start gap-8 relative z-20 mt-8 lg:mt-0 pb-4 md:pb-6 space-y-4"
-          >
-            <p
-              className="text-sm md:text-base text-white/80 leading-relaxed font-light"
-              style={{ fontFamily: "var(--font-body)" }}
-            >
-              I am a Frontend Developer focusing on high performance web
-              applications. I craft immersive, intuitive interfaces with a
-              dedication to seamless user experiences, helping startups ship
-              products that scale.
-            </p>
-
-            {/* Buttons Group - Added gap between items and border radii per feedback */}
-            <div className="flex items-stretch h-12 md:h-14 gap-2 group cursor-pointer w-full max-w-[320px]">
-              <Link
-                href="/contact"
-                className="bg-white text-black text-xs md:text-sm font-bold tracking-widest uppercase px-4 md:px-6 flex items-center justify-center hover:bg-gray-200 transition-colors h-full rounded-md whitespace-nowrap flex-1"
-              >
-                LET'S CONTACT
-              </Link>
-              <Link
-                href="/contact"
-                className="bg-[#f59e0b] text-black w-14 md:w-16 flex items-center justify-center hover:bg-[#d97706] transition-colors h-full rounded-md flex-shrink-0"
-              >
-                <ArrowUpRight className="w-5 h-5" />
-              </Link>
-            </div>
-          </motion.div>
-
-          {/* Spinning Badge - Adjusted positioning for better spacing */}
-          <Badge />
+          {/* Badge – bottom right, absolutely positioned to not disturb flow */}
+          <div className="absolute bottom-10 right-10 md:right-14 z-20">
+            <Badge />
+          </div>
         </div>
       </div>
     </section>

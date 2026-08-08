@@ -8,7 +8,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="min-h-screen  relative flex flex-col mx-auto bg-black overflow-x-hidden">
       <Navbar />
-      <main className="w-full">{children}</main>
+      <main className="w-full mt-24">{children}</main>
       <Footer />
 
       <DownloadResumeButton />
