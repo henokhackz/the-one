@@ -1,93 +1,109 @@
-'use client'
+"use client";
 
-import React, { useRef, useState } from 'react'
-import Image from 'next/image'
-import { motion, useInView } from 'motion/react'
+import React, { useRef, useState } from "react";
+import Image from "next/image";
+import { motion, useInView } from "motion/react";
 
 // ─── Data ──────────────────────────────────────────────────────────────────────
 
 const experiences = [
   {
-    id: 'ideeza',
-    role: 'Three.js Engineer',
-    company: 'Ideeza',
-    logo: '/ideeza.png',
-    date: 'Nov 2025 – Present',
-    duration: 'Current',
-    location: 'Remote · Israel',
-    type: 'Contract',
-    accent: '#10b981',
+    id: "ideeza",
+    role: "Three.js Engineer",
+    company: "Ideeza",
+    logo: "/ideeza.png",
+    date: "Nov 2025 – Present",
+    duration: "Current",
+    location: "Remote · Israel",
+    type: "Contract",
+    accent: "#f59e0b",
     featured: true,
     description:
-      'Contributing to Ideeza\'s AI-powered hardware design platform — a next-generation EDA tool that lets engineers and makers design PCBs through both manual workflows and AI-generated prompts. I own the Three.js electronics layer: building interactive 3D PCB visualizations, implementing real-time layer inspection, schematic routing, and 2D/3D dual-side viewing rendering that ships production-ready Gerber files.',
+      "Contributing to Ideeza's AI-powered hardware design platform — a next-generation EDA tool that lets engineers and makers design PCBs through both manual workflows and AI-generated prompts. I own the Three.js electronics layer: building interactive 3D PCB visualizations, implementing real-time layer inspection, schematic routing, and 2D/3D dual-side viewing rendering that ships production-ready Gerber files.",
     highlights: [
-      'Built the 2D/3D PCB canvas with real-time layer switching and drill-hole rendering',
-      'Implemented AI-driven board layout generation from natural language input',
-      'Delivered interactive trace inspection tools with zoom-level-aware detail',
-      'Developed both schematic views and dual-perspective 3D viewer modes',
+      "Built the 2D/3D PCB canvas with real-time layer switching and drill-hole rendering",
+      "Implemented AI-driven board layout generation from natural language input",
+      "Delivered interactive trace inspection tools with zoom-level-aware detail",
+      "Developed both schematic views and dual-perspective 3D viewer modes",
     ],
-    technologies: ['Three.js', 'Next.js', 'React', 'TypeScript', 'Node.js', 'WebGL', 'EDA APIs'],
+    technologies: [
+      "Three.js",
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Node.js",
+      "WebGL",
+      "EDA APIs",
+    ],
   },
   {
-    id: 'freelance',
-    role: 'Fullstack Freelancer',
-    company: 'Independent Professional',
+    id: "freelance",
+    role: "Fullstack Freelancer",
+    company: "Independent Professional",
     logo: null,
-    date: 'Jun 2025 – Present',
-    duration: 'Ongoing',
-    location: 'Remote · Global',
-    type: 'Freelance',
-    accent: '#10b981',
+    date: "Jun 2025 – Present",
+    duration: "Ongoing",
+    location: "Remote · Global",
+    type: "Freelance",
+    accent: "#f59e0b",
     featured: false,
     description:
-      'Delivering end-to-end web products for startups and SMEs globally. Expanding client base through social media outreach, global marketplaces like Upwork, and regional platforms like Afriwork (the premier Ethiopian talent hub). Specializing in performance-critical Next.js applications and API infrastructure.',
+      "Delivering end-to-end web products for startups and SMEs globally. Expanding client base through social media outreach, global marketplaces like Upwork, and regional platforms like Afriwork (the premier Ethiopian talent hub). Specializing in performance-critical Next.js applications and API infrastructure.",
     highlights: [
-      'Shipped 8+ production apps for independent clients and businesses',
-      'Sourced high-value projects consistently via Upwork, Afriwork, and social channels',
-      'Built scalable REST routes and architectures deployed across modern CI/CD pipelines',
+      "Shipped 8+ production apps for independent clients and businesses",
+      "Sourced high-value projects consistently via Upwork, Afriwork, and social channels",
+      "Built scalable REST routes and architectures deployed across modern CI/CD pipelines",
     ],
-    technologies: ['Next.js', 'TypeScript', 'Node.js', 'PostgreSQL', 'Prisma', 'MongoDB', 'React'],
+    technologies: [
+      "Next.js",
+      "TypeScript",
+      "Node.js",
+      "PostgreSQL",
+      "Prisma",
+      "MongoDB",
+      "React",
+    ],
   },
   {
-    id: 'ethiotelecom',
-    role: 'Full Stack Developer Intern',
-    company: 'Ethio Telecom',
+    id: "ethiotelecom",
+    role: "Full Stack Developer Intern",
+    company: "Ethio Telecom",
     logo: null,
-    date: 'Jan 2024 – Mar 2025',
-    duration: '14 months',
-    location: 'Hawassa, Ethiopia',
-    type: 'Internship',
-    accent: '#10b981',
+    date: "Jan 2024 – Mar 2025",
+    duration: "14 months",
+    location: "Hawassa, Ethiopia",
+    type: "Internship",
+    accent: "#f59e0b",
     featured: false,
     description:
-      'Built internal tooling and REST APIs for one of Africa\'s largest telecom operators. Integrated frontends with backend systems, handled auth flows, and participated in weekly code reviews and production deployments.',
+      "Built internal tooling and REST APIs for one of Africa's largest telecom operators. Integrated frontends with backend systems, handled auth flows, and participated in weekly code reviews and production deployments.",
     highlights: [
-      'Developed internal dashboards consumed by 200+ internal users',
-      'Designed and integrated RESTful APIs with proper JWT auth pipelines',
-      'Participated in agile sprints and production deployment cycles',
+      "Developed internal dashboards consumed by 200+ internal users",
+      "Designed and integrated RESTful APIs with proper JWT auth pipelines",
+      "Participated in agile sprints and production deployment cycles",
     ],
-    technologies: ['Next.js', 'Node.js', 'Prisma', 'PostgreSQL'],
+    technologies: ["Next.js", "Node.js", "Prisma", "PostgreSQL"],
   },
   {
-    id: 'nile',
-    role: 'Web Developer',
-    company: 'Nile Technologies',
+    id: "nile",
+    role: "Web Developer",
+    company: "Nile Technologies",
     logo: null,
-    date: 'Sept 2025',
-    duration: 'Short-term',
-    location: 'Remote',
-    type: 'Contract',
-    accent: '#10b981',
+    date: "Sept 2025",
+    duration: "Short-term",
+    location: "Remote",
+    type: "Contract",
+    accent: "#f59e0b",
     featured: false,
     description:
-      'Built SEO-optimised landing pages for AI-based online learning platforms. Designed fast, accessible web interfaces with a strong focus on conversion and performance scores.',
+      "Built SEO-optimised landing pages for AI-based online learning platforms. Designed fast, accessible web interfaces with a strong focus on conversion and performance scores.",
     highlights: [
-      'Achieved 95+ Lighthouse scores on all delivered pages',
-      'Implemented structured data markup for enhanced SERP presence',
+      "Achieved 95+ Lighthouse scores on all delivered pages",
+      "Implemented structured data markup for enhanced SERP presence",
     ],
-    technologies: ['Next.js', 'Tailwind CSS', 'SEO', 'Content Writing'],
+    technologies: ["Next.js", "Tailwind CSS", "SEO", "Content Writing"],
   },
-]
+];
 
 // ─── Timeline dot ──────────────────────────────────────────────────────────────
 
@@ -98,11 +114,11 @@ function TimelineDot({ accent, active }: { accent: string; active: boolean }) {
         className="w-2.5 h-2.5 rounded-full transition-all duration-300"
         style={{
           background: accent,
-          boxShadow: active ? `0 0 12px 4px ${accent}55` : 'none',
+          boxShadow: active ? `0 0 12px 4px ${accent}55` : "none",
         }}
       />
     </div>
-  )
+  );
 }
 
 // ─── Tech Tag ─────────────────────────────────────────────────────────────────
@@ -119,7 +135,7 @@ function TechTag({ label, accent }: { label: string; accent: string }) {
     >
       {label}
     </span>
-  )
+  );
 }
 
 // ─── Experience Card ──────────────────────────────────────────────────────────
@@ -129,20 +145,20 @@ function ExperienceCard({
   index,
   isLast,
 }: {
-  exp: (typeof experiences)[0]
-  index: number
-  isLast: boolean
+  exp: (typeof experiences)[0];
+  index: number;
+  isLast: boolean;
 }) {
-  const ref = useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, { once: true, margin: '-80px' })
-  const [hovered, setHovered] = useState(false)
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const [hovered, setHovered] = useState(false);
 
   return (
     <motion.div
       ref={ref}
       initial={{ opacity: 0, x: -24 }}
       animate={inView ? { opacity: 1, x: 0 } : {}}
-      transition={{ duration: 0.55, delay: index * 0.1, ease: 'easeOut' }}
+      transition={{ duration: 0.55, delay: index * 0.1, ease: "easeOut" }}
       className="relative flex gap-6 md:gap-10"
     >
       {/* Timeline spine */}
@@ -153,7 +169,7 @@ function ExperienceCard({
             className="w-px flex-1 mt-2"
             style={{
               background: `linear-gradient(to bottom, ${exp.accent}30, transparent)`,
-              minHeight: '40px',
+              minHeight: "40px",
             }}
           />
         )}
@@ -169,7 +185,11 @@ function ExperienceCard({
         {exp.featured && (
           <div
             className="inline-flex items-center gap-1.5 mb-3 px-3 py-1 text-[8px] font-mono uppercase tracking-[0.35em]"
-            style={{ color: exp.accent, border: `1px solid ${exp.accent}40`, background: `${exp.accent}0d` }}
+            style={{
+              color: exp.accent,
+              border: `1px solid ${exp.accent}40`,
+              background: `${exp.accent}0d`,
+            }}
           >
             <span
               className="w-1.5 h-1.5 rounded-full animate-pulse"
@@ -186,7 +206,10 @@ function ExperienceCard({
             {exp.logo ? (
               <div
                 className="flex-shrink-0 w-10 h-10 rounded overflow-hidden flex items-center justify-center"
-                style={{ background: '#0a0a0a', border: `1px solid ${exp.accent}30` }}
+                style={{
+                  background: "#0a0a0a",
+                  border: `1px solid ${exp.accent}30`,
+                }}
               >
                 <Image
                   src={exp.logo}
@@ -210,7 +233,9 @@ function ExperienceCard({
             )}
 
             <div>
-              <h3 className="text-base font-bold text-white leading-tight">{exp.role}</h3>
+              <h3 className="text-base font-bold text-white leading-tight">
+                {exp.role}
+              </h3>
               <p className="text-sm" style={{ color: exp.accent }}>
                 {exp.company}
               </p>
@@ -224,7 +249,11 @@ function ExperienceCard({
             </span>
             <span
               className="px-2 py-1"
-              style={{ color: exp.accent, border: `1px solid ${exp.accent}30`, background: `${exp.accent}08` }}
+              style={{
+                color: exp.accent,
+                border: `1px solid ${exp.accent}30`,
+                background: `${exp.accent}08`,
+              }}
             >
               {exp.type}
             </span>
@@ -238,8 +267,8 @@ function ExperienceCard({
         <div
           className="relative rounded-none p-5 md:p-7 transition-all duration-300 overflow-hidden"
           style={{
-            background: hovered ? `${exp.accent}06` : '#0a0a0a',
-            border: `1px solid ${hovered ? exp.accent + '35' : '#ffffff10'}`,
+            background: hovered ? `${exp.accent}06` : "#0a0a0a",
+            border: `1px solid ${hovered ? exp.accent + "35" : "#ffffff10"}`,
           }}
         >
           {/* Corner accent */}
@@ -251,11 +280,15 @@ function ExperienceCard({
           />
           <div
             className="absolute top-0 right-0 w-px h-12 pointer-events-none"
-            style={{ background: `linear-gradient(to bottom, ${exp.accent}50, transparent)` }}
+            style={{
+              background: `linear-gradient(to bottom, ${exp.accent}50, transparent)`,
+            }}
           />
           <div
             className="absolute top-0 right-0 w-12 h-px pointer-events-none"
-            style={{ background: `linear-gradient(to left, ${exp.accent}50, transparent)` }}
+            style={{
+              background: `linear-gradient(to left, ${exp.accent}50, transparent)`,
+            }}
           />
 
           {/* Description */}
@@ -271,7 +304,9 @@ function ExperienceCard({
                   className="mt-[5px] flex-shrink-0 w-1 h-1 rounded-full"
                   style={{ background: exp.accent }}
                 />
-                <span className="text-[0.78rem] text-white/40 leading-relaxed">{h}</span>
+                <span className="text-[0.78rem] text-white/40 leading-relaxed">
+                  {h}
+                </span>
               </li>
             ))}
           </ul>
@@ -285,14 +320,14 @@ function ExperienceCard({
         </div>
       </div>
     </motion.div>
-  )
+  );
 }
 
 // ─── Section ──────────────────────────────────────────────────────────────────
 
 const Experience = () => {
-  const headRef = useRef<HTMLDivElement>(null)
-  const headInView = useInView(headRef, { once: true })
+  const headRef = useRef<HTMLDivElement>(null);
+  const headInView = useInView(headRef, { once: true });
 
   return (
     <section className="relative w-full py-24 md:py-32 bg-black overflow-hidden">
@@ -300,12 +335,12 @@ const Experience = () => {
       <div
         className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse at center, rgba(16,185,129,0.04) 0%, transparent 70%)',
+          background:
+            "radial-gradient(ellipse at center, rgba(245,158,11,0.04) 0%, transparent 70%)",
         }}
       />
 
       <div className="max-w-4xl mx-auto px-6 md:px-12">
-
         {/* Section heading */}
         <motion.div
           ref={headRef}
@@ -314,17 +349,15 @@ const Experience = () => {
           transition={{ duration: 0.6 }}
           className="mb-20"
         >
-          <div className="flex items-center gap-3 mb-5">
-            <div className="h-px w-6 bg-emerald-500" />
-            <span className="text-[9px] font-mono text-emerald-400 uppercase tracking-[0.4em]">
-              Work History
-            </span>
-          </div>
-          <h2 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight">
-            Experience
+          <p className="text-xl md:text-2xl font-bold text-white/50 tracking-wide mb-8">
+            (EXPERIENCE)
+          </p>
+          <h2 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-white tracking-tighter uppercase leading-none">
+            WORK <span className="text-yellow-400">HISTORY</span>
           </h2>
-          <p className="mt-3 text-sm text-white/30 leading-relaxed max-w-sm">
-            Real products. Real outcomes. Shipped across startups, enterprises, and frontier tech.
+          <p className="mt-6 text-sm md:text-base text-white/40 leading-relaxed max-w-sm font-light">
+            Real products. Real outcomes. Shipped across startups, enterprises,
+            and frontier tech.
           </p>
         </motion.div>
 
@@ -339,10 +372,9 @@ const Experience = () => {
             />
           ))}
         </div>
-
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default Experience
+export default Experience;
