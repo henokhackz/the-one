@@ -28,18 +28,18 @@ const MobileNavbar = () => {
             key={item.href}
             href={item.href}
             className={`flex flex-col items-center justify-center gap-1.5 transition-all duration-300 ${
-              isActive ? "text-green-500 scale-110" : "text-muted"
+              isActive ? "text-accent scale-110" : "text-muted"
             } hover:text-foreground`}
           >
             <div
-              className={`relative p-1 rounded-lg ${isActive ? "bg-green-500/10" : ""}`}
+              className={`relative p-1 rounded-lg ${isActive ? "bg-accent/10" : ""}`}
             >
               {item.icon}
               {isActive && (
-                <span className="absolute -top-1 -right-1 flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                </span>
+                  <span className="absolute -top-1 -right-1 flex h-2 w-2">
+                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
+                   <span className="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
+                 </span>
               )}
             </div>
             <span
