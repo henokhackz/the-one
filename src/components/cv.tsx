@@ -6,7 +6,7 @@ import React from "react";
 const DownloadResumeButton = () => {
   return (
     <a
-      href="/lantumo-resume.pdf"
+      href="/Lantumo_Birhanu_resume.pdf"
       download
       className="fixed bottom-20 lg:bottom-10 right-6 z-50 group"
     >
