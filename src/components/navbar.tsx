@@ -29,7 +29,11 @@ const Navbar = () => {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 border-b border-border transition-all duration-500 ${
-        scrolled ? "bg-background-translucent backdrop-blur-xl" : "bg-transparent"
+        isMenuOpen
+          ? "bg-background"
+          : scrolled
+            ? "bg-background-translucent backdrop-blur-xl"
+            : "bg-transparent"
       }`}
     >
       <div className="mx-auto max-w-[1600px] px-6 md:px-12 xl:px-16 h-20 md:h-24 flex items-center justify-between">
@@ -96,7 +100,7 @@ const Navbar = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-40 flex flex-col bg-background-translucent backdrop-blur-xl md:hidden"
+            className="fixed left-0 right-0 top-20 bottom-0 z-40 flex flex-col bg-background backdrop-blur-xl md:top-24 md:hidden"
           >
             <div className="flex-1 flex flex-col items-center justify-center gap-2">
               {navLinks.map((link, i) => {
@@ -111,7 +115,7 @@ const Navbar = () => {
                     <Link
                       href={link.href}
                       onClick={() => setIsMenuOpen(false)}
-                      className={`flex items-center gap-3 font-mono text-2xl font-semibold tracking-[0.2em] uppercase transition-colors duration-300 ${
+                      className={`flex items-center gap-3 font-mono text-xl sm:text-2xl font-semibold tracking-[0.2em] uppercase transition-colors duration-300 ${
                         isActive
                           ? "text-accent"
                           : "text-muted hover:text-foreground"
