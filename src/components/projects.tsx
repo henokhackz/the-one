@@ -1,218 +1,414 @@
-'use client'
+"use client";
 
-import { useState } from "react"
-import Image from "next/image"
-import { useRouter } from "next/navigation"
-import { ExternalLink, Github, ArrowRight } from "lucide-react"
-import Link from "next/link"
-import { motion } from "motion/react"
-import { allProjects } from "@/lib/dummy-data"
+import { Canvas, useFrame, useLoader } from "@react-three/fiber";
+import {
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type MutableRefObject,
+  type PointerEvent as ReactPointerEvent,
+} from "react";
+import {
+  DoubleSide,
+  Group,
+  MathUtils,
+  MeshBasicMaterial,
+  SRGBColorSpace,
+  TextureLoader,
+} from "three";
+import { allProjects } from "@/lib/dummy-data";
+import { Github, ExternalLink } from "lucide-react";
 
-export function Projects() {
-  const [showAll, setShowAll] = useState(false)
-  const router = useRouter()
+type Project = (typeof allProjects)[number];
 
-  const projectsToShow = showAll
-    ? allProjects
-    : allProjects.filter((p) => p.featured)
+type DragState = {
+  pointerId: number | null;
+  isDragging: boolean;
+  lastX: number;
+  velocity: number;
+};
 
-  const accent = '#10b981'
+const PANEL_WIDTH = 5;
+const PANEL_HEIGHT = 3.5;
+const GALLERY_RADIUS = 8.7;
+const DRAG_SPEED = 0.005;
+const WHEEL_SPEED = 0.0015;
+const MOMENTUM_LIMIT = 0.85;
+const SNAP_DELAY = 140;
 
-  return (
-    <section className="relative w-full py-24 md:py-32 bg-black overflow-hidden" id="projects">
-      {/* Ambient background glow */}
-      <div
-        className="absolute top-1/4 left-0 w-[500px] h-[500px] pointer-events-none"
-        style={{
-          background: 'radial-gradient(ellipse at center, rgba(16,185,129,0.03) 0%, transparent 60%)',
-        }}
-      />
-
-      <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
-        
-        {/* Header */}
-        <div className="flex flex-col items-center mb-20">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="flex flex-col items-center text-center"
-          >
-            <div className="flex items-center gap-3 mb-5">
-              <div className="h-px w-6 bg-emerald-500" />
-              <span className="text-[9px] font-mono text-emerald-400 uppercase tracking-[0.4em]">
-                System Architecture
-              </span>
-              <div className="h-px w-6 bg-emerald-500" />
-            </div>
-            
-            <h2 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight">
-              Featured Projects
-            </h2>
-            <p className="mt-4 text-sm text-white/40 max-w-lg leading-relaxed">
-              A selection of scalable systems, complex UI implementations, and full-stack solutions built for modern web standards.
-            </p>
-          </motion.div>
-        </div>
-
-        {/* Grid */}
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 w-full">
-          {projectsToShow.map((project, index) => (
-            <motion.div
-              key={project.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              viewport={{ once: true }}
-              className="h-full"
-            >
-              <ProjectCard project={project} accent={accent} router={router} />
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Load More Button */}
-        {!showAll && (
-          <motion.div 
-            className="mt-20 flex justify-center"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            viewport={{ once: true }}
-          >
-            <button
-              onClick={() => setShowAll(true)}
-              className="relative group px-8 py-3.5 border border-[#10b981]/30 bg-[#10b981]/[0.02] text-white tracking-[0.2em] uppercase text-[10px] font-bold overflow-hidden transition-all duration-500"
-            >
-              <div className="absolute inset-0 bg-[#10b981] translate-y-[100%] group-hover:translate-y-0 transition-transform duration-500 ease-out" />
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ boxShadow: '0 0 20px 2px rgba(16,185,129,0.4) inset' }} />
-              
-              <span className="relative z-10 group-hover:text-black transition-colors duration-300">
-                Load More Modules
-              </span>
-            </button>
-          </motion.div>
-        )}
-      </div>
-    </section>
-  )
+function clamp(value: number, min: number, max: number) {
+  return Math.min(max, Math.max(min, value));
 }
 
-function ProjectCard({ project, accent, router }: { project: any, accent: string, router: any }) {
-  const [hovered, setHovered] = useState(false)
+function normalizeIndex(index: number, total: number) {
+  return ((index % total) + total) % total;
+}
+
+function ProjectPanel({ project, angle }: { project: Project; angle: number }) {
+  const texture = useLoader(TextureLoader, project.image);
+
+  useEffect(() => {
+    texture.colorSpace = SRGBColorSpace;
+    const planeAspect = PANEL_WIDTH / PANEL_HEIGHT;
+    const image = texture.image as { width: number; height: number };
+    const imageAspect = image.width / image.height;
+    let repeatX = 1;
+    let repeatY = 1;
+    let offsetX = 0;
+    let offsetY = 0;
+    if (imageAspect > planeAspect) {
+      repeatX = planeAspect / imageAspect;
+      offsetX = (1 - repeatX) / 2;
+    } else {
+      repeatY = imageAspect / planeAspect;
+      offsetY = (1 - repeatY) / 2;
+    }
+    texture.repeat.set(repeatX, repeatY);
+    texture.offset.set(offsetX, offsetY);
+    texture.needsUpdate = true;
+  }, [texture]);
 
   return (
-    <div
-      onClick={() => router.push(`/projects/${project.id}`)}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      className="group relative flex flex-col h-full bg-[#0a0a0a] transition-all duration-500 cursor-pointer overflow-hidden"
-      style={{
-        border: `1px solid ${hovered ? accent + '40' : '#ffffff10'}`,
-        boxShadow: hovered ? `0 10px 40px -10px ${accent}20` : 'none',
-      }}
-    >
-      {/* Corner cut-out / accent effect */}
-      <div 
-        className="absolute top-0 right-0 w-16 h-16 pointer-events-none z-20 transition-opacity duration-500"
-        style={{
-          background: `linear-gradient(135deg, transparent 50%, ${accent}20 100%)`,
-          opacity: hovered ? 1 : 0.3
-        }}
-      />
-      <div 
-        className="absolute top-0 right-0 w-px h-16 pointer-events-none z-20"
-        style={{ background: `linear-gradient(to bottom, ${accent}60, transparent)` }}
-      />
-      <div 
-        className="absolute top-0 right-0 w-16 h-px pointer-events-none z-20"
-        style={{ background: `linear-gradient(to left, ${accent}60, transparent)` }}
-      />
-
-      {/* Image Container */}
-      <div className="relative h-56 w-full overflow-hidden border-b border-white/5">
-        <Image
-          src={project.image}
-          alt={project.title}
-          fill
-          className="object-cover transition-transform duration-1000 group-hover:scale-[1.03] filter grayscale-[40%] group-hover:grayscale-0"
+    <group rotation-y={angle}>
+      <mesh position={[0, 0, -GALLERY_RADIUS]}>
+        <planeGeometry args={[PANEL_WIDTH, PANEL_HEIGHT]} />
+        <meshBasicMaterial
+          map={texture}
+          side={DoubleSide}
+          toneMapped={false}
+          transparent
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] to-transparent opacity-90" />
-        
-        {/* Status Badge */}
-        <div className="absolute top-4 left-4 z-10 flex items-center gap-2 px-2.5 py-1 text-[8px] font-mono uppercase tracking-widest backdrop-blur-md bg-black/40 border border-white/10">
-          <span className="w-1.5 h-1.5 rounded-full" style={{ background: project.status.includes('Finished') ? accent : '#f59e0b' }} />
-          <span className="text-white/80">{project.status}</span>
-        </div>
-      </div>
+      </mesh>
+    </group>
+  );
+}
 
-      {/* Content */}
-      <div className="p-7 flex flex-col justify-between flex-grow relative bg-gradient-to-b from-transparent to-white/[0.01]">
-        <div className="space-y-4">
-          <h3 className="text-xl font-bold text-white tracking-wide leading-snug group-hover:text-gray-200 transition-colors">
-            {project.title}
-          </h3>
-          <p className="text-[0.85rem] text-white/50 leading-[1.7] line-clamp-3">
-            {project.description}
-          </p>
-          
-          <div className="flex flex-wrap gap-2 pt-3">
-            {project.technologies.slice(0, 4).map((tech: string) => (
-              <span
-                key={tech}
-                className="text-[9px] uppercase font-mono tracking-[0.2em] border border-white/10 text-white/40 px-2 py-1 transition-colors duration-300"
-                style={{
-                  color: hovered ? accent : '',
-                  borderColor: hovered ? `${accent}30` : '',
-                  background: hovered ? `${accent}05` : 'transparent'
-                }}
-              >
-                {tech}
-              </span>
-            ))}
-            {project.technologies.length > 4 && (
-              <span className="text-[9px] uppercase font-mono tracking-[0.2em] border border-white/10 text-white/30 px-2 py-1">
-                +{project.technologies.length - 4}
-              </span>
-            )}
-          </div>
+function ProjectGalleryScene({
+  projects,
+  targetRotationRef,
+  rootRef,
+  onActiveChange,
+}: {
+  projects: Project[];
+  targetRotationRef: MutableRefObject<number>;
+  rootRef: MutableRefObject<Group | null>;
+  onActiveChange: (index: number) => void;
+}) {
+  const lastActiveRef = useRef(0);
+  const step = (Math.PI * 2) / projects.length;
+
+  useFrame((_, delta) => {
+    if (rootRef.current) {
+      const settle = 1 - Math.exp(-delta * 6);
+      rootRef.current.rotation.y = MathUtils.lerp(
+        rootRef.current.rotation.y,
+        targetRotationRef.current,
+        settle,
+      );
+      const idx =
+        ((Math.round(-rootRef.current.rotation.y / step) % projects.length) +
+          projects.length) %
+        projects.length;
+      if (idx !== lastActiveRef.current) {
+        lastActiveRef.current = idx;
+        onActiveChange(idx);
+      }
+    }
+  });
+
+  return (
+    <group ref={rootRef}>
+      {projects.map((project, i) => (
+        <ProjectPanel
+          key={project.id}
+          project={project}
+          angle={(Math.PI * 2 * i) / projects.length}
+        />
+      ))}
+    </group>
+  );
+}
+
+export function Projects() {
+  const projects = useMemo(() => allProjects, []);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const projectCount = projects.length;
+  const step = (Math.PI * 2) / projectCount;
+  const targetRotationRef = useRef(0);
+  const rootRef = useRef<Group | null>(null);
+  const dragStateRef = useRef<DragState>({
+    pointerId: null,
+    isDragging: false,
+    lastX: 0,
+    velocity: 0,
+  });
+  const snapTimerRef = useRef<number | null>(null);
+  const activeIndexRef = useRef(0);
+  const activeProject = projects[activeIndex] ?? projects[0];
+
+  const clearSnapTimer = useCallback(() => {
+    if (snapTimerRef.current !== null) {
+      window.clearTimeout(snapTimerRef.current);
+      snapTimerRef.current = null;
+    }
+  }, []);
+
+  const snapToNearest = useCallback(() => {
+    const drag = dragStateRef.current;
+    const momentum = clamp(
+      drag.velocity * 0.16,
+      -MOMENTUM_LIMIT,
+      MOMENTUM_LIMIT,
+    );
+    targetRotationRef.current =
+      Math.round((targetRotationRef.current + momentum) / step) * step;
+  }, [step]);
+
+  const scheduleSnap = useCallback(() => {
+    clearSnapTimer();
+    snapTimerRef.current = window.setTimeout(() => {
+      snapToNearest();
+      snapTimerRef.current = null;
+    }, SNAP_DELAY);
+  }, [clearSnapTimer, snapToNearest]);
+
+  const move = useCallback(
+    (direction: -1 | 1) => {
+      clearSnapTimer();
+      const next = targetRotationRef.current + direction * step;
+      targetRotationRef.current = next;
+      const nextIndex = normalizeIndex(Math.round(-next / step), projectCount);
+      activeIndexRef.current = nextIndex;
+      setActiveIndex(nextIndex);
+    },
+    [clearSnapTimer, step, projectCount],
+  );
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        move(-1);
+      }
+
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        move(1);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      clearSnapTimer();
+    };
+  }, [clearSnapTimer, move]);
+
+  const handlePointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
+    const drag = dragStateRef.current;
+    drag.pointerId = event.pointerId;
+    drag.isDragging = true;
+    drag.lastX = event.clientX;
+    drag.velocity = 0;
+    setIsDragging(true);
+    clearSnapTimer();
+    event.currentTarget.setPointerCapture(event.pointerId);
+  };
+
+  const handlePointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
+    const drag = dragStateRef.current;
+    if (!drag.isDragging || drag.pointerId !== event.pointerId) return;
+
+    const deltaX = event.clientX - drag.lastX;
+    const deltaRotation = -deltaX * DRAG_SPEED;
+
+    targetRotationRef.current += deltaRotation;
+    drag.velocity = drag.velocity * 0.7 + deltaRotation * 0.3;
+    drag.lastX = event.clientX;
+
+    const nextIndex = normalizeIndex(
+      Math.round(-targetRotationRef.current / step),
+      projectCount,
+    );
+    activeIndexRef.current = nextIndex;
+    setActiveIndex(nextIndex);
+  };
+
+  const endPointer = (event: ReactPointerEvent<HTMLDivElement>) => {
+    const drag = dragStateRef.current;
+    if (!drag.isDragging || drag.pointerId !== event.pointerId) return;
+
+    drag.isDragging = false;
+    drag.pointerId = null;
+    setIsDragging(false);
+
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+
+    scheduleSnap();
+  };
+
+  const handleWheel = (event: React.WheelEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    clearSnapTimer();
+
+    const delta =
+      Math.abs(event.deltaX) > Math.abs(event.deltaY)
+        ? event.deltaX
+        : event.deltaY;
+    const deltaRotation = delta * WHEEL_SPEED;
+    targetRotationRef.current += deltaRotation;
+    dragStateRef.current.velocity =
+      dragStateRef.current.velocity * 0.72 + deltaRotation * 0.28;
+
+    const nextIndex = normalizeIndex(
+      Math.round(-targetRotationRef.current / step),
+      projectCount,
+    );
+    activeIndexRef.current = nextIndex;
+    setActiveIndex(nextIndex);
+    scheduleSnap();
+  };
+
+  return (
+    <section id="projects" className="relative text-foreground">
+      <div className="relative mx-auto w-full max-w-[1920px]">
+        <div className="mx-auto max-w-[1500px] px-5 pt-16 md:px-10 md:pt-24">
+          <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-accent">
+            Selected Work
+          </span>
+          <h2 className="mt-2 font-heading text-[clamp(2.5rem,5vw,4.5rem)] leading-[0.95] tracking-[-0.02em] font-bold uppercase">
+            Projects
+          </h2>
         </div>
 
-        {/* Footer Actions */}
-        <div className="flex justify-between items-center mt-8 pt-5 border-t border-white/10">
-          <div className="flex gap-3">
-            <Link
-              href={project.live}
-              target="_blank"
-              onClick={(e) => e.stopPropagation()}
-              className="text-white/30 hover:text-white transition-colors p-2 hover:bg-white/5 rounded"
-            >
-              <ExternalLink className="w-4 h-4" />
-            </Link>
-            <Link
-              href={project.github}
-              target="_blank"
-              onClick={(e) => e.stopPropagation()}
-              className="text-white/30 hover:text-white transition-colors p-2 hover:bg-white/5 rounded"
-            >
-              <Github className="w-4 h-4" />
-            </Link>
-          </div>
-          <div 
-            className="text-white opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300"
-            style={{ color: accent }}
+        <div
+          className="relative mt-8"
+          style={{
+            cursor: isDragging ? "grabbing" : "grab",
+            touchAction: "none",
+          }}
+        >
+          <div
+            className="relative h-[360px]  md:h-[420px] lg:h-[470px]"
+            aria-label="Interactive 3D project gallery"
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={endPointer}
+            onPointerCancel={endPointer}
+            onWheel={handleWheel}
           >
-            <ArrowRight className="w-4 h-4" />
+            <Canvas
+              camera={{ position: [0, 0, 0.01], fov: 35, near: 0.1, far: 100 }}
+              dpr={[1, 1.6]}
+              gl={{ antialias: true, alpha: true }}
+            >
+              <Suspense fallback={null}>
+                <ProjectGalleryScene
+                  projects={projects}
+                  targetRotationRef={targetRotationRef}
+                  rootRef={rootRef}
+                  onActiveChange={(index) => {
+                    activeIndexRef.current = index;
+                    setActiveIndex(index);
+                  }}
+                />
+              </Suspense>
+            </Canvas>
           </div>
         </div>
 
-        {/* Animated bottom line */}
-        <div 
-          className="absolute bottom-0 left-0 h-px bg-emerald-500 transition-all duration-500 ease-out"
-          style={{ width: hovered ? '100%' : '0%', opacity: hovered ? 0.7 : 0 }}
-        />
+        {/* ── Project info panel ── */}
+        <div className="mx-auto max-w-[1500px] px-5 pb-16 pt-10 md:px-10 md:pb-24 md:pt-16">
+          {/* Counter + Links row */}
+          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border pb-6">
+            <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-accent">
+              {String(activeIndex + 1).padStart(2, "0")} /{" "}
+              {String(projectCount).padStart(2, "0")}
+            </p>
+
+            {/* ─── GitHub & Live links ─── */}
+            <div className="flex items-center gap-3">
+              {activeProject.github && (
+                <a
+                  href={activeProject.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-center gap-2 border border-border bg-foreground/[0.03] px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-muted transition-all duration-200 hover:border-border hover:bg-foreground/[0.07] hover:text-foreground"
+                >
+                  <Github className="h-3.5 w-3.5 transition-transform duration-200 group-hover:scale-110" />
+                  GitHub
+                </a>
+              )}
+              {activeProject.live && (
+                <a
+                  href={activeProject.live}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-center gap-2 border border-accent/30 bg-accent/10 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-accent transition-all duration-200 hover:border-accent hover:bg-accent/20"
+                >
+                  <ExternalLink className="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                  Live Site
+                </a>
+              )}
+            </div>
+          </div>
+
+          {/* Title + description + meta grid */}
+          <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-[1fr_auto] md:gap-12 lg:grid-cols-[1.6fr_1fr]">
+            {/* Left: title + description */}
+            <div>
+              <h3 className="text-2xl font-bold leading-tight tracking-[-0.01em] text-foreground md:text-4xl">
+                {activeProject.title}
+              </h3>
+              <p className="mt-3 text-sm leading-relaxed text-muted md:text-base">
+                {activeProject.description}
+              </p>
+            </div>
+
+            {/* Right: tech tags + meta */}
+            <div className="flex flex-col gap-6">
+              {/* Tech stack */}
+              <div className="flex flex-wrap gap-2">
+                {activeProject.technologies.slice(0, 6).map((tech) => (
+                  <span
+                    key={tech}
+                    className="border border-border bg-background px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-foreground transition-colors hover:border-accent hover:text-accent"
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
+
+              {/* Status + Role */}
+              <div className="grid grid-cols-2 gap-3">
+                <div className="border border-border bg-foreground/[0.03] px-4 py-3">
+                  <p className="text-[9px] uppercase tracking-[0.24em] text-muted">
+                    Status
+                  </p>
+                  <p className="mt-1 text-sm font-medium text-foreground">
+                    {activeProject.status}
+                  </p>
+                </div>
+                <div className="border border-border bg-foreground/[0.03] px-4 py-3">
+                  <p className="text-[9px] uppercase tracking-[0.24em] text-muted">
+                    Role
+                  </p>
+                  <p className="mt-1 text-sm font-medium text-foreground line-clamp-2">
+                    {activeProject.caseStudy.role}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  )
+    </section>
+  );
 }
