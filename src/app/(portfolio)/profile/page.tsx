@@ -66,7 +66,7 @@ const ProfilePage = () => {
           <div className="absolute -inset-4 border border-white/5 rounded-full animate-[spin_20s_linear_infinite] opacity-20" />
           <div className="absolute -inset-8 border border-white/5 rounded-full animate-[spin_30s_linear_infinite_reverse] opacity-10" />
 
-          <div className="relative border border-white/10 p-2 bg-black/40 backdrop-blur-3xl aspect-[4/5] flex items-center justify-center overflow-hidden rounded-2xl">
+          <div className="relative border border-white/10 p-2  backdrop-blur-3xl aspect-[4/5] flex items-center justify-center overflow-hidden rounded-2xl">
             <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-green-500/40 to-transparent animate-[scan_3s_linear_infinite]" />
 
             {/* Character Display Placeholder */}

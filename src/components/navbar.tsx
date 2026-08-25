@@ -2,12 +2,15 @@
 
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -25,66 +28,117 @@ const Navbar = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50  px-16 transition-colors duration-500 ${
-        scrolled ? "bg-black/80 backdrop-blur-md" : "bg-transparent"
+      className={`fixed top-0 left-0 right-0 z-50 border-b border-border transition-all duration-500 ${
+        scrolled ? "bg-background-translucent backdrop-blur-xl" : "bg-transparent"
       }`}
     >
-      <div className="mx-auto  h-24 flex items-center justify-between">
+      <div className="mx-auto max-w-[1600px] px-6 md:px-12 xl:px-16 h-20 md:h-24 flex items-center justify-between">
         {/* LOGO */}
-        <Link
-          href="/"
-          className="text-2xl font-bold tracking-tight text-white hover:text-white/80 transition-colors z-50"
-        >
-          Lantumo
+        <Link href="/" className="group flex items-center gap-2.5 z-50">
+          <span className="text-xl md:text-2xl font-bold tracking-tight text-foreground">
+            Lantumo
+          </span>
         </Link>
 
         {/* DESKTOP NAV */}
-        <nav className="hidden md:flex items-center gap-10">
-          {navLinks.map((link) => (
-            <Link
-              key={link.name}
-              href={link.href}
-              className="text-[11px] font-semibold tracking-[0.15em] text-white/70 hover:text-white transition-colors"
-            >
-              {link.name}
-            </Link>
-          ))}
+        <nav className="hidden md:flex items-center gap-1">
+          {navLinks.map((link) => {
+            const isActive = pathname === link.href;
+            return (
+              <Link
+                key={link.name}
+                href={link.href}
+                className={`group relative px-4 py-2 font-mono text-[10px] font-medium tracking-[0.25em] uppercase transition-colors duration-300 ${
+                  isActive ? "text-foreground" : "text-muted hover:text-foreground"
+                }`}
+              >
+                {link.name}
+                <span
+                  className={`absolute left-4 right-4 bottom-0 h-px bg-accent transition-all duration-300 ${
+                    isActive
+                      ? "opacity-100 scale-x-100"
+                      : "opacity-0 scale-x-0 group-hover:opacity-100 group-hover:scale-x-100"
+                  }`}
+                />
+              </Link>
+            );
+          })}
         </nav>
 
-        {/* MOBILE MENU TOGGLE */}
-        <button
-          className="md:hidden text-white z-50"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-        >
-          {isMenuOpen ? (
-            <X className="w-6 h-6" />
-          ) : (
-            <Menu className="w-6 h-6" />
-          )}
-        </button>
+        {/* CTA + MOBILE TOGGLE */}
+        <div className="flex items-center gap-4">
+          <Link
+            href="/contact"
+            className="hidden md:inline-flex items-center border border-border hover:border-accent hover:text-accent px-5 py-2.5 font-mono text-[10px] tracking-[0.25em] uppercase text-foreground transition-colors duration-300"
+          >
+            Let&apos;s Talk
+          </Link>
+          <ThemeToggle />
+          <button
+            className="md:hidden text-foreground z-50"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            {isMenuOpen ? (
+              <X className="w-6 h-6" />
+            ) : (
+              <Menu className="w-6 h-6" />
+            )}
+          </button>
+        </div>
       </div>
 
       {/* MOBILE NAV OVERLAY */}
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="fixed inset-0 bg-[#0a0a0a] z-40 flex flex-col items-center justify-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-40 flex flex-col bg-background-translucent backdrop-blur-xl md:hidden"
           >
-            <nav className="flex flex-col items-center gap-8">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  href={link.href}
-                  onClick={() => setIsMenuOpen(false)}
-                  className="text-2xl font-bold tracking-widest text-white/50 hover:text-white transition-colors"
-                >
-                  {link.name}
-                </Link>
-              ))}
-            </nav>
+            <div className="flex-1 flex flex-col items-center justify-center gap-2">
+              {navLinks.map((link, i) => {
+                const isActive = pathname === link.href;
+                return (
+                  <motion.div
+                    key={link.name}
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.35, delay: 0.05 * i }}
+                  >
+                    <Link
+                      href={link.href}
+                      onClick={() => setIsMenuOpen(false)}
+                      className={`flex items-center gap-3 font-mono text-2xl font-semibold tracking-[0.2em] uppercase transition-colors duration-300 ${
+                        isActive
+                          ? "text-accent"
+                          : "text-muted hover:text-foreground"
+                      }`}
+                    >
+                      <span className="text-[10px] text-muted">
+                        0{i + 1}
+                      </span>
+                      {link.name}
+                    </Link>
+                  </motion.div>
+                );
+              })}
+            </div>
+
+            <div className="px-8 pb-16 flex flex-col items-center gap-4">
+              <Link
+                href="/contact"
+                onClick={() => setIsMenuOpen(false)}
+                className="w-full inline-flex items-center justify-center border border-border hover:border-accent hover:text-accent py-4 font-mono text-[11px] tracking-[0.25em] uppercase text-foreground transition-colors duration-300"
+              >
+                Let&apos;s Talk
+              </Link>
+              <span className="font-mono text-[9px] tracking-[0.3em] text-muted uppercase">
+                Addis Ababa, ET
+              </span>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

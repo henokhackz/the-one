@@ -28,6 +28,7 @@ import {
   SiExpress,
 } from "react-icons/si";
 import { motion, AnimatePresence } from "motion/react";
+import { useTheme } from "next-themes";
 import * as THREE from "three";
 
 const stackCategories = [
@@ -74,22 +75,32 @@ const stackCategories = [
 ];
 
 // Animated 3D Globe
-const AbstractCore = ({ activeTab }: { activeTab: string }) => {
-  const globeRef = useRef<THREE.Mesh>(null);
+const AbstractCore = ({
+  activeTab,
+  isLight,
+}: {
+  activeTab: string;
+  isLight: boolean;
+}) => {
   const linesGroupRef = useRef<THREE.Group>(null);
 
   // Map tabs to globe glow/line colors
-  const colors = {
+  const lineColorDark = {
     frontend: "#f59e0b",
     backend: "#fbbf24",
     workflow: "#e5e7eb",
   };
-  const lineColor = colors[activeTab as keyof typeof colors] || "#f59e0b";
+  const lineColorLight = {
+    frontend: "#d97706",
+    backend: "#b45309",
+    workflow: "#475569",
+  };
+  const lineColor =
+    (isLight ? lineColorLight : lineColorDark)[
+      activeTab as keyof typeof lineColorDark
+    ] || "#f59e0b";
 
   useFrame((state, delta) => {
-    if (globeRef.current) {
-      globeRef.current.rotation.y += delta * 0.12;
-    }
     if (linesGroupRef.current) {
       linesGroupRef.current.rotation.y += delta * 0.12;
     }
@@ -97,10 +108,15 @@ const AbstractCore = ({ activeTab }: { activeTab: string }) => {
 
   // Build lat/lon lines geometry
   const latLines = React.useMemo(() => {
-    const groups: JSX.Element[] = [];
+    const groups: React.ReactElement[] = [];
     const radius = 2.01;
     const latCount = 10;
     const lonCount = 16;
+    const mat = new THREE.LineBasicMaterial({
+      color: lineColor,
+      opacity: 0.35,
+      transparent: true,
+    });
 
     // Latitude circles
     for (let i = 1; i < latCount; i++) {
@@ -116,9 +132,10 @@ const AbstractCore = ({ activeTab }: { activeTab: string }) => {
       }
       const geo = new THREE.BufferGeometry().setFromPoints(pts);
       groups.push(
-        <line key={`lat-${i}`} geometry={geo}>
-          <lineBasicMaterial color={lineColor} opacity={0.35} transparent />
-        </line>,
+        <primitive
+          key={`lat-${i}`}
+          object={new THREE.Line(geo, mat.clone())}
+        />,
       );
     }
 
@@ -138,79 +155,41 @@ const AbstractCore = ({ activeTab }: { activeTab: string }) => {
       }
       const geo = new THREE.BufferGeometry().setFromPoints(pts);
       groups.push(
-        <line key={`lon-${j}`} geometry={geo}>
-          <lineBasicMaterial color={lineColor} opacity={0.35} transparent />
-        </line>,
+        <primitive
+          key={`lon-${j}`}
+          object={new THREE.Line(geo, mat.clone())}
+        />,
       );
     }
 
     return groups;
   }, [lineColor]);
 
-  return (
-    <>
-      {/* Sun-like directional light from above */}
-      <directionalLight
-        position={[0, 10, 3]}
-        intensity={4.5}
-        color="#fffbea"
-        castShadow
-      />
-      {/* Soft warm fill to reveal lit hemisphere */}
-      <pointLight position={[4, 4, 6]} intensity={1.2} color="#fde68a" />
-      {/* Rim light from below-back for depth */}
-      <pointLight position={[-3, -6, -3]} intensity={0.4} color="#7dd3fc" />
-      {/* Enough ambient so dark side has shape */}
-      <ambientLight intensity={0.25} />
-
-      {/* Globe sphere */}
-      <mesh ref={globeRef}>
-        <sphereGeometry args={[2, 128, 128]} />
-        <meshStandardMaterial
-          color="#1e3a5f"
-          roughness={0.25}
-          metalness={0.85}
-          envMapIntensity={1.2}
-        />
-      </mesh>
-
-      {/* Lat / lon wireframe overlay — rotates with globe */}
-      <group ref={linesGroupRef}>{latLines}</group>
-
-      {/* Subtle outer glow halo */}
-      <mesh>
-        <sphereGeometry args={[2.18, 64, 64]} />
-        <meshBasicMaterial
-          color={lineColor}
-          transparent
-          opacity={0.12}
-          side={THREE.BackSide}
-        />
-      </mesh>
-    </>
-  );
+  return <group ref={linesGroupRef}>{latLines}</group>;
 };
 
 const Technologies = () => {
   const [activeTab, setActiveTab] = useState(stackCategories[0].id);
+  const { resolvedTheme } = useTheme();
+  const isLight = resolvedTheme === "light";
 
   return (
-    <section className="w-full relative  bg-black overflow-hidden flex items-center min-h-[80vh]">
+    <section className="w-full relative  overflow-hidden flex items-center min-h-[80vh]">
       <div className=" px-16 mx-auto relative z-10 px-6 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         {/* Left Side: Copy & Tech Stack */}
         <div className="flex flex-col space-y-4">
           <div>
-            <p className="text-xl md:text-2xl font-bold text-white/50 tracking-wide mb-8">
+            <p className="text-xl md:text-2xl font-bold text-muted tracking-wide mb-8">
               (TECHNOLOGIES)
             </p>
-            <h2 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-white tracking-tighter uppercase drop-shadow-lg leading-none">
-              ENGINEERED FOR <span className="text-yellow-400">DELIVERY.</span>
+            <h2 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-foreground tracking-tighter uppercase drop-shadow-lg leading-none">
+              ENGINEERED FOR <span className="text-accent">DELIVERY.</span>
               <br />
               <span className="mt-2 block">
-                BUILT FOR <span className="text-white">SCALE.</span>
+                BUILT FOR <span className="text-foreground">SCALE.</span>
               </span>
             </h2>
-            <p className="text-white/60 text-base md:text-lg max-w-xl leading-relaxed mt-8 font-light">
+            <p className="text-muted text-base md:text-lg max-w-xl leading-relaxed mt-8 font-light">
               I bring a reliable and proven selection of tools to every project.
               Whether I am quickly building a prototype for a freelance client
               or delivering robust features within a remote team, I focus on
@@ -226,8 +205,8 @@ const Technologies = () => {
                   onClick={() => setActiveTab(category.id)}
                   className={`px-5 md:px-6 py-3 rounded-md text-xs md:text-sm font-bold uppercase tracking-widest transition-all duration-300 backdrop-blur-md ${
                     activeTab === category.id
-                      ? "bg-[#f59e0b]/10 text-[#f59e0b] border border-[#f59e0b]/50 shadow-[0_0_20px_rgba(245,158,11,0.15)]"
-                      : "bg-white/5 text-white/50 border border-white/5 hover:border-white/20 hover:text-white/80"
+                      ? "bg-accent/10 text-accent border border-accent/50 shadow-[0_0_20px_rgba(245,158,11,0.15)]"
+                      : "bg-background text-muted border border-border hover:border-accent/40 hover:text-foreground"
                   }`}
                 >
                   {category.title}
@@ -248,20 +227,20 @@ const Technologies = () => {
                         transition={{ duration: 0.3 }}
                         className="absolute inset-0 flex flex-col space-y-8"
                       >
-                        <p className="text-[#a1a1aa] text-sm md:text-base leading-relaxed max-w-md font-light">
-                          {category.desc}
-                        </p>
+                         <p className="text-muted text-sm md:text-base leading-relaxed max-w-md font-light">
+                           {category.desc}
+                         </p>
 
                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                           {category.items.map((tech, idx) => (
                             <div
                               key={idx}
-                              className="flex items-center gap-3 p-4 rounded-xl bg-white/5 backdrop-blur-md border border-white/10 hover:bg-[#f59e0b]/10 hover:border-[#f59e0b]/30 hover:shadow-[0_0_20px_rgba(245,158,11,0.1)] transition-all duration-300 group cursor-pointer"
+                              className="flex items-center gap-3 p-4 rounded-xl bg-background backdrop-blur-md border border-border hover:bg-accent/10 hover:border-accent/30 hover:shadow-[0_0_20px_rgba(245,158,11,0.1)] transition-all duration-300 group cursor-pointer"
                             >
-                              <div className="text-white/40 group-hover:text-[#f59e0b] transition-colors duration-300 group-hover:scale-110 transform">
+                              <div className="text-muted group-hover:text-accent transition-colors duration-300 group-hover:scale-110 transform">
                                 {tech.icon}
                               </div>
-                              <span className="text-sm font-bold tracking-wide text-white/60 group-hover:text-white transition-colors">
+                              <span className="text-sm font-bold tracking-wide text-muted group-hover:text-foreground transition-colors">
                                 {tech.name}
                               </span>
                             </div>
@@ -276,28 +255,33 @@ const Technologies = () => {
         </div>
 
         {/* Right Side: 3D Globe */}
-        <div className="h-[500px] lg:h-[600px] w-full relative rounded-3xl overflow-hidden bg-[#050505] shadow-[0_0_60px_rgba(0,0,0,0.9)] group">
+        <div className="h-[500px] lg:h-[600px] w-full relative rounded-3xl overflow-hidden dark:shadow-[0_0_60px_rgba(0,0,0,0.9)] group">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(245,158,11,0.03)_1px,transparent_1px)] bg-[size:24px_24px]" />
-          <Canvas camera={{ position: [0, 0, 6], fov: 45 }}>
-            <Stars
-              radius={50}
-              depth={50}
-              count={1500}
-              factor={4}
-              saturation={0}
-              fade
-              speed={1}
-            />
+          <Canvas
+            camera={{ position: [0, 0, 6], fov: 45 }}
+            gl={{ alpha: true }}
+          >
+            {!isLight && (
+              <Stars
+                radius={50}
+                depth={50}
+                count={1500}
+                factor={4}
+                saturation={0}
+                fade
+                speed={1}
+              />
+            )}
             <OrbitControls
               enableZoom={false}
               enablePan={false}
               autoRotate
               autoRotateSpeed={0.8}
             />
-            <AbstractCore activeTab={activeTab} />
+            <AbstractCore activeTab={activeTab} isLight={isLight} />
           </Canvas>
 
-          <div className="absolute inset-0 pointer-events-none rounded-3xl shadow-[inset_0_0_80px_rgba(0,0,0,0.9)]" />
+          <div className="absolute inset-0 pointer-events-none rounded-3xl dark:shadow-[inset_0_0_80px_rgba(0,0,0,0.9)]" />
         </div>
       </div>
     </section>

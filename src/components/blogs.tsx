@@ -1,26 +1,30 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { motion } from 'motion/react'
-import BlogCard from './blog-card'
-import blogs from '@/lib/dummy-data'
+import { useState } from "react";
+import { motion } from "motion/react";
+import BlogCard from "./blog-card";
+import blogs from "@/lib/dummy-data";
 
 const Blogs = () => {
-  const [visibleCount, setVisibleCount] = useState(3)
-  const visibleBlogs = blogs.slice(0, visibleCount)
-  const hasMore = visibleCount < blogs.length
+  const [visibleCount, setVisibleCount] = useState(3);
+  const visibleBlogs = blogs.slice(0, visibleCount);
+  const hasMore = visibleCount < blogs.length;
 
   const loadMore = () => {
-    setVisibleCount((prev) => prev + 3)
-  }
+    setVisibleCount((prev) => prev + 3);
+  };
 
   return (
-    <section className="relative w-full py-24 md:py-32 bg-black overflow-hidden" id="blogs">
+    <section
+      className="relative w-full py-24 md:py-32  overflow-hidden"
+      id="blogs"
+    >
       {/* Ambient background glow */}
       <div
         className="absolute top-0 right-1/4 w-[500px] h-[500px] pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse at center, rgba(16,185,129,0.03) 0%, transparent 60%)',
+          background:
+            "radial-gradient(ellipse at center, rgba(16,185,129,0.03) 0%, transparent 60%)",
         }}
       />
 
@@ -40,12 +44,13 @@ const Blogs = () => {
               </span>
               <div className="h-px w-6 bg-emerald-500" />
             </div>
-            
-            <h2 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight">
+
+            <h2 className="text-4xl md:text-5xl font-extrabold text-foreground tracking-tight leading-tight">
               Insights on Future Tech
             </h2>
-            <p className="mt-4 text-sm text-white/40 max-w-lg leading-relaxed">
-              Deep dives into modern web architecture, High-Performance 3D rendering, and integrating LLMs into production applications.
+            <p className="mt-4 text-sm text-muted max-w-lg leading-relaxed">
+              Deep dives into modern web architecture, High-Performance 3D
+              rendering, and integrating LLMs into production applications.
             </p>
           </motion.div>
         </div>
@@ -65,7 +70,7 @@ const Blogs = () => {
         </div>
 
         {hasMore && (
-          <motion.div 
+          <motion.div
             className="mt-20 flex justify-center"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -74,13 +79,16 @@ const Blogs = () => {
           >
             <button
               onClick={loadMore}
-              className="relative group px-8 py-3.5 border border-[#10b981]/30 bg-[#10b981]/[0.02] text-white tracking-[0.2em] uppercase text-[10px] font-bold overflow-hidden transition-all duration-500"
+              className="relative group px-8 py-3.5 border border-[#10b981]/30 bg-[#10b981]/[0.02] text-foreground tracking-[0.2em] uppercase text-[10px] font-bold overflow-hidden transition-all duration-500"
             >
               {/* Button focus background */}
               <div className="absolute inset-0 bg-[#10b981] translate-y-[100%] group-hover:translate-y-0 transition-transform duration-500 ease-out" />
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ boxShadow: '0 0 20px 2px rgba(16,185,129,0.4) inset' }} />
-              
-              <span className="relative z-10 group-hover:text-black transition-colors duration-300">
+              <div
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                style={{ boxShadow: "0 0 20px 2px rgba(16,185,129,0.4) inset" }}
+              />
+
+              <span className="relative z-10 group-hover:text-background transition-colors duration-300">
                 Access Memory Bank
               </span>
             </button>
@@ -88,7 +96,7 @@ const Blogs = () => {
         )}
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default Blogs
+export default Blogs;

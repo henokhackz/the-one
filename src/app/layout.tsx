@@ -29,7 +29,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${fontHeading.variable} ${fontBody.variable} antialiased bg-black text-white font-body`}
+        className={`${fontHeading.variable} ${fontBody.variable} antialiased font-body`}
       >
         <ThemeProvider
           attribute="class"

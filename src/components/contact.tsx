@@ -8,7 +8,7 @@ export function Contact() {
       <div className="max-w-3xl mx-auto space-y-12">
         {/* Header */}
         <div className="text-center space-y-2">
-          <h2 className="text-3xl font-bold text-neutral-900 dark:text-white tracking-tight">
+          <h2 className="text-3xl font-bold text-neutral-900 dark:text-foreground tracking-tight">
             Let’s Talk
           </h2>
           <p className="text-sm text-neutral-600 dark:text-neutral-400">
@@ -37,26 +37,26 @@ export function Contact() {
           <input
             type="text"
             placeholder="Name"
-            className="w-full rounded-md border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 p-3 text-sm text-neutral-800 dark:text-white placeholder-neutral-500 dark:placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-neutral-700"
+            className="w-full rounded-md border border-neutral-300 dark:border-neutral-700 bg-foreground dark:bg-neutral-900 p-3 text-sm text-neutral-800 dark:text-foreground placeholder-neutral-500 dark:placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-neutral-700"
           />
           <input
             type="email"
             placeholder="E-Mail"
-            className="w-full rounded-md border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 p-3 text-sm text-neutral-800 dark:text-white placeholder-neutral-500 dark:placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-neutral-700"
+            className="w-full rounded-md border border-neutral-300 dark:border-neutral-700 bg-foreground dark:bg-neutral-900 p-3 text-sm text-neutral-800 dark:text-foreground placeholder-neutral-500 dark:placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-neutral-700"
           />
           <input
             type="text"
             placeholder="Subject"
-            className="md:col-span-2 w-full rounded-md border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 p-3 text-sm text-neutral-800 dark:text-white placeholder-neutral-500 dark:placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-neutral-700"
+            className="md:col-span-2 w-full rounded-md border border-neutral-300 dark:border-neutral-700 bg-foreground dark:bg-neutral-900 p-3 text-sm text-neutral-800 dark:text-foreground placeholder-neutral-500 dark:placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-neutral-700"
           />
           <textarea
             placeholder="Message"
             rows={6}
-            className="md:col-span-2 w-full rounded-md border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 p-3 text-sm text-neutral-800 dark:text-white placeholder-neutral-500 dark:placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-neutral-700 resize-none"
+            className="md:col-span-2 w-full rounded-md border border-neutral-300 dark:border-neutral-700 bg-foreground dark:bg-neutral-900 p-3 text-sm text-neutral-800 dark:text-foreground placeholder-neutral-500 dark:placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-neutral-700 resize-none"
           ></textarea>
           <button
             type="submit"
-            className="md:col-span-2 mt-2 w-full rounded-md bg-neutral-900 text-white hover:bg-neutral-800 dark:bg-white dark:text-black dark:hover:bg-neutral-200 py-3 text-sm font-medium transition"
+            className="md:col-span-2 mt-2 w-full rounded-md bg-neutral-900 text-foreground hover:bg-neutral-800 dark:bg-foreground dark:text-background dark:hover:bg-neutral-200 py-3 text-sm font-medium transition"
           >
             Send Message
           </button>

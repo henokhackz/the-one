@@ -2,3 +2,51 @@
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
+
+@theme {
+  --color-background: #ffffff;
+  --color-surface: #f4f4f5;
+  --color-foreground: #0a0a0a;
+  --color-muted: #52525b;
+  --color-border: #e4e4e7;
+  --color-accent: #f59e0b;
+  --color-accent-foreground: #1a1205;
+  --color-hero-ink: #ffffff;
+  --color-background-translucent: rgba(255, 255, 255, 0.85);
+  --gradient-from: #ffffff;
+  --gradient-via: #f4f4f5;
+  --gradient-to: #fafafa;
+}
+
+.dark {
+  --color-background: #070707;
+  --color-surface: #0a0a0a;
+  --color-foreground: #ffffff;
+  --color-muted: rgba(255, 255, 255, 0.6);
+  --color-border: rgba(255, 255, 255, 0.1);
+  --color-accent: #f59e0b;
+  --color-accent-foreground: #000000;
+  --color-hero-ink: #0a0a0a;
+  --color-background-translucent: rgba(7, 7, 7, 0.85);
+  --gradient-from: #050505;
+  --gradient-via: #080808;
+  --gradient-to: #0b0b0b;
+}
+
+@utility section-gradient {
+  background-image: linear-gradient(
+    to bottom,
+    var(--gradient-from),
+    var(--gradient-via),
+    var(--gradient-to)
+  );
+}
+
+.hero-circuit {
+  color: var(--color-hero-ink);
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+}

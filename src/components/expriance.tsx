@@ -205,11 +205,8 @@ function ExperienceCard({
             {/* Logo or initial */}
             {exp.logo ? (
               <div
-                className="flex-shrink-0 w-10 h-10 rounded overflow-hidden flex items-center justify-center"
-                style={{
-                  background: "#0a0a0a",
-                  border: `1px solid ${exp.accent}30`,
-                }}
+                className="flex-shrink-0 w-10 h-10 rounded overflow-hidden flex items-center justify-center bg-background"
+                style={{ border: `1px solid ${exp.accent}30` }}
               >
                 <Image
                   src={exp.logo}
@@ -233,7 +230,7 @@ function ExperienceCard({
             )}
 
             <div>
-              <h3 className="text-base font-bold text-white leading-tight">
+              <h3 className="text-base font-bold text-foreground leading-tight">
                 {exp.role}
               </h3>
               <p className="text-sm" style={{ color: exp.accent }}>
@@ -244,7 +241,7 @@ function ExperienceCard({
 
           {/* Meta chips */}
           <div className="flex flex-wrap gap-2 text-[9px] font-mono uppercase tracking-widest">
-            <span className="px-2 py-1 text-white/30 border border-white/8 bg-white/[0.02]">
+            <span className="px-2 py-1 text-muted border border-border bg-foreground/[0.02]">
               {exp.date}
             </span>
             <span
@@ -257,7 +254,7 @@ function ExperienceCard({
             >
               {exp.type}
             </span>
-            <span className="px-2 py-1 text-white/20 border border-white/5">
+            <span className="px-2 py-1 text-muted border border-border">
               {exp.location}
             </span>
           </div>
@@ -265,11 +262,7 @@ function ExperienceCard({
 
         {/* Inner card with hover glow */}
         <div
-          className="relative rounded-none p-5 md:p-7 transition-all duration-300 overflow-hidden"
-          style={{
-            background: hovered ? `${exp.accent}06` : "#0a0a0a",
-            border: `1px solid ${hovered ? exp.accent + "35" : "#ffffff10"}`,
-          }}
+          className="relative rounded-none p-5 md:p-7 transition-all duration-300 overflow-hidden border border-border bg-background hover:border-accent/35 hover:bg-accent/[0.06]"
         >
           {/* Corner accent */}
           <div
@@ -292,7 +285,7 @@ function ExperienceCard({
           />
 
           {/* Description */}
-          <p className="text-[0.82rem] text-white/50 leading-[1.85] mb-5">
+          <p className="text-[0.82rem] text-muted leading-[1.85] mb-5">
             {exp.description}
           </p>
 
@@ -304,7 +297,7 @@ function ExperienceCard({
                   className="mt-[5px] flex-shrink-0 w-1 h-1 rounded-full"
                   style={{ background: exp.accent }}
                 />
-                <span className="text-[0.78rem] text-white/40 leading-relaxed">
+                <span className="text-[0.78rem] text-muted leading-relaxed">
                   {h}
                 </span>
               </li>
@@ -330,7 +323,7 @@ const Experience = () => {
   const headInView = useInView(headRef, { once: true });
 
   return (
-    <section className="relative w-full py-24 md:py-32 bg-black overflow-hidden">
+    <section className="relative w-full py-24 md:py-32  overflow-hidden">
       {/* Ambient background glow */}
       <div
         className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] pointer-events-none"
@@ -349,13 +342,13 @@ const Experience = () => {
           transition={{ duration: 0.6 }}
           className="mb-20"
         >
-          <p className="text-xl md:text-2xl font-bold text-white/50 tracking-wide mb-8">
+          <p className="text-xl md:text-2xl font-bold text-muted tracking-wide mb-8">
             (EXPERIENCE)
           </p>
-          <h2 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-white tracking-tighter uppercase leading-none">
-            WORK <span className="text-yellow-400">HISTORY</span>
+          <h2 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-foreground tracking-tighter uppercase leading-none">
+              WORK <span className="text-accent">HISTORY</span>
           </h2>
-          <p className="mt-6 text-sm md:text-base text-white/40 leading-relaxed max-w-sm font-light">
+          <p className="mt-6 text-sm md:text-base text-muted leading-relaxed max-w-sm font-light">
             Real products. Real outcomes. Shipped across startups, enterprises,
             and frontier tech.
           </p>
