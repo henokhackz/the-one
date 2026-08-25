@@ -94,7 +94,7 @@ function ProjectGalleryScene({
 }: {
   projects: Project[];
   targetRotationRef: MutableRefObject<number>;
-  rootRef: MutableRefObject<Group>;
+  rootRef: MutableRefObject<Group | null>;
   onActiveChange: (index: number) => void;
 }) {
   const lastActiveRef = useRef(0);
@@ -140,7 +140,7 @@ export function Projects() {
   const projectCount = projects.length;
   const step = (Math.PI * 2) / projectCount;
   const targetRotationRef = useRef(0);
-  const rootRef = useRef<Group>(null);
+  const rootRef = useRef<Group | null>(null);
   const dragStateRef = useRef<DragState>({
     pointerId: null,
     isDragging: false,
