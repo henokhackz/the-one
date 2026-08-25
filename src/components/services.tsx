@@ -147,8 +147,8 @@ export function Services() {
                   </div>
 
                   {/* Main content */}
-                  <div className="flex flex-col gap-4 md:flex-row md:items-start md:gap-16">
-                    <div className="min-w-[200px]">
+                   <div className="flex flex-col gap-4 md:flex-row md:items-start md:gap-16">
+                     <div className="min-w-0 md:min-w-[200px]">
                       <h3
                         className={`text-3xl font-bold uppercase tracking-[-0.02em] transition-colors duration-300 md:text-4xl ${isHovered ? "text-foreground" : "text-muted"}`}
                       >
@@ -161,9 +161,9 @@ export function Services() {
                       </p>
                     </div>
 
-                    <div className="flex-1">
+                    <div className="flex-1 min-w-0">
                       <p
-                        className={`text-sm leading-relaxed transition-colors duration-300 md:text-base ${isHovered ? "text-muted" : "text-muted"}`}
+                        className={`text-sm leading-relaxed transition-colors duration-300 break-words md:text-base ${isHovered ? "text-muted" : "text-muted"}`}
                       >
                         {service.description}
                       </p>

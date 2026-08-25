@@ -175,14 +175,14 @@ const Technologies = () => {
 
   return (
     <section className="w-full relative  overflow-hidden flex items-center min-h-[80vh]">
-      <div className=" px-16 mx-auto relative z-10 px-6 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div className="mx-auto relative z-10 w-full max-w-[1500px] px-6 grid grid-cols-1 gap-12 items-center md:grid-cols-2">
         {/* Left Side: Copy & Tech Stack */}
         <div className="flex flex-col space-y-4">
           <div>
             <p className="text-xl md:text-2xl font-bold text-muted tracking-wide mb-8">
               (TECHNOLOGIES)
             </p>
-            <h2 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-foreground tracking-tighter uppercase drop-shadow-lg leading-none">
+              <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-foreground tracking-tighter uppercase drop-shadow-lg leading-none break-words">
               ENGINEERED FOR <span className="text-accent">DELIVERY.</span>
               <br />
               <span className="mt-2 block">
@@ -255,7 +255,7 @@ const Technologies = () => {
         </div>
 
         {/* Right Side: 3D Globe */}
-        <div className="h-[500px] lg:h-[600px] w-full relative rounded-3xl overflow-hidden dark:shadow-[0_0_60px_rgba(0,0,0,0.9)] group">
+        <div className="h-[360px] sm:h-[460px] lg:h-[600px] w-full relative rounded-3xl overflow-hidden dark:shadow-[0_0_60px_rgba(0,0,0,0.9)] group">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(245,158,11,0.03)_1px,transparent_1px)] bg-[size:24px_24px]" />
           <Canvas
             camera={{ position: [0, 0, 6], fov: 45 }}

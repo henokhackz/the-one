@@ -31,47 +31,24 @@ type DragState = {
   velocity: number;
 };
 
-const PANEL_WIDTH = 6.8;
-const PANEL_HEIGHT = 4.5;
-const PANEL_SPACING = 9.5;
-const DRAG_SPEED = 0.0044;
-const WHEEL_SPEED = 0.001;
+const PANEL_WIDTH = 5;
+const PANEL_HEIGHT = 3.5;
+const GALLERY_RADIUS = 8.7;
+const DRAG_SPEED = 0.005;
+const WHEEL_SPEED = 0.0015;
 const MOMENTUM_LIMIT = 0.85;
-const SNAP_DELAY = 120;
+const SNAP_DELAY = 140;
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
-}
-
-function smoothstep(edge0: number, edge1: number, x: number) {
-  const t = clamp((x - edge0) / (edge1 - edge0), 0, 1);
-  return t * t * (3 - 2 * t);
 }
 
 function normalizeIndex(index: number, total: number) {
   return ((index % total) + total) % total;
 }
 
-function getWrappedDistance(index: number, progress: number, total: number) {
-  let distance = index - progress;
-  distance = ((distance + total / 2 + total * 1000) % total) - total / 2;
-  return distance;
-}
-
-function ProjectPanel({
-  project,
-  index,
-  progressRef,
-  total,
-}: {
-  project: Project;
-  index: number;
-  progressRef: MutableRefObject<number>;
-  total: number;
-}) {
+function ProjectPanel({ project, angle }: { project: Project; angle: number }) {
   const texture = useLoader(TextureLoader, project.image);
-  const panelRef = useRef<Group>(null);
-  const imageRef = useRef<MeshBasicMaterial>(null);
 
   useEffect(() => {
     texture.colorSpace = SRGBColorSpace;
@@ -94,78 +71,15 @@ function ProjectPanel({
     texture.needsUpdate = true;
   }, [texture]);
 
-  useFrame((_, delta) => {
-    const distance = getWrappedDistance(index, progressRef.current, total);
-    const clampedDistance = clamp(distance, -4, 4);
-    const absDistance = Math.abs(clampedDistance);
-    const frontness = clamp(1 - absDistance / 4, 0, 1);
-    const visibleMask = 1 - smoothstep(1, 1.6, absDistance);
-    const settle = 1 - Math.exp(-delta * 14);
-
-    if (panelRef.current) {
-      const targetX = clampedDistance * PANEL_SPACING;
-      const targetY = -absDistance * 0.04;
-      const targetZ = -absDistance * 0.3;
-      const targetScale = 1.4;
-      panelRef.current.position.x = MathUtils.lerp(
-        panelRef.current.position.x,
-        targetX,
-        settle,
-      );
-      panelRef.current.scale.x = MathUtils.lerp(
-        panelRef.current.scale.x,
-        targetScale,
-        settle,
-      );
-      panelRef.current.scale.y = MathUtils.lerp(
-        panelRef.current.scale.y,
-        targetScale,
-        settle,
-      );
-      panelRef.current.scale.z = MathUtils.lerp(
-        panelRef.current.scale.z,
-        targetScale,
-        settle,
-      );
-      panelRef.current.position.y = MathUtils.lerp(
-        panelRef.current.position.y,
-        targetY,
-        settle,
-      );
-      panelRef.current.position.z = MathUtils.lerp(
-        panelRef.current.position.z,
-        targetZ,
-        settle,
-      );
-      panelRef.current.rotation.y = MathUtils.lerp(
-        panelRef.current.rotation.y,
-        -clampedDistance * 0.06,
-        settle,
-      );
-      panelRef.current.rotation.z = MathUtils.lerp(
-        panelRef.current.rotation.z,
-        0,
-        settle,
-      );
-      panelRef.current.visible = visibleMask > 0.01;
-    }
-
-    if (imageRef.current) {
-      imageRef.current.opacity = visibleMask;
-    }
-  });
-
   return (
-    <group ref={panelRef}>
-      <mesh>
+    <group rotation-y={angle}>
+      <mesh position={[0, 0, -GALLERY_RADIUS]}>
         <planeGeometry args={[PANEL_WIDTH, PANEL_HEIGHT]} />
         <meshBasicMaterial
-          ref={imageRef}
           map={texture}
           side={DoubleSide}
-          transparent
-          opacity={1}
           toneMapped={false}
+          transparent
         />
       </mesh>
     </group>
@@ -174,57 +88,47 @@ function ProjectPanel({
 
 function ProjectGalleryScene({
   projects,
-  progressRef,
-  targetProgressRef,
-  dragStateRef,
+  targetRotationRef,
+  rootRef,
   onActiveChange,
 }: {
   projects: Project[];
-  progressRef: MutableRefObject<number>;
-  targetProgressRef: MutableRefObject<number>;
-  dragStateRef: MutableRefObject<DragState>;
+  targetRotationRef: MutableRefObject<number>;
+  rootRef: MutableRefObject<Group>;
   onActiveChange: (index: number) => void;
 }) {
   const lastActiveRef = useRef(0);
+  const step = (Math.PI * 2) / projects.length;
 
   useFrame((_, delta) => {
-    if (!dragStateRef.current.isDragging) {
-      const settle = 1 - Math.exp(-delta * 8);
-      progressRef.current = MathUtils.lerp(
-        progressRef.current,
-        targetProgressRef.current,
+    if (rootRef.current) {
+      const settle = 1 - Math.exp(-delta * 6);
+      rootRef.current.rotation.y = MathUtils.lerp(
+        rootRef.current.rotation.y,
+        targetRotationRef.current,
         settle,
       );
-    } else {
-      progressRef.current = targetProgressRef.current;
-    }
-
-    const nextIndex = normalizeIndex(
-      Math.round(progressRef.current),
-      projects.length,
-    );
-    if (nextIndex !== lastActiveRef.current) {
-      lastActiveRef.current = nextIndex;
-      onActiveChange(nextIndex);
+      const idx =
+        ((Math.round(-rootRef.current.rotation.y / step) % projects.length) +
+          projects.length) %
+        projects.length;
+      if (idx !== lastActiveRef.current) {
+        lastActiveRef.current = idx;
+        onActiveChange(idx);
+      }
     }
   });
 
   return (
-    <>
-      <color attach="background" args={["#1e40af"]} />
-      <ambientLight intensity={2.2} />
-      <group position={[0, -0.05, 0]}>
-        {projects.map((project, index) => (
-          <ProjectPanel
-            key={project.id}
-            project={project}
-            index={index}
-            progressRef={progressRef}
-            total={projects.length}
-          />
-        ))}
-      </group>
-    </>
+    <group ref={rootRef}>
+      {projects.map((project, i) => (
+        <ProjectPanel
+          key={project.id}
+          project={project}
+          angle={(Math.PI * 2 * i) / projects.length}
+        />
+      ))}
+    </group>
   );
 }
 
@@ -233,8 +137,10 @@ export function Projects() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
 
-  const progressRef = useRef(0);
-  const targetProgressRef = useRef(0);
+  const projectCount = projects.length;
+  const step = (Math.PI * 2) / projectCount;
+  const targetRotationRef = useRef(0);
+  const rootRef = useRef<Group>(null);
   const dragStateRef = useRef<DragState>({
     pointerId: null,
     isDragging: false,
@@ -243,7 +149,6 @@ export function Projects() {
   });
   const snapTimerRef = useRef<number | null>(null);
   const activeIndexRef = useRef(0);
-  const projectCount = projects.length;
   const activeProject = projects[activeIndex] ?? projects[0];
 
   const clearSnapTimer = useCallback(() => {
@@ -260,10 +165,9 @@ export function Projects() {
       -MOMENTUM_LIMIT,
       MOMENTUM_LIMIT,
     );
-    targetProgressRef.current = Math.round(
-      targetProgressRef.current + momentum,
-    );
-  }, []);
+    targetRotationRef.current =
+      Math.round((targetRotationRef.current + momentum) / step) * step;
+  }, [step]);
 
   const scheduleSnap = useCallback(() => {
     clearSnapTimer();
@@ -276,18 +180,13 @@ export function Projects() {
   const move = useCallback(
     (direction: -1 | 1) => {
       clearSnapTimer();
-      const nextProgress = Math.round(targetProgressRef.current) + direction;
-      targetProgressRef.current = nextProgress;
-      progressRef.current = MathUtils.lerp(
-        progressRef.current,
-        nextProgress,
-        0.35,
-      );
-      const nextIndex = normalizeIndex(nextProgress, projectCount);
+      const next = targetRotationRef.current + direction * step;
+      targetRotationRef.current = next;
+      const nextIndex = normalizeIndex(Math.round(-next / step), projectCount);
       activeIndexRef.current = nextIndex;
       setActiveIndex(nextIndex);
     },
-    [clearSnapTimer, projectCount],
+    [clearSnapTimer, step, projectCount],
   );
 
   useEffect(() => {
@@ -326,14 +225,14 @@ export function Projects() {
     if (!drag.isDragging || drag.pointerId !== event.pointerId) return;
 
     const deltaX = event.clientX - drag.lastX;
-    const deltaProgress = -deltaX * DRAG_SPEED;
+    const deltaRotation = -deltaX * DRAG_SPEED;
 
-    targetProgressRef.current += deltaProgress;
-    drag.velocity = drag.velocity * 0.7 + deltaProgress * 0.3;
+    targetRotationRef.current += deltaRotation;
+    drag.velocity = drag.velocity * 0.7 + deltaRotation * 0.3;
     drag.lastX = event.clientX;
 
     const nextIndex = normalizeIndex(
-      Math.round(targetProgressRef.current),
+      Math.round(-targetRotationRef.current / step),
       projectCount,
     );
     activeIndexRef.current = nextIndex;
@@ -363,13 +262,13 @@ export function Projects() {
       Math.abs(event.deltaX) > Math.abs(event.deltaY)
         ? event.deltaX
         : event.deltaY;
-    const deltaProgress = delta * WHEEL_SPEED;
-    targetProgressRef.current += deltaProgress;
+    const deltaRotation = delta * WHEEL_SPEED;
+    targetRotationRef.current += deltaRotation;
     dragStateRef.current.velocity =
-      dragStateRef.current.velocity * 0.72 + deltaProgress * 0.28;
+      dragStateRef.current.velocity * 0.72 + deltaRotation * 0.28;
 
     const nextIndex = normalizeIndex(
-      Math.round(targetProgressRef.current),
+      Math.round(-targetRotationRef.current / step),
       projectCount,
     );
     activeIndexRef.current = nextIndex;
@@ -378,7 +277,7 @@ export function Projects() {
   };
 
   return (
-    <section id="projects" className="relative   text-foreground">
+    <section id="projects" className="relative text-foreground">
       <div className="relative mx-auto w-full max-w-[1920px]">
         <div className="mx-auto max-w-[1500px] px-5 pt-16 md:px-10 md:pt-24">
           <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-accent">
@@ -396,13 +295,8 @@ export function Projects() {
             touchAction: "none",
           }}
         >
-          {/* Left fade mask */}
-          <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-[12%] bg-gradient-to-r from-[#070707] to-transparent" />
-          {/* Right fade mask */}
-          <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-[12%] bg-gradient-to-l from-[#070707] to-transparent" />
-
           <div
-            className="relative h-[360px] overflow-hidden bg-[#1e40af] md:h-[420px] lg:h-[470px]"
+            className="relative h-[360px]  md:h-[420px] lg:h-[470px]"
             aria-label="Interactive 3D project gallery"
             onPointerDown={handlePointerDown}
             onPointerMove={handlePointerMove}
@@ -411,16 +305,15 @@ export function Projects() {
             onWheel={handleWheel}
           >
             <Canvas
-              camera={{ position: [0, 0.1, 6], fov: 50, near: 0.1, far: 100 }}
+              camera={{ position: [0, 0, 0.01], fov: 35, near: 0.1, far: 100 }}
               dpr={[1, 1.6]}
-              gl={{ antialias: true, alpha: false }}
+              gl={{ antialias: true, alpha: true }}
             >
               <Suspense fallback={null}>
                 <ProjectGalleryScene
                   projects={projects}
-                  progressRef={progressRef}
-                  targetProgressRef={targetProgressRef}
-                  dragStateRef={dragStateRef}
+                  targetRotationRef={targetRotationRef}
+                  rootRef={rootRef}
                   onActiveChange={(index) => {
                     activeIndexRef.current = index;
                     setActiveIndex(index);
