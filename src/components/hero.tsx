@@ -1,148 +1,115 @@
-"use client";
-
-import React from "react";
+import Image from "next/image";
 import Link from "next/link";
-import { motion, useReducedMotion } from "motion/react";
-import { ArrowUpRight, ArrowRight } from "lucide-react";
-import { HeroVisual } from "./hero-visual";
+import { ArrowRight } from "lucide-react";
+import { profile, socials } from "@/lib/data";
+import { SocialIcon } from "./social-icon";
 
-const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
-
-const SKILLS = ["NEXT.JS", "REACT", "TYPESCRIPT", "JAVASCRIPT"];
-
+/**
+ * Hero — full-bleed lime gradient with an egg-shaped bright core.
+ *
+ *   "Hi, I'm Lantumo" — bold sans
+ *   "Fullstack Developer" — giant italic serif, partially behind the portrait
+ *   cutout portrait (grayscale, lg+) overlapping the serif line
+ *   availability pill · trusted row (left) / bio · CTA (right)
+ */
 export function Hero() {
-  const reducedMotion = useReducedMotion();
-
   return (
-    <section
-      className="relative w-full min-h-[calc(100svh-6rem)]  text-foreground overflow-hidden flex flex-col"
-      id="top"
-    >
-      {/* ── Mobile: PCB as soft backdrop (same dot environment) ── */}
-      <div className="lg:hidden absolute inset-0 z-0 opacity-[0.15] pointer-events-none">
-        <HeroVisual />
-      </div>
+    <section className="relative overflow-hidden">
+      {/* ── Lime gradient: linear base (top→bottom fade) + bright oval core ── */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 50% 48% at 50% 52%, rgba(201,241,88,0.95) 0%, rgba(201,241,88,0.55) 58%, rgba(201,241,88,0) 100%)," +
+            "linear-gradient(180deg, rgba(201,241,88,0.28) 0%, rgba(201,241,88,0.5) 22%, rgba(201,241,88,0.66) 45%, rgba(201,241,88,0.6) 60%, rgba(201,241,88,0.3) 78%, rgba(253,253,251,0) 97%)",
+        }}
+      />
 
-      {/* ── Content ── */}
-      <div className="relative z-10 flex-1 w-full max-w-[1600px] mx-auto px-6 md:px-12 xl:px-16 flex flex-col">
-        {/* Top bar */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6 }}
-          className="flex items-center justify-between pt-8 md:pt-10"
+      <div className="relative mx-auto flex min-h-[100svh] max-w-[1400px] flex-col px-6 md:px-10 lg:px-16">
+        {/* ── Headline ──────────────────────────────────────────────────── */}
+        <div className="relative flex  flex-1 flex-col items-center justify-center pb-12">
+          <h1 className="relative z-10 text-center leading-[1.02] tracking-[-0.03em]">
+            <span className="block text-[clamp(2.5rem,8vw,6.5rem)] font-semibold text-foreground">
+              Hi, I&apos;m {profile.firstName}
+            </span>
+            <span className="font-serif-accent relative mt-1 block text-[clamp(2.25rem,9vw,8rem)] italic leading-[1.05] text-foreground">
+              {profile.role}
+            </span>
+          </h1>
+        </div>
+
+        {/* ── Portrait — grayscale, behind the serif line, fading at the
+            bottom edge so it melts into the white gradient (lg+) ──────── */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-20 mx-auto hidden h-[64%] w-full max-w-[480px] [mask-image:linear-gradient(to_bottom,black_46%,black_62%,transparent_94%)] lg:block"
         >
-          <div className="flex items-center gap-3">
-            <span className="font-mono text-[10px] tracking-[0.35em] text-muted uppercase font-medium">
-              HENOK BIRHANU
+          <Image
+            src={profile.portrait.src}
+            alt=""
+            fill
+            priority
+            sizes="480px"
+            className="object-contain object-bottom grayscale"
+          />
+        </div>
+
+        {/* ── Bottom row ────────────────────────────────────────────────── */}
+        <div className="relative z-30 flex flex-col items-center gap-8 pb-14 md:flex-row md:items-end md:justify-between md:gap-6">
+          {/* Left — availability + trusted */}
+          <div className="order-2 flex flex-col items-center gap-8 md:order-1 md:items-start">
+            <span className="inline-flex items-center gap-2.5 rounded-full bg-surface py-2 pl-3 pr-4 text-sm font-medium text-foreground">
+              <span className="relative flex h-5 w-5 items-center justify-center">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60 motion-reduce:animate-none" />
+                <span className="relative inline-flex h-5 w-5 rounded-full border border-border bg-accent" />
+              </span>
+              Available for new opportunities
             </span>
-          </div>
-          <div className="hidden sm:flex items-center gap-6">
-            <span className="font-mono text-[10px] tracking-[0.35em] text-muted uppercase">
-              ADDIS ABABA, ET
-            </span>
-            <span className="w-px h-3 bg-foreground" />
-            <span className="font-mono text-[10px] tracking-[0.35em] text-muted uppercase">
-              01 / 04
-            </span>
-          </div>
-        </motion.div>
 
-        {/* ── Main two-column ── */}
-        <div className="flex-1 grid grid-cols-1 lg:grid-cols-[1fr_1.1fr] items-center gap-10 py-10">
-          {/* LEFT — communication-first content */}
-          <div className="relative flex flex-col">
-            {/* 1. Intro */}
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.1, ease: EASE }}
-              className="flex items-center gap-3 mb-5"
-            >
-              <span className="font-mono text-xs md:text-sm tracking-[0.3em] text-muted uppercase font-medium">
-                Frontend Developer
-              </span>
-            </motion.div>
-
-            {/* 2. Main statement */}
-            <h1 className="font-heading text-[clamp(3rem,5.2vw,5.75rem)] leading-[0.98] tracking-[-0.035em] font-bold select-none">
-              <span className="block overflow-hidden pb-1">
-                <motion.span
-                  initial={{ y: reducedMotion ? 0 : "110%" }}
-                  animate={{ y: 0 }}
-                  transition={{ duration: 0.9, delay: 0.18, ease: EASE }}
-                  className="block text-foreground"
-                >
-                  Clear, fast
-                </motion.span>
-              </span>
-              <span className="block overflow-hidden pb-1">
-                <motion.span
-                  initial={{ y: reducedMotion ? 0 : "110%" }}
-                  animate={{ y: 0 }}
-                  transition={{ duration: 0.9, delay: 0.3, ease: EASE }}
-                  className="block text-foreground"
-                >
-                  digital
-                </motion.span>
-              </span>
-              <span className="block overflow-hidden pb-1">
-                <motion.span
-                  initial={{ y: reducedMotion ? 0 : "110%" }}
-                  animate={{ y: 0 }}
-                  transition={{ duration: 0.9, delay: 0.42, ease: EASE }}
-                  className="block text-accent"
-                >
-                  experiences.
-                </motion.span>
-              </span>
-            </h1>
-
-            {/* 3. Short explanation — readable */}
-            <motion.p
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
-              className="mt-7 max-w-md text-base md:text-lg leading-relaxed text-muted font-light"
-            >
-              I design and build thoughtful websites and web apps that are easy
-              to use, quick to load, and made to last.
-            </motion.p>
-
-            {/* 5. CTA */}
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.8, ease: EASE }}
-              className="mt-10 flex flex-wrap items-center gap-5 md:gap-8"
-            >
-              <Link
-                href="/projects"
-                className="group relative inline-flex items-center gap-3 border border-border hover:border-border px-6 md:px-8 py-3.5 md:py-4 text-[11px] md:text-xs font-semibold tracking-[0.28em] uppercase text-foreground transition-colors duration-300 hover:bg-foreground hover:text-background overflow-hidden"
-              >
-                <span className="relative z-10">View My Work</span>
-                <ArrowUpRight className="relative z-10 w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              </Link>
-
-              <Link
-                href="/contact"
-                className="group inline-flex items-center gap-2 text-[11px] md:text-xs font-semibold tracking-[0.28em] uppercase text-muted hover:text-accent transition-colors duration-300"
-              >
-                Let's Talk
-                <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-              </Link>
-            </motion.div>
+            <div className="flex items-center gap-4">
+              <div className="flex -space-x-3">
+                {socials.slice(0, 3).map((social) => (
+                  <a
+                    key={social.label}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={social.label}
+                    className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-surface text-foreground transition-transform duration-200 hover:-translate-y-0.5"
+                  >
+                    <SocialIcon
+                      name={social.icon}
+                      className="h-4 w-4"
+                    />
+                  </a>
+                ))}
+              </div>
+              <p className="max-w-[230px] text-xs leading-relaxed text-foreground/70">
+                Trusted by over{" "}
+                <span className="font-semibold text-foreground">
+                  20+ happy clients
+                </span>{" "}
+                across startups and commercial projects.
+              </p>
+            </div>
           </div>
 
-          {/* RIGHT — interactive frontend system module */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.4 }}
-            className="hidden lg:block relative h-[540px] xl:h-[600px] -ml-8 xl:-ml-12"
-          >
-            <HeroVisual />
-          </motion.div>
+          {/* Right — bio + CTA */}
+          <div className="order-1 flex flex-col items-center gap-6 md:order-2 md:items-end">
+            <p className="max-w-xs text-center text-sm leading-relaxed text-foreground/80 md:max-w-sm md:text-right md:text-[15px]">
+              I care about the whole path — sketching the flow, building it
+              out, and shipping something people actually enjoy using.
+            </p>
+
+            <Link href="/contact" className="btn-pill group">
+              <ArrowRight
+                className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5"
+                aria-hidden="true"
+              />
+              Get in Touch
+            </Link>
+          </div>
         </div>
       </div>
     </section>

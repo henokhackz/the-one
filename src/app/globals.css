@@ -3,50 +3,122 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* ── Design tokens — minimal light "Elian Ross" design ──────────────────── */
 @theme {
-  --color-background: #ffffff;
-  --color-surface: #f4f4f5;
-  --color-foreground: #0a0a0a;
-  --color-muted: #52525b;
-  --color-border: #e4e4e7;
-  --color-accent: #f59e0b;
-  --color-accent-foreground: #1a1205;
-  --color-hero-ink: #ffffff;
-  --color-background-translucent: rgba(255, 255, 255, 0.85);
-  --gradient-from: #ffffff;
-  --gradient-via: #f4f4f5;
-  --gradient-to: #fafafa;
+  /* Warm paper white background */
+  --color-background: #fdfdfb;
+  /* Pure white cards / sections */
+  --color-surface: #ffffff;
+  /* Near-black ink */
+  --color-foreground: #161615;
+  /* Soft gray secondary text */
+  --color-muted: #75756f;
+  /* Hairline borders */
+  --color-border: #e9e9e4;
+  /* Lime signature accent */
+  --color-accent: #c9f158;
+  /* Dark ink text that sits on lime */
+  --color-accent-foreground: #161615;
 }
 
-.dark {
-  --color-background: #070707;
-  --color-surface: #0a0a0a;
-  --color-foreground: #ffffff;
-  --color-muted: rgba(255, 255, 255, 0.6);
-  --color-border: rgba(255, 255, 255, 0.1);
-  --color-accent: #f59e0b;
-  --color-accent-foreground: #000000;
-  --color-hero-ink: #0a0a0a;
-  --color-background-translucent: rgba(7, 7, 7, 0.85);
-  --gradient-from: #050505;
-  --gradient-via: #080808;
-  --gradient-to: #0b0b0b;
-}
-
-@utility section-gradient {
-  background-image: linear-gradient(
-    to bottom,
-    var(--gradient-from),
-    var(--gradient-via),
-    var(--gradient-to)
-  );
-}
-
-.hero-circuit {
-  color: var(--color-hero-ink);
-}
-
+/* ── Typography ─────────────────────────────────────────────────────────── */
 body {
   background-color: var(--color-background);
   color: var(--color-foreground);
+  font-family: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Italic serif accent (Instrument Serif) — used for "/ Who Am I", footer name */
+.font-serif-accent {
+  font-family: var(--font-instrument), Georgia, serif;
+}
+
+/* ── Buttons ────────────────────────────────────────────────────────────── */
+
+/* Dark pill button ("Get In Touch", "View All Work") */
+.btn-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  background-color: var(--color-foreground);
+  color: var(--color-surface);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  border-radius: 9999px;
+  padding: 0.625rem 1.25rem;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+.btn-pill:hover {
+  transform: translateY(-2px);
+  opacity: 0.92;
+}
+.btn-pill:active {
+  transform: translateY(0);
+}
+
+/* Light pill button on lime/glow sections */
+.btn-pill-light {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  background-color: var(--color-surface);
+  color: var(--color-foreground);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  border-radius: 9999px;
+  padding: 0.625rem 1.25rem;
+  border: 1px solid var(--color-border);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+.btn-pill-light:hover {
+  transform: translateY(-2px);
+  opacity: 0.85;
+}
+
+/* ── Tags ───────────────────────────────────────────────────────────────── */
+
+/* Small pill tag next to project titles */
+.tag-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.6875rem;
+  color: var(--color-muted);
+  border: 1px solid var(--color-border);
+  border-radius: 9999px;
+  background-color: var(--color-surface);
+  white-space: nowrap;
+}
+
+/* ── Section header ("/ Best Works" style) ──────────────────────────────── */
+.section-slash {
+  font-family: var(--font-instrument), Georgia, serif;
+  font-style: italic;
+  font-size: 1.125rem;
+  color: var(--color-muted);
+}
+
+/* ── Keyframes ──────────────────────────────────────────────────────────── */
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+}
+
+/* Fixed-width desktop viewport guard (kept from the previous design) */
+@media (min-width: 1024px) {
+  body {
+    min-width: 1024px;
+  }
 }

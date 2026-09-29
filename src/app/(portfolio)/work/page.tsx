@@ -1,17 +1,18 @@
+import type { Metadata } from "next";
 import { Projects } from "@/components/projects";
+import { ContactCta } from "@/components/contact-cta";
 
-export const metadata = {
-  title: "Work | Lantumo Birhanu",
+export const metadata: Metadata = {
+  title: "Portfolio",
   description:
     "Selected projects engineered for performance, usability and scale — from AI platforms to full e-commerce systems.",
 };
 
-const WorkPage = () => {
+export default function WorkPage() {
   return (
-    <div className="w-full">
+    <>
       <Projects />
-    </div>
+      <ContactCta />
+    </>
   );
-};
-
-export default WorkPage;
+}

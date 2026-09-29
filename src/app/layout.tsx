@@ -1,24 +1,48 @@
-import type { Metadata } from "next";
-import { Syne, Outfit } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Instrument_Serif, Outfit } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/components/ui/theme-provider";
-
-const fontHeading = Syne({
-  variable: "--font-heading",
-  subsets: ["latin"],
-});
 
 const fontBody = Outfit({
-  variable: "--font-body",
+  variable: "--font-outfit",
   subsets: ["latin"],
+  display: "swap",
+});
+
+const fontSerif = Instrument_Serif({
+  variable: "--font-instrument",
+  subsets: ["latin"],
+  weight: "400",
+  style: ["normal", "italic"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  icons: {
-    icon: "/logo.png",
+  metadataBase: new URL("https://lantumobirhanu.vercel.app"),
+  title: {
+    default: "Lantumo Birhanu — Fullstack Developer",
+    template: "%s | Lantumo Birhanu",
   },
-  title: "lantumo birhanu || fullstack developer",
-  description: "lantumo birhanu |  the developer | next.js | node.js ",
+  description:
+    "Fullstack developer crafting seamless digital experiences that merge elegant design with robust engineering.",
+  keywords: [
+    "Fullstack Developer",
+    "Next.js",
+    "React",
+    "TypeScript",
+    "Portfolio",
+  ],
+  authors: [{ name: "Lantumo Birhanu" }],
+  openGraph: {
+    title: "Lantumo Birhanu — Fullstack Developer",
+    description:
+      "Fullstack developer crafting seamless digital experiences that merge elegant design with robust engineering.",
+    type: "website",
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({
@@ -29,16 +53,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${fontHeading.variable} ${fontBody.variable} antialiased font-body`}
+        className={`${fontBody.variable} ${fontSerif.variable} antialiased`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem={false}
-          disableTransitionOnChange
-        >
-          <div className="w-full min-h-screen">{children}</div>
-        </ThemeProvider>
+        {children}
       </body>
     </html>
   );

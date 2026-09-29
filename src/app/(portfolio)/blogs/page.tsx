@@ -1,12 +1,18 @@
-import Blogs from '@/components/blogs'
-import React from 'react'
+import type { Metadata } from "next";
+import { Blogs } from "@/components/blogs";
+import { ContactCta } from "@/components/contact-cta";
 
-const BlogsPage = () => {
+export const metadata: Metadata = {
+  title: "Blog",
+  description:
+    "Notes on modern web architecture, 3D on the web, and shipping AI features to production.",
+};
+
+export default function BlogsPage() {
   return (
-    <div className='w-full min-h-screen'>
-      <Blogs/>
-    </div>
-  )
+    <>
+      <Blogs />
+      <ContactCta />
+    </>
+  );
 }
-
-export default BlogsPage

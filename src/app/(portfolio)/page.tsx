@@ -1,28 +1,21 @@
-import AboutMe from "@/components/aboutme";
-import Blogs from "@/components/blogs";
-import CTA from "@/components/cta";
-import { Education } from "@/components/education";
-import Experience from "@/components/expriance";
 import { Hero } from "@/components/hero";
+import { Intro } from "@/components/intro";
+import { Process } from "@/components/process";
 import { Projects } from "@/components/projects";
-import Technologies from "@/components/technologies";
-import { Services } from "@/components/services";
+import { About } from "@/components/about";
 import { Testimonials } from "@/components/testimonials";
-import React from "react";
+import { ContactCta } from "@/components/contact-cta";
 
-const Home = () => {
+export default function HomePage() {
   return (
-    <div className="w-full space-y-24">
+    <>
       <Hero />
-      <AboutMe />
-      <Projects />
-      <Services />
+      <Intro />
+      <Process />
+      <Projects limit={4} />
+      <About />
       <Testimonials />
-      <Technologies />
-      <Experience />
-      <CTA />
-    </div>
+      <ContactCta />
+    </>
   );
-};
-
-export default Home;
+}
