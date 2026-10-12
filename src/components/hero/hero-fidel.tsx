@@ -3,33 +3,60 @@
 import React, { useState, useEffect, Suspense } from "react";
 import dynamic from "next/dynamic";
 import { Hero2D } from "./hero-2d";
-import { detectDeviceTier } from "@/lib/gpu-tier";
+import { detectDeviceTier, DeviceTier } from "@/lib/gpu-tier";
+import { Project } from "@/lib/projects-data";
+import { useLocale } from "@/lib/locale-context";
 
-// Dynamically import WebGL Canvas with 2D Hero fallback as loading state
-const WebGLCanvas = dynamic(
-  () => import("./hero-webgl-canvas").then((mod) => mod.HeroWebGLCanvas),
+// Dynamic import with ssr: false for Three.js Canvas
+const FidelExperienceScene = dynamic(
+  () =>
+    import("./fidel-experience-scene").then(
+      (mod) => mod.FidelExperienceScene
+    ),
   {
     ssr: false,
     loading: () => <Hero2D />,
   }
 );
 
-export function HeroFidel() {
-  const [canRun3D, setCanRun3D] = useState<boolean | null>(null);
+interface HeroFidelProps {
+  scrollProgress: number;
+  activeProject: Project | null;
+  onSelectProject: (p: Project | null) => void;
+}
+
+export function HeroFidel({
+  scrollProgress,
+  activeProject,
+  onSelectProject,
+}: HeroFidelProps) {
+  const [tier, setTier] = useState<DeviceTier | null>(null);
+  const { locale } = useLocale();
 
   useEffect(() => {
-    const tier = detectDeviceTier();
-    setCanRun3D(tier.canRun3D);
+    const detected = detectDeviceTier();
+    setTier(detected);
   }, []);
 
-  // While detecting or if 3D is disabled/gated, render high-performance 2D canvas
-  if (canRun3D === null || !canRun3D) {
+  // SSR or determining capability
+  if (tier === null) {
+    return <Hero2D />;
+  }
+
+  // Fallback to static accessible 2D if user prefers reduced motion or WebGL is unsupported
+  if (!tier.canRun3D) {
     return <Hero2D />;
   }
 
   return (
     <Suspense fallback={<Hero2D />}>
-      <WebGLCanvas />
+      <FidelExperienceScene
+        scrollProgress={scrollProgress}
+        activeProject={activeProject}
+        onSelectProject={onSelectProject}
+        locale={locale as "en" | "am"}
+        tier={tier}
+      />
     </Suspense>
   );
 }
