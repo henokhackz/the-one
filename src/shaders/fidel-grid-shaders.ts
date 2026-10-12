@@ -1,53 +1,65 @@
 /**
  * Fidel Static Grid Shaders
- * Strict 24x14 / 12x8 Syllable Chart Layout
- * Cursor-only interaction, 60% desaturated Ethiopian diagonal tint, and headline vignette.
+ * Pixel-mapped orthographic full-coverage layout (edge-to-edge).
+ * 140px critically-damped spring hover, theme ink colors, desaturated Ethiopian flag gradient,
+ * finite 1.2s wake wave, headline vignette mask, and ?debug=grid overlay.
  */
 
 export const fidelGridVertexShader = /* glsl */ `
+precision highp float;
+
 attribute vec3 aBasePos;
 attribute vec2 aGridNorm;   // [0..1, 0..1]
 attribute float aGlyphIndex;
 
 uniform float uCols;
 uniform float uRows;
-uniform vec3 uPointer;
+uniform float uCellSize;
+uniform vec2 uPointer;
 uniform float uPointerActive;
+uniform float uHoverSpring;
 uniform float uWakeTime; // 0.0 to 1.2s once on load, never loops
+uniform float uWakeDone; // 1.0 when wake ends, hands 100% control to hover
 
 varying vec2 vUv;
 varying vec2 vGridNorm;
 varying float vHover;
 varying float vWake;
+varying vec2 vWorldPos;
 
 void main() {
   vGridNorm = aGridNorm;
+  vWorldPos = aBasePos.xy;
 
-  // 1. One-time wake up wave across X (left to right, 1.2s duration)
-  float wakeProgress = clamp(uWakeTime / 1.2, 0.0, 1.0);
-  float wavePos = wakeProgress * 1.35 - 0.15;
-  float distToWave = abs(aGridNorm.x - wavePos);
-  float wake = smoothstep(0.14, 0.0, distToWave) * (1.0 - smoothstep(0.7, 1.2, uWakeTime));
+  // 1. Separate, finite wake wave (0.0 to 1.2s duration once on load)
+  float wake = 0.0;
+  if (uWakeDone < 0.5) {
+    float wakeProgress = clamp(uWakeTime / 1.2, 0.0, 1.0);
+    float wavePos = wakeProgress * 1.3 - 0.15;
+    float distToWave = abs(aGridNorm.x - wavePos);
+    wake = smoothstep(0.12, 0.0, distToWave) * (1.0 - smoothstep(0.8, 1.2, uWakeTime));
+  }
   vWake = wake;
 
-  // 2. Cursor hover interaction (only cursor drives motion)
-  vec3 toPointer = aBasePos - uPointer;
-  toPointer.z = 0.0;
+  // 2. Cursor hover interaction within 140px radius with smooth Hermite falloff
+  vec2 toPointer = aBasePos.xy - uPointer;
   float dist = length(toPointer);
-  float hoverRadius = 2.8;
+  float hoverRadius = 140.0;
   float hover = 0.0;
 
-  if (uPointerActive > 0.5 && dist < hoverRadius) {
-    hover = pow((hoverRadius - dist) / hoverRadius, 1.6);
+  if (uPointerActive > 0.001 && dist < hoverRadius) {
+    float t = 1.0 - (dist / hoverRadius);
+    hover = smoothstep(0.0, 1.0, t) * uHoverSpring;
   }
   vHover = hover;
 
-  // 3. Static base position + lift on cursor or wake
-  float lift = hover * 0.45 + wake * 0.25;
-  vec3 worldPos = aBasePos + vec3(0.0, 0.0, lift);
+  // 3. Scale up to 1.35, rise slightly (4px), and subtle wake boost
+  float scale = uCellSize * 0.72 * (1.0 + hover * 0.35 + wake * 0.18);
+  float rise = hover * 4.0 + wake * 2.0;
 
-  // 4. Camera-facing billboard sizing
-  float scale = 0.28 * (1.0 + hover * 0.32 + wake * 0.18);
+  vec3 worldPos = aBasePos + vec3(0.0, rise, 0.0);
+
+  // 4. Camera-facing billboard sizing in orthographic pixel space
   vec4 mvPosition = modelViewMatrix * vec4(worldPos, 1.0);
   mvPosition.xy += position.xy * scale;
 
@@ -61,61 +73,76 @@ void main() {
 `;
 
 export const fidelGridFragmentShader = /* glsl */ `
-precision mediump float;
+precision highp float;
 
 uniform sampler2D uAtlas;
-uniform float uThemeIsDark;
+uniform vec3 uInkColor;
+uniform float uRestOpacity;
+uniform float uHoverOpacity;
+uniform vec3 uFlagGreen;
+uniform vec3 uFlagAmber;
+uniform vec3 uFlagRed;
 uniform float uHeroFade; // 1.0 in hero, fades to 0.0 once hero leaves viewport
+uniform float uDebug;    // 1.0 if ?debug=grid
+uniform vec2 uPointer;
+uniform float uPointerActive;
+uniform vec2 uVignetteCenter;
+uniform vec2 uVignetteRadius;
 
 varying vec2 vUv;
 varying vec2 vGridNorm;
 varying float vHover;
 varying float vWake;
+varying vec2 vWorldPos;
 
 void main() {
-  // Sample glyph opacity from atlas
   vec4 texSample = texture2D(uAtlas, vUv);
   float glyphMask = texSample.a;
 
-  if (glyphMask < 0.08) {
+  if (glyphMask < 0.06) {
     discard;
   }
 
-  // 1. Subtle diagonal gradient across grid (Muted Green -> Amber -> Muted Red)
-  // Desaturated by ~60% so it reads as a noble cultural tint, never an aggressive flag
-  float diag = (vGridNorm.x + (1.0 - vGridNorm.y)) * 0.5;
-
-  vec3 mutedGreen = vec3(0.20, 0.42, 0.28);
-  vec3 mutedAmber = vec3(0.72, 0.64, 0.28);
-  vec3 mutedRed   = vec3(0.62, 0.24, 0.25);
-
-  vec3 tint = mix(mutedGreen, mutedAmber, smoothstep(0.05, 0.50, diag));
-  tint = mix(tint, mutedRed, smoothstep(0.50, 0.95, diag));
-
-  // Light theme adaptation
-  if (uThemeIsDark < 0.5) {
-    tint = mix(tint, vec3(0.22, 0.20, 0.18), 0.35);
+  // 1. Ethiopian flag tint by column, blended as smooth horizontal gradient (never hard blocks)
+  // Green (#078930) -> Amber (#FCDD09) -> Red (#DA121A)
+  float nx = vGridNorm.x;
+  vec3 colFlag;
+  if (nx < 0.5) {
+    colFlag = mix(uFlagGreen, uFlagAmber, smoothstep(0.06, 0.48, nx));
+  } else {
+    colFlag = mix(uFlagAmber, uFlagRed, smoothstep(0.52, 0.94, nx));
   }
 
-  // 2. Rest opacity: 8% to 12%, rising up to ~40% on hover or wake wave
-  float baseOpacity = 0.09;
-  float activeFactor = clamp(vHover * 1.5 + vWake * 0.9, 0.0, 1.0);
-  float alpha = mix(baseOpacity, 0.42, activeFactor);
+  // Desaturate 60% towards ink color for genuine manuscript dye feel
+  vec3 tintedInk = mix(colFlag, uInkColor, 0.60);
 
-  // 3. Soft radial vignette protecting the headline & CTA zone (left/center)
-  // Ensures zero glyph noise sits under real HTML text
-  vec2 textZone = vec2(0.26, 0.52);
-  vec2 offset = (vGridNorm - textZone) * vec2(1.25, 1.0);
-  float distToText = length(offset);
-  float textVignette = smoothstep(0.20, 0.58, distToText);
+  // At rest: ink color with very faint cultural tint; hovered: full local tint color
+  vec3 finalColor = mix(uInkColor, tintedInk, clamp(0.18 + vHover * 0.82, 0.0, 1.0));
 
-  // Apply hero visibility fade (pauses/fades when hero scrolls out)
-  float finalAlpha = glyphMask * alpha * textVignette * uHeroFade;
+  // 2. Opacity: rest opacity (14-20% light, 12-18% dark), rising up to ~55% on hover
+  float targetOpacity = mix(uRestOpacity, uHoverOpacity, clamp(vHover * 1.25 + vWake * 0.7, 0.0, 1.0));
 
-  if (finalAlpha < 0.015) {
+  // 3. Soft radial vignette protecting headline & CTA zone so text stays clean
+  vec2 toVignette = (vGridNorm - uVignetteCenter) / uVignetteRadius;
+  float distToText = length(toVignette);
+  float textVignette = smoothstep(0.25, 0.90, distToText);
+
+  // Hero visibility fade
+  float alpha = glyphMask * targetOpacity * textVignette * uHeroFade;
+
+  if (alpha < 0.008) {
     discard;
   }
 
-  gl_FragColor = vec4(tint, finalAlpha);
+  // Debug overlay: 140px radius circle (?debug=grid)
+  if (uDebug > 0.5 && uPointerActive > 0.01) {
+    float distToPtr = length(vWorldPos - uPointer);
+    if (abs(distToPtr - 140.0) < 3.0) {
+      gl_FragColor = vec4(0.95, 0.68, 0.18, 0.90 * uHeroFade);
+      return;
+    }
+  }
+
+  gl_FragColor = vec4(finalColor, alpha);
 }
 `;
