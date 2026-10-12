@@ -306,64 +306,26 @@ export function Hero2D() {
         <EthiopianClock showDate={true} />
       </div>
 
-      {/* Main Editorial Hero Core */}
+      {/* Minimal Hero Core (Strictly under 25 words) */}
       <div className="relative z-10 w-full max-w-[1600px] mx-auto px-6 md:px-12 py-12 md:py-16 flex flex-col justify-center">
-        {/* Availability Signal */}
-        <div className="inline-flex items-center gap-2 mb-6 w-fit">
-          <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="font-mono text-[11px] tracking-[0.2em] text-muted uppercase font-medium">
-            {t.hero.badge}
-          </span>
-        </div>
-
-        {/* Editorial Heading */}
-        <div className="max-w-4xl">
-          <h1 className={`text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight text-foreground leading-[1.05] ${locale === "am" ? "font-ethiopic" : "font-heading"}`}>
+        <div className="max-w-4xl space-y-4">
+          <h1 className={`text-5xl sm:text-7xl md:text-8xl font-black tracking-tight text-foreground leading-[1.05] ${locale === "am" ? "font-ethiopic" : "font-heading"}`}>
             {t.hero.name}
           </h1>
 
-          <p className="font-mono text-xs sm:text-sm md:text-base tracking-widest text-accent font-semibold uppercase mt-4 mb-6">
+          <p className="font-mono text-xs sm:text-sm tracking-[0.25em] text-accent font-semibold uppercase">
             {t.hero.role}
           </p>
 
-          <p className="max-w-2xl text-base sm:text-lg md:text-xl text-muted font-light leading-relaxed">
-            {t.hero.bio}
-          </p>
-        </div>
-
-        {/* CTA Actions */}
-        <div className="mt-10 flex flex-wrap items-center gap-4 sm:gap-6">
-          <Magnetic>
+          <div className="pt-4">
             <Link
               href="/work"
-              className="group relative inline-flex items-center gap-3 px-7 py-3.5 bg-foreground text-background font-mono text-xs font-semibold tracking-[0.2em] uppercase transition-all duration-300 hover:bg-accent hover:text-accent-foreground shadow-sm hover:shadow-lg active:scale-95"
+              className="inline-flex items-center gap-3 px-8 py-4 bg-foreground text-background font-mono text-xs font-semibold tracking-[0.2em] uppercase hover:bg-accent hover:text-accent-foreground transition-all shadow-md active:scale-95"
             >
               <span>{t.hero.viewWork}</span>
-              <ArrowUpRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              <ArrowUpRight className="w-4 h-4" />
             </Link>
-          </Magnetic>
-
-          <Magnetic>
-            <Link
-              href="/contact"
-              className="group inline-flex items-center gap-2.5 px-6 py-3.5 border border-border hover:border-accent text-foreground hover:text-accent font-mono text-xs font-semibold tracking-[0.2em] uppercase transition-all duration-300 active:scale-95 bg-surface/50 backdrop-blur-sm"
-            >
-              <span>{t.hero.connect}</span>
-              <span className="text-accent group-hover:translate-x-1 transition-transform">→</span>
-            </Link>
-          </Magnetic>
-
-          <Magnetic>
-            <a
-              href="/Lantumo_Birhanu_resume.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hidden sm:inline-flex items-center gap-2 px-4 py-3 text-muted hover:text-foreground font-mono text-xs tracking-widest uppercase transition-colors"
-            >
-              <span>{t.hero.downloadCv}</span>
-              <span className="text-[10px] text-accent">PDF</span>
-            </a>
-          </Magnetic>
+          </div>
         </div>
       </div>
 
