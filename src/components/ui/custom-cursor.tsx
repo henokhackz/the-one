@@ -4,11 +4,13 @@ import React, { useEffect, useState, useRef } from "react";
 
 export function CustomCursor() {
   const [enabled, setEnabled] = useState(false);
-  const [cursorState, setCursorState] = useState<"default" | "link" | "view" | "fidel">("default");
+  const [inHero, setInHero] = useState(true);
+  const [cursorState, setCursorState] = useState<"default" | "link" | "fidel">("default");
   const [position, setPosition] = useState({ x: -100, y: -100 });
   const cursorRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
+    // Only enable on desktop pointer devices and when reduced motion is not preferred
     const hasFinePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -21,14 +23,17 @@ export function CustomCursor() {
     const onMouseMove = (e: MouseEvent) => {
       setPosition({ x: e.clientX, y: e.clientY });
 
+      // Check if pointer is within the hero fold
+      const heroEl = document.getElementById("hero");
+      if (heroEl) {
+        const rect = heroEl.getBoundingClientRect();
+        const insideHero = e.clientY >= rect.top && e.clientY <= rect.bottom;
+        setInHero(insideHero);
+        if (!insideHero) return;
+      }
+
       const target = e.target as HTMLElement | null;
       if (!target) return;
-
-      const projectTarget = target.closest('[data-cursor="view"]');
-      if (projectTarget) {
-        setCursorState("view");
-        return;
-      }
 
       const interactiveTarget = target.closest("a, button, input, [role='button']");
       if (interactiveTarget) {
@@ -50,9 +55,8 @@ export function CustomCursor() {
     };
   }, []);
 
-  if (!enabled) return null;
+  if (!enabled || !inHero) return null;
 
-  const isView = cursorState === "view";
   const isLink = cursorState === "link";
   const isFidel = cursorState === "fidel";
 
@@ -67,20 +71,13 @@ export function CustomCursor() {
     >
       <div
         className={`-translate-x-1/2 -translate-y-1/2 flex items-center justify-center transition-all duration-200 rounded-full ${
-          isView
-            ? "w-16 h-16 bg-accent text-accent-foreground shadow-xl border border-accent/40 scale-100"
-            : isLink
+          isLink
             ? "w-8 h-8 bg-accent/20 border border-accent scale-100"
             : isFidel
-            ? "w-6 h-6 border border-accent/60 bg-accent/10 backdrop-blur-[1px] scale-100"
-            : "w-3 h-3 bg-accent/80 scale-100"
+            ? "w-6 h-6 border border-accent/70 bg-accent/10 backdrop-blur-[1px] scale-100"
+            : "w-3 h-3 bg-accent/90 scale-100"
         }`}
       >
-        {isView && (
-          <span className="font-mono text-[9px] font-bold tracking-widest uppercase">
-            VIEW
-          </span>
-        )}
         {isFidel && (
           <span className="w-1.5 h-1.5 rounded-full bg-accent animate-ping" />
         )}
