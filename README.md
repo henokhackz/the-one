@@ -106,7 +106,7 @@ To add a new project, add an entry to the `PROJECTS` array:
   technologies: ["Next.js", "TypeScript", "PostgreSQL", "Tailwind CSS"],
   thumbnail: "https://images.unsplash.com/...", // or local path
   liveUrl: "https://example.com",
-  githubUrl: "https://github.com/lyzon1/example",
+  githubUrl: "https://github.com/henokhackz/example",
   caseStudy: {
     problem: "Specific engineering or market problem that this project addresses.",
     myRole: "Lead Fullstack Developer",

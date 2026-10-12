@@ -114,6 +114,8 @@ export function HeroAtmosphereCanvas({ heroFade }: HeroAtmosphereCanvasProps) {
   const [isMobile, setIsMobile] = useState(false);
   const [isDebug, setIsDebug] = useState(false);
 
+  const [debugPointer, setDebugPointer] = useState<{ x: number; y: number; active: boolean } | null>(null);
+
   useEffect(() => {
     const tier = detectDeviceTier();
     setCanRun(tier.canRun3D);
@@ -122,12 +124,6 @@ export function HeroAtmosphereCanvas({ heroFade }: HeroAtmosphereCanvasProps) {
       setIsDebug(window.location.search.includes("debug=grid"));
     }
   }, []);
-
-  if (!canRun || heroFade <= 0.001) {
-    return null;
-  }
-
-  const [debugPointer, setDebugPointer] = useState<{ x: number; y: number; active: boolean } | null>(null);
 
   useEffect(() => {
     if (!isDebug) return;
@@ -144,6 +140,10 @@ export function HeroAtmosphereCanvas({ heroFade }: HeroAtmosphereCanvasProps) {
       window.removeEventListener("pointerleave", handleLeave);
     };
   }, [isDebug]);
+
+  if (!canRun || heroFade <= 0.001) {
+    return null;
+  }
 
   return (
     <div

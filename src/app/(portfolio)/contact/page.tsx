@@ -258,7 +258,7 @@ export default function ContactPage() {
                 </a>
 
                 <a
-                  href="https://github.com/lyzon1"
+                  href="https://github.com/henokhackz"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group flex items-center justify-between p-4 border border-border bg-background hover:border-accent transition-all"

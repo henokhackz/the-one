@@ -133,26 +133,26 @@ export function TestimonialsCarousel() {
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
         tabIndex={0}
-        className="mt-12 relative p-8 sm:p-12 md:p-16 rounded-sm border border-border bg-surface/90 shadow-xl backdrop-blur-xs outline-none focus-visible:ring-1 focus-visible:ring-accent"
+        className="mt-12 relative p-8 sm:p-12 md:p-16 rounded-[1px] border-2 border-double border-border bg-transparent outline-none focus-visible:ring-1 focus-visible:ring-accent"
         aria-roledescription="carousel"
         aria-label="Testimonials Carousel"
       >
-        <Quote className="w-12 h-12 text-accent/20 absolute top-8 right-8 pointer-events-none" />
+        <Quote className="w-12 h-12 text-muted/20 absolute top-8 right-8 pointer-events-none" />
 
         <div className="max-w-4xl mx-auto flex flex-col justify-between min-h-[220px]">
-          {/* Quote Body */}
-          <blockquote className="text-lg sm:text-2xl md:text-3xl font-light text-foreground leading-relaxed sm:leading-snug">
+          {/* Quote Body: Ink-written manuscript style */}
+          <blockquote className="text-xl sm:text-2xl md:text-3xl font-serif italic text-foreground leading-relaxed sm:leading-snug">
             "{current.quote}"
           </blockquote>
 
-          {/* Author Details */}
+          {/* Author Details: Handwritten signature note */}
           <div className="mt-8 pt-6 border-t border-border/60 flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full border border-accent/40 bg-background flex items-center justify-center font-mono font-bold text-accent text-sm">
+              <div className="w-11 h-11 border border-border bg-transparent flex items-center justify-center font-mono font-bold text-accent text-sm">
                 {current.avatarText}
               </div>
               <div>
-                <h3 className="font-heading font-bold text-base sm:text-lg text-foreground">
+                <h3 className="font-serif italic font-bold text-lg sm:text-xl text-foreground tracking-wide">
                   {current.name}
                 </h3>
                 <p className="font-mono text-xs text-muted">
@@ -169,10 +169,10 @@ export function TestimonialsCarousel() {
                   <button
                     key={i}
                     onClick={() => setCurrentIndex(i)}
-                    className={`h-2 transition-all rounded-full ${
+                    className={`h-1.5 transition-all ${
                       i === currentIndex
                         ? "w-6 bg-accent"
-                        : "w-2 bg-border hover:bg-muted"
+                        : "w-1.5 bg-border hover:bg-muted"
                     }`}
                     aria-label={`Go to slide ${i + 1}`}
                   />
@@ -183,14 +183,14 @@ export function TestimonialsCarousel() {
               <div className="flex items-center gap-2">
                 <button
                   onClick={prev}
-                  className="p-2 border border-border hover:border-accent text-muted hover:text-foreground transition-colors"
+                  className="btn-ink p-2 border border-border hover:border-foreground text-foreground transition-colors"
                   aria-label="Previous testimonial"
                 >
                   <ChevronLeft className="w-4 h-4" />
                 </button>
                 <button
                   onClick={next}
-                  className="p-2 border border-border hover:border-accent text-muted hover:text-foreground transition-colors"
+                  className="btn-ink p-2 border border-border hover:border-foreground text-foreground transition-colors"
                   aria-label="Next testimonial"
                 >
                   <ChevronRight className="w-4 h-4" />

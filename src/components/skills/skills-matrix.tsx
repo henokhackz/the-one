@@ -115,11 +115,11 @@ export function SkillsMatrix({ onHoverSkillProject }: SkillsMatrixProps) {
         {categories.map((cat, idx) => (
           <div
             key={idx}
-            className="p-6 sm:p-8 rounded-sm border border-border bg-surface/90 backdrop-blur-xs flex flex-col justify-between shadow-md hover:border-accent/60 transition-colors"
+            className="p-6 sm:p-8 rounded-[1px] border border-border card-ink flex flex-col justify-between hover:border-border-strong transition-colors"
           >
             <div>
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-sm bg-accent/10 border border-accent/30 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-none bg-accent/10 border border-accent/30 flex items-center justify-center">
                   {cat.icon}
                 </div>
                 <h3 className="font-heading text-xl font-bold text-foreground">
@@ -140,10 +140,10 @@ export function SkillsMatrix({ onHoverSkillProject }: SkillsMatrixProps) {
                       key={sIdx}
                       onMouseEnter={() => handleMouseEnter(skill)}
                       onMouseLeave={handleMouseLeave}
-                      className={`group/skill px-3.5 py-2.5 rounded-xs border text-xs transition-all cursor-pointer flex items-center justify-between ${
+                      className={`group/skill px-3.5 py-2.5 rounded-[1px] border text-xs transition-all cursor-pointer flex items-center justify-between ${
                         isActive
-                          ? "bg-foreground text-background border-foreground font-semibold shadow-xs"
-                          : "bg-background/80 hover:bg-surface border-border text-foreground hover:border-accent"
+                          ? "bg-foreground text-background border-foreground font-semibold"
+                          : "bg-transparent hover:bg-foreground/5 border-border text-foreground hover:border-foreground"
                       }`}
                     >
                       <span className="flex items-center gap-2">

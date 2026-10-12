@@ -16,7 +16,7 @@ const navLinks = [
 const socials = [
   {
     name: "GitHub",
-    href: "https://github.com/lyzon1",
+    href: "https://github.com/henokhackz",
     icon: Github,
   },
   {

@@ -177,7 +177,7 @@ export function CommandPalette({
       category: actCategory,
       icon: <Github className="w-4 h-4" />,
       action: () => {
-        window.open("https://github.com/lyzon1", "_blank");
+        window.open("https://github.com/henokhackz", "_blank");
         onClose();
       },
     },
@@ -232,7 +232,7 @@ export function CommandPalette({
       onClick={onClose}
     >
       <div
-        className="w-full max-w-2xl bg-surface border border-border shadow-2xl rounded-sm overflow-hidden flex flex-col"
+        className="w-full max-w-2xl bg-surface border-2 border-double border-border rounded-[1px] overflow-hidden flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Search Input Bar */}

@@ -5,7 +5,9 @@ async function audit() {
   const userDataDir = "C:\\Users\\Hp\\AppData\\Local\\Temp\\chrome-audit-" + Date.now();
 
   const chromeProc = spawn(chromePath, [
-    "--headless",
+    "--headless=new",
+    "--no-sandbox",
+    "--disable-dev-shm-usage",
     "--remote-debugging-port=9224",
     `--user-data-dir=${userDataDir}`,
     "http://localhost:3000"

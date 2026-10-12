@@ -55,7 +55,7 @@ export default function WorkPage() {
                 onClick={() => setSelectedCategory(cat.key)}
                 className={`px-4 py-2 font-mono text-xs tracking-widest uppercase transition-all border ${
                   selectedCategory === cat.key
-                    ? "border-accent bg-accent text-accent-foreground font-semibold shadow-sm"
+                    ? "border-accent bg-accent text-accent-foreground font-semibold"
                     : "border-border bg-surface/40 text-muted hover:text-foreground hover:border-accent/50"
                 }`}
               >

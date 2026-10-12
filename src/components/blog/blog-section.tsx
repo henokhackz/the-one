@@ -50,11 +50,11 @@ export function BlogSection() {
         {BLOG_POSTS.slice(0, 3).map((post) => (
           <article
             key={post.id}
-            className="group relative p-6 sm:p-8 rounded-sm border border-border bg-surface/90 backdrop-blur-xs flex flex-col justify-between shadow-md hover:border-accent transition-all duration-300"
+            className="group relative p-6 sm:p-8 rounded-[1px] border border-border card-ink flex flex-col justify-between hover:border-border-strong transition-all duration-300"
           >
             <div>
               <div className="flex items-center justify-between font-mono text-xs text-muted mb-4">
-                <span className="px-2 py-0.5 rounded-xs bg-background border border-border text-[10px] text-accent uppercase tracking-wider font-semibold">
+                <span className="px-2 py-0.5 rounded-none bg-transparent border border-border text-[10px] text-accent uppercase tracking-wider font-semibold">
                   {post.category}
                 </span>
                 <span className="flex items-center gap-1.5 text-[11px]">
@@ -64,7 +64,7 @@ export function BlogSection() {
               </div>
 
               <h3 className="font-heading text-xl sm:text-2xl font-bold text-foreground group-hover:text-accent transition-colors leading-snug">
-                <Link href={`/blogs/${post.slug}`}>
+                <Link href={`/blogs/${post.slug}`} className="ink-link">
                   {post.title}
                 </Link>
               </h3>
@@ -82,7 +82,7 @@ export function BlogSection() {
 
               <Link
                 href={`/blogs/${post.slug}`}
-                className="font-mono text-xs text-accent font-semibold uppercase tracking-wider group-hover:translate-x-1 transition-transform inline-flex items-center gap-1"
+                className="ink-link font-mono text-xs text-accent font-semibold uppercase tracking-wider inline-flex items-center gap-1"
               >
                 <span>Read Essay</span>
                 <ArrowUpRight className="w-3.5 h-3.5" />

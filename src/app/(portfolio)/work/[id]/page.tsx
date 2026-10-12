@@ -106,7 +106,7 @@ export default async function CaseStudyPage({ params }: Props) {
 
       {/* Hero Visual Preview */}
       <div className="max-w-[1200px] mx-auto px-6 md:px-12 py-8">
-        <div className="relative aspect-[16/9] w-full overflow-hidden border border-border bg-surface shadow-2xl rounded-sm">
+        <div className="relative aspect-[16/9] w-full overflow-hidden border border-border bg-surface rounded-sm">
           <Image
             src={project.thumbnail}
             alt={project.title}

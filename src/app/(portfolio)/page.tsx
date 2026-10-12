@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { ArrowDown, ArrowUp, Send, ArrowUpRight, CheckCircle, Code2, Server } from "lucide-react";
 import { HeroAtmosphereCanvas } from "@/components/hero/hero-atmosphere-canvas";
+import { BiranaParchmentSurface } from "@/components/ui/birana-parchment-surface";
 import { ProjectCaseRows } from "@/components/work/project-case-rows";
 import { SkillsMatrix } from "@/components/skills/skills-matrix";
 import { TestimonialsCarousel } from "@/components/testimonials/testimonials-carousel";
@@ -51,13 +52,19 @@ export default function Home() {
       <HeroAtmosphereCanvas heroFade={heroFade} />
 
       {/* =========================================================================
+          AUTHENTIC BIRANA PARCHMENT TEXTURE LAYER
+          Static SVG feTurbulence grain + gentle candlelit vellum lighting tones.
+      ========================================================================= */}
+      <BiranaParchmentSurface />
+
+      {/* =========================================================================
           LAYER 1: REAL SOLID HTML CONTENT
-          All sections have solid/near-solid surfaces, WCAG AA contrast.
-          Never sits over glyphs.
+          All sections share the paper surface, WCAG AA contrast.
+          Separation via thin ink rules and diamond weave dividers.
       ========================================================================= */}
       <div className="relative z-10 w-full flex flex-col">
         {/* =====================================================================
-            1. HERO SECTION: Clean, one message, recruiter-ready in 5 seconds
+            1. HERO SECTION: Clean, one message, ink written on Birana parchment
         ===================================================================== */}
         <section
           id="hero"
@@ -66,15 +73,14 @@ export default function Home() {
         >
           {/* Left-aligned text in a protected clear zone */}
           <div className="max-w-3xl space-y-6">
-            {/* Status Signal */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border/80 bg-surface/80 backdrop-blur-xs font-mono text-[11px] uppercase tracking-widest text-muted">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse inline-block" />
+            {/* Status Signal: plain ink text with a small green dot before it (no container, no border, no pill) */}
+            <div className="flex items-center gap-2 font-mono text-xs tracking-wider text-muted ink-reveal">
               <span>Available for Select Roles & High-Impact Contracts</span>
             </div>
 
             {/* Name */}
             <h1
-              className={`text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-tight text-foreground leading-[0.94] ${
+              className={`text-5xl sm:text-7xl md:text-8xl lg:text-8xl font-bold tracking-tight text-foreground leading-[0.92] ink-reveal ${
                 locale === "am" ? "font-ethiopic" : "font-heading"
               }`}
             >
@@ -82,38 +88,29 @@ export default function Home() {
             </h1>
 
             {/* One Role Line */}
-            <p className="font-mono text-base sm:text-lg md:text-xl tracking-wider text-accent font-semibold uppercase">
+            <p className="font-mono text-sm sm:text-base md:text-lg tracking-wider text-accent font-semibold uppercase ink-reveal">
               {locale === "am"
                 ? "ፍሮንትኤንድ፣ ባክኤንድ እና ፉልስታክ ሶፍትዌር ኢንጂነር"
                 : "Frontend, Backend & Fullstack Developer"}
             </p>
 
-            {/* One Proof Line */}
-            <div className="p-3.5 rounded-sm border border-border bg-surface/90 backdrop-blur-xs inline-flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-xs text-muted max-w-2xl">
-              <span className="flex items-center gap-1.5 text-foreground font-semibold">
-                <CheckCircle className="w-3.5 h-3.5 text-emerald-500" />
-                <span>5+ Years Experience</span>
-              </span>
+            {/* One Proof Line: plain ink small caps text with middle-dot separator and NO container box */}
+            <p className="font-mono text-xs tracking-wider uppercase text-muted py-1 flex flex-wrap items-center gap-x-3 gap-y-1 ink-reveal">
+              <span className="text-foreground font-semibold">5+ Years Experience</span>
               <span className="opacity-40">•</span>
-              <span className="flex items-center gap-1.5 text-foreground font-semibold">
-                <Code2 className="w-3.5 h-3.5 text-accent" />
-                <span>Next.js & React 19</span>
-              </span>
+              <span className="text-foreground font-semibold">Next.js & React 19</span>
               <span className="opacity-40">•</span>
-              <span className="flex items-center gap-1.5 text-foreground font-semibold">
-                <Server className="w-3.5 h-3.5 text-accent" />
-                <span>PostgreSQL & Node.js</span>
-              </span>
+              <span className="text-foreground font-semibold">PostgreSQL & Node.js</span>
               <span className="opacity-40">•</span>
-              <span className="text-muted">Three.js / WebGL</span>
-            </div>
+              <span>Three.js / WebGL</span>
+            </p>
 
-            {/* Two Primary Action CTAs */}
-            <div className="pt-2 flex flex-wrap items-center gap-4 sm:gap-6 font-mono text-xs">
+            {/* Two Primary Action CTAs: bordered text buttons (ink border, no fill, no shadow) */}
+            <div className="pt-2 flex flex-wrap items-center gap-4 sm:gap-6 font-mono text-xs ink-reveal">
               <Magnetic>
                 <a
                   href="#projects"
-                  className="inline-flex items-center gap-3 px-8 py-4 bg-foreground text-background font-semibold tracking-widest uppercase hover:bg-accent hover:text-accent-foreground transition-all duration-300 shadow-md active:scale-95"
+                  className="btn-ink inline-flex items-center gap-3 px-8 py-3.5 border border-foreground text-foreground bg-transparent font-semibold tracking-widest uppercase hover:bg-foreground/5 transition-all duration-200"
                 >
                   <span>View Projects</span>
                   <ArrowDown className="w-4 h-4" />
@@ -123,7 +120,7 @@ export default function Home() {
               <Magnetic>
                 <a
                   href="#contact"
-                  className="inline-flex items-center gap-2.5 px-7 py-4 border border-border hover:border-accent text-foreground hover:text-accent font-semibold tracking-widest uppercase transition-all bg-surface/80 backdrop-blur-xs active:scale-95"
+                  className="btn-ink inline-flex items-center gap-2.5 px-7 py-3.5 border border-foreground/60 text-foreground bg-transparent font-semibold tracking-widest uppercase hover:border-foreground hover:bg-foreground/5 transition-all duration-200"
                 >
                   <span>Contact Me</span>
                   <Send className="w-3.5 h-3.5" />
@@ -133,7 +130,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Thin Ethiopian Tilet Divider */}
+        {/* Thin Ethiopian Tilet Divider: single row of small diamonds */}
         <TibebDivider className="my-2" />
 
         {/* =====================================================================
@@ -178,7 +175,7 @@ export default function Home() {
       {showBackToTop && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-6 right-6 z-40 p-3 rounded-full border border-border bg-surface/95 text-muted hover:text-accent hover:border-accent shadow-xl backdrop-blur-md transition-all duration-200 active:scale-95 animate-in fade-in"
+          className="btn-ink fixed bottom-6 right-6 z-40 p-3 rounded-[1px] border border-border hover:border-foreground bg-background text-foreground transition-all duration-200 active:translate-y-[1px] animate-in fade-in"
           aria-label="Back to top"
           title="Back to top"
         >

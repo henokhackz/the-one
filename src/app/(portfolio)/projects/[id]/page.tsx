@@ -62,7 +62,7 @@
 
           {/* 🔸 Project Image */}
           <div className="w-full lg:w-1/2 flex justify-center">
-            <div className="rounded-2xl overflow-hidden border border-white/10 bg-white/5 p-1 shadow-2xl">
+            <div className="rounded-2xl overflow-hidden border border-white/10 bg-white/5 p-1">
               <Image
                 src={image}
                 alt={title}

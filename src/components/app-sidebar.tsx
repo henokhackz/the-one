@@ -46,7 +46,7 @@ export function AppSidebar() {
   const isActive = (url: string) => pathname === url;
 
   return (
-    <Sidebar className="w-64 h-screen border-r border-border shadow-md">
+    <Sidebar className="w-64 h-screen border-r border-border">
       <div className="absolute inset-0 rounded-xl z-0 bg-foreground p-px">
         <div className="w-full h-full  rounded-[11px] z-10"></div>
       </div>

@@ -20,7 +20,7 @@ const MobileNavbar = () => {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-0 inset-x-0 z-50  backdrop-blur-xl border-t border-border shadow-[0_-10px_20px_rgba(0,0,0,0.5)] md:hidden flex justify-around items-center py-3 px-6 overflow-x-hidden">
+    <nav className="fixed bottom-0 inset-x-0 z-50 backdrop-blur-xl border-t border-border md:hidden flex justify-around items-center py-3 px-6 overflow-x-hidden">
       {navItems.map((item) => {
         const isActive = pathname === item.href;
         return (

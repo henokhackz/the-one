@@ -75,7 +75,7 @@ export function EthiopianClock({
       )}
 
       {/* Subtle Explanatory Tooltip on Hover */}
-      <div className="absolute top-full left-0 mt-2 hidden group-hover:block z-50 min-w-[240px] p-3 rounded-sm border border-border bg-surface text-foreground shadow-xl backdrop-blur-md transition-all">
+      <div className="absolute top-full left-0 mt-2 hidden group-hover:block z-50 min-w-[240px] p-3 rounded-[1px] border border-border bg-background text-foreground transition-all">
         <div className="text-[10px] font-semibold text-accent uppercase tracking-wider mb-1">
           Ethiopian Solar Calendar
         </div>

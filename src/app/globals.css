@@ -4,20 +4,20 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --color-background: #0a0908;
-  --color-surface: #141210;
-  --color-surface-elevated: #1c1916;
-  --color-foreground: #f4f0e8;
-  --color-muted: #9e988e;
-  --color-border: rgba(244, 240, 232, 0.12);
-  --color-border-strong: rgba(244, 240, 232, 0.24);
+  --color-background: #1e1912;
+  --color-surface: #1e1912;
+  --color-surface-elevated: #262017;
+  --color-foreground: #e8d9b5;
+  --color-muted: #a8987e;
+  --color-border: rgba(232, 217, 181, 0.35);
+  --color-border-strong: rgba(232, 217, 181, 0.60);
   --color-accent: #e5a93c;
-  --color-accent-foreground: #0a0908;
+  --color-accent-foreground: #1e1912;
   --color-accent-muted: rgba(229, 169, 60, 0.15);
   --color-accent-hover: #f5b74f;
-  --color-flag-green: #10b981;
-  --color-flag-red: #e11d48;
-  --color-flag-yellow: #eab308;
+  --color-flag-green: #078930;
+  --color-flag-red: #da121a;
+  --color-flag-yellow: #fcdd09;
 
   --font-heading: var(--font-heading), serif;
   --font-body: var(--font-body), sans-serif;
@@ -26,37 +26,43 @@
 }
 
 :root {
-  --color-background: #f7f4eb;
-  --color-surface: #efe9da;
-  --color-surface-elevated: #e5decb;
-  --color-foreground: #181512;
-  --color-muted: #6e6659;
-  --color-border: rgba(24, 21, 18, 0.12);
-  --color-border-strong: rgba(24, 21, 18, 0.24);
-  --color-accent: #b87c14;
-  --color-accent-foreground: #ffffff;
-  --color-accent-muted: rgba(184, 124, 20, 0.12);
-  --color-accent-hover: #9a650c;
-  --color-flag-green: #059669;
-  --color-flag-red: #be123c;
-  --color-flag-yellow: #ca8a04;
+  --color-background: #efe3c8;
+  --color-surface: #efe3c8;
+  --color-surface-elevated: #e8d9b5;
+  --color-foreground: #2b1d10;
+  --color-muted: #5c4a36;
+  --color-border: rgba(43, 29, 16, 0.38);
+  --color-border-strong: rgba(43, 29, 16, 0.65);
+  --color-accent: #8c2d19;
+  --color-accent-foreground: #efe3c8;
+  --color-accent-muted: rgba(140, 45, 25, 0.12);
+  --color-accent-hover: #a8361e;
+  --color-flag-green: #078930;
+  --color-flag-red: #da121a;
+  --color-flag-yellow: #fcdd09;
 }
 
 .dark {
-  --color-background: #0a0908;
-  --color-surface: #141210;
-  --color-surface-elevated: #1c1916;
-  --color-foreground: #f4f0e8;
-  --color-muted: #9e988e;
-  --color-border: rgba(244, 240, 232, 0.12);
-  --color-border-strong: rgba(244, 240, 232, 0.24);
+  --color-background: #1e1912;
+  --color-surface: #1e1912;
+  --color-surface-elevated: #262017;
+  --color-foreground: #e8d9b5;
+  --color-muted: #a8987e;
+  --color-border: rgba(232, 217, 181, 0.35);
+  --color-border-strong: rgba(232, 217, 181, 0.60);
   --color-accent: #e5a93c;
-  --color-accent-foreground: #0a0908;
+  --color-accent-foreground: #1e1912;
   --color-accent-muted: rgba(229, 169, 60, 0.15);
   --color-accent-hover: #f5b74f;
-  --color-flag-green: #10b981;
-  --color-flag-red: #e11d48;
-  --color-flag-yellow: #eab308;
+  --color-flag-green: #078930;
+  --color-flag-red: #da121a;
+  --color-flag-yellow: #fcdd09;
+}
+
+/* Strict elimination of all box-shadows, glows, and drop-shadows across the entire application */
+*, *::before, *::after {
+  box-shadow: none !important;
+  text-shadow: none !important;
 }
 
 html {
@@ -71,7 +77,8 @@ body {
   background-color: var(--color-background);
   color: var(--color-foreground);
   font-family: var(--font-body);
-  transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  /* Theme cross-fade: 400ms "light the candle" transition, grain stays */
+  transition: background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   overflow-x: hidden;
 }
 
@@ -79,3 +86,83 @@ body {
   background-color: var(--color-accent);
   color: var(--color-accent-foreground);
 }
+
+/* Birana Paper Micro-Interactions */
+/* 1. Link Hover: Ink underline that draws from left to right in 250ms */
+.ink-link {
+  position: relative;
+  text-decoration: none;
+}
+.ink-link::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 250ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.ink-link:hover::after {
+  transform: scaleX(1);
+}
+
+/* 2. Button Press: Border thickens like a pressed pen stroke, label shifts 1px, no bounce */
+.btn-ink {
+  border: 1px solid var(--color-foreground);
+  background: transparent;
+  color: var(--color-foreground);
+  transition: border-width 100ms ease, transform 100ms ease, background-color 200ms ease;
+}
+.btn-ink:active {
+  border-width: 1.5px;
+  transform: translate(1px, 1px);
+}
+
+/* 3. Card Ink-Wash Soaking: faint 5% ink bleed on hover */
+.card-ink {
+  background-color: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: 1px;
+  transition: border-color 250ms ease, background-color 250ms ease;
+}
+.card-ink:hover {
+  border-color: var(--color-border-strong);
+  background-color: rgba(43, 29, 16, 0.04);
+}
+.dark .card-ink:hover {
+  background-color: rgba(232, 217, 181, 0.04);
+}
+
+/* 4. Page and section reveal: ink soaking in (opacity 0 to 1 with slight blur-to-sharp) */
+@keyframes inkSoak {
+  0% {
+    opacity: 0;
+    filter: blur(2px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0px);
+  }
+}
+
+.ink-reveal {
+  animation: inkSoak 450ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ink-reveal {
+    animation: none;
+    opacity: 1;
+    filter: none;
+  }
+  .ink-link::after {
+    transition: none;
+  }
+  .btn-ink:active {
+    transform: none;
+  }
+}
+

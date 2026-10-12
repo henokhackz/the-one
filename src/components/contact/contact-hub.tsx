@@ -23,7 +23,7 @@ export function ContactHub() {
       className="relative z-10 w-full max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 py-24 scroll-mt-20 bg-background"
       aria-label="Direct Contact and Hiring Hub"
     >
-      <div className="relative border border-border bg-surface/95 backdrop-blur-md p-8 sm:p-12 md:p-16 rounded-sm shadow-xl">
+      <div className="relative border-2 border-double border-border bg-transparent p-8 sm:p-12 md:p-16 rounded-[1px]">
         <div className="max-w-4xl space-y-6">
           <div className="flex items-center gap-3">
             <TibebCornerStamp geezNumeral={locale === "am" ? "መልዕክት" : "05"} />
@@ -55,12 +55,12 @@ export function ContactHub() {
             {/* Copy Email Button with Toast Feedback */}
             <button
               onClick={handleCopy}
-              className="group inline-flex items-center gap-3 px-6 sm:px-8 py-4 bg-foreground text-background font-semibold tracking-widest uppercase hover:bg-accent hover:text-accent-foreground transition-all duration-300 shadow-md active:scale-95"
+              className="btn-ink group inline-flex items-center gap-3 px-6 sm:px-8 py-3.5 border border-foreground text-foreground font-semibold tracking-widest uppercase hover:bg-foreground/5 transition-all duration-200 active:translate-y-[1px]"
               aria-label="Copy email address"
             >
               {copied ? (
                 <>
-                  <Check className="w-4 h-4 text-emerald-400" />
+                  <Check className="w-4 h-4 text-emerald-500" />
                   <span>Email Copied!</span>
                 </>
               ) : (
@@ -77,7 +77,7 @@ export function ContactHub() {
               href="https://t.me/lyzon1"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-4 border border-border hover:border-accent text-foreground hover:text-accent font-semibold tracking-widest uppercase transition-colors"
+              className="btn-ink inline-flex items-center gap-2 px-6 py-3.5 border border-border hover:border-foreground text-foreground font-semibold tracking-widest uppercase transition-colors active:translate-y-[1px]"
             >
               <span>Telegram (@lyzon1)</span>
               <Send className="w-3.5 h-3.5" />
@@ -88,7 +88,7 @@ export function ContactHub() {
               href="/Lantumo_Birhanu_resume.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-4 border border-border hover:border-accent text-muted hover:text-foreground font-semibold tracking-widest uppercase transition-colors"
+              className="btn-ink inline-flex items-center gap-2 px-6 py-3.5 border border-border hover:border-foreground text-muted hover:text-foreground font-semibold tracking-widest uppercase transition-colors active:translate-y-[1px]"
             >
               <FileText className="w-4 h-4 text-accent" />
               <span>Resume (PDF)</span>
@@ -99,10 +99,10 @@ export function ContactHub() {
           {/* Social Profiles */}
           <div className="pt-4 border-t border-border/60 flex items-center gap-6 font-mono text-xs text-muted">
             <a
-              href="https://github.com/lyzon1"
+              href="https://github.com/henokhackz"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 hover:text-accent transition-colors"
+              className="ink-link flex items-center gap-2 hover:text-accent transition-colors"
             >
               <Github className="w-4 h-4" />
               <span>github.com/lyzon1</span>
@@ -111,7 +111,7 @@ export function ContactHub() {
               href="https://www.linkedin.com/in/lantumobirhanu/"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 hover:text-accent transition-colors"
+              className="ink-link flex items-center gap-2 hover:text-accent transition-colors"
             >
               <Linkedin className="w-4 h-4" />
               <span>linkedin.com/in/lantumobirhanu</span>

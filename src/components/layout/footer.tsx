@@ -62,7 +62,7 @@ export function Footer() {
               {t.footer.channelsTitle}
             </span>
             <a
-              href="https://github.com/lyzon1"
+              href="https://github.com/henokhackz"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-muted hover:text-accent transition-colors"
@@ -125,10 +125,6 @@ export function Footer() {
             © {new Date().getFullYear()} {t.footer.copyright}
           </div>
           <div className="flex items-center gap-4">
-            <span>Next.js App Router</span>
-            <span>•</span>
-            <span>TypeScript Strict</span>
-            <span>•</span>
             <span className="text-accent">{t.footer.location}</span>
           </div>
         </div>

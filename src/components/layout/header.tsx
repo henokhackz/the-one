@@ -67,7 +67,7 @@ export function Header({
 
   return (
     <header
-      className="sticky top-0 left-0 right-0 z-50 w-full transition-all duration-200 border-b border-border/80 bg-background/95 backdrop-blur-md shadow-xs"
+      className="sticky top-0 left-0 right-0 z-50 w-full transition-all duration-200 border-b border-border bg-background"
     >
       {/* Scroll Progress Bar across the top of navbar */}
       <div
@@ -89,7 +89,7 @@ export function Header({
             }
           }}
         >
-          <div className="w-8 h-8 md:w-9 md:h-9 border border-border group-hover:border-accent flex items-center justify-center font-bold text-accent bg-surface/90 transition-colors">
+          <div className="w-8 h-8 md:w-9 md:h-9 border border-border group-hover:border-accent flex items-center justify-center font-bold text-accent bg-transparent transition-colors">
             <span className={locale === "am" ? "font-ethiopic text-base" : "font-mono text-sm"}>
               {brandMonogram}
             </span>
@@ -114,17 +114,21 @@ export function Header({
               <a
                 key={item.id}
                 href={item.href}
-                className={`relative py-1 text-xs tracking-[0.2em] uppercase transition-colors ${
+                className={`ink-link relative py-1 text-xs tracking-[0.2em] uppercase transition-colors flex items-center ${
                   locale === "am" ? "font-ethiopic font-semibold" : "font-mono"
                 } ${
                   isActive
-                    ? "text-accent font-semibold"
+                    ? "text-foreground font-semibold"
                     : "text-muted hover:text-foreground"
                 }`}
               >
                 <span>{item.label}</span>
+                {/* Small ink-stamp style active marker (small square mark in flag red) */}
                 {isActive && (
-                  <span className="absolute -bottom-1 left-0 right-0 h-0.5 bg-accent rounded-full animate-in fade-in duration-200" />
+                  <span
+                    className="inline-block w-1.5 h-1.5 bg-[#DA121A] ml-2 shrink-0 animate-in fade-in duration-200"
+                    aria-hidden="true"
+                  />
                 )}
               </a>
             );

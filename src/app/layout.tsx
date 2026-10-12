@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
-import { Syne, Outfit, JetBrains_Mono, Noto_Sans_Ethiopic } from "next/font/google";
+import { Cormorant_Garamond, Outfit, JetBrains_Mono, Noto_Serif_Ethiopic } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { LocaleProvider } from "@/lib/locale-context";
 
-const fontHeading = Syne({
+const fontHeading = Cormorant_Garamond({
   variable: "--font-heading",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
   preload: true,
 });
@@ -25,9 +26,10 @@ const fontMono = JetBrains_Mono({
   preload: false,
 });
 
-const fontEthiopic = Noto_Sans_Ethiopic({
+const fontEthiopic = Noto_Serif_Ethiopic({
   variable: "--font-ethiopic",
   subsets: ["ethiopic"],
+  weight: ["400", "700"],
   display: "swap",
   preload: false,
 });
@@ -47,7 +49,7 @@ export const metadata: Metadata = {
     "Addis Ababa",
     "Ideeza",
   ],
-  authors: [{ name: "Lantumo Birhanu", url: "https://github.com/lyzon1" }],
+  authors: [{ name: "Lantumo Birhanu", url: "https://github.com/henokhackz" }],
   openGraph: {
     title: "Lantumo Birhanu — Fullstack & Creative Three.js Engineer",
     description: "Fidel (ፊደል): Distinctive, performance-first creative developer portfolio.",

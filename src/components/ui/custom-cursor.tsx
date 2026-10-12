@@ -70,18 +70,12 @@ export function CustomCursor() {
       }}
     >
       <div
-        className={`-translate-x-1/2 -translate-y-1/2 flex items-center justify-center transition-all duration-200 rounded-full ${
+        className={`-translate-x-1/2 -translate-y-1/2 transition-all duration-150 rounded-full ${
           isLink
-            ? "w-8 h-8 bg-accent/20 border border-accent scale-100"
-            : isFidel
-            ? "w-6 h-6 border border-accent/70 bg-accent/10 backdrop-blur-[1px] scale-100"
-            : "w-3 h-3 bg-accent/90 scale-100"
+            ? "w-6 h-6 border border-foreground bg-foreground/10"
+            : "w-1.5 h-1.5 bg-foreground"
         }`}
-      >
-        {isFidel && (
-          <span className="w-1.5 h-1.5 rounded-full bg-accent animate-ping" />
-        )}
-      </div>
+      />
     </div>
   );
 }
