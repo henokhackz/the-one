@@ -51,7 +51,7 @@ export function PortfolioShell({ children }: { children: React.ReactNode }) {
         {/* Floating ⌘K Mobile Trigger Button */}
         <button
           onClick={() => setCommandPaletteOpen(true)}
-          className="md:hidden fixed bottom-6 right-6 z-40 w-12 h-12 rounded-full border border-border bg-surface/90 text-accent shadow-xl backdrop-blur-md flex items-center justify-center active:scale-95 transition-transform"
+          className="md:hidden fixed bottom-20 right-6 z-40 w-11 h-11 rounded-full border border-border bg-surface/90 text-accent shadow-xl backdrop-blur-md flex items-center justify-center active:scale-95 transition-transform"
           aria-label="Open Command Search"
         >
           <Command className="w-5 h-5" />
