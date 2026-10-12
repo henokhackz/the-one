@@ -1,6 +1,6 @@
 /**
  * GPU & Device Capability Detection
- * Ensures creative 3D features never compromise mobile battery, framerate, or accessibility.
+ * Ensures creative 3D features deliver 60fps on desktop and mobile while respecting accessibility.
  */
 
 export interface DeviceTier {
@@ -8,6 +8,8 @@ export interface DeviceTier {
   prefersReducedMotion: boolean;
   webglSupported: boolean;
   canRun3D: boolean;
+  instanceCount: number;
+  enablePostProcessing: boolean;
   reason?: string;
 }
 
@@ -18,6 +20,8 @@ export function detectDeviceTier(): DeviceTier {
       prefersReducedMotion: false,
       webglSupported: false,
       canRun3D: false,
+      instanceCount: 3000,
+      enablePostProcessing: true,
       reason: "SSR",
     };
   }
@@ -33,6 +37,8 @@ export function detectDeviceTier(): DeviceTier {
       prefersReducedMotion: true,
       webglSupported: true,
       canRun3D: false,
+      instanceCount: 0,
+      enablePostProcessing: false,
       reason: "prefers-reduced-motion enabled",
     };
   }
@@ -59,28 +65,35 @@ export function detectDeviceTier(): DeviceTier {
       prefersReducedMotion,
       webglSupported: false,
       canRun3D: false,
+      instanceCount: 0,
+      enablePostProcessing: false,
       reason: "WebGL not supported",
     };
   }
 
   // 4. Memory & Concurrency constraints
   const hardwareConcurrency = navigator.hardwareConcurrency || 4;
-  const isLowEndDevice = hardwareConcurrency < 4;
+  const isLowEndDevice = hardwareConcurrency < 3;
 
   if (isMobile || isLowEndDevice) {
     return {
-      isMobile,
+      isMobile: true,
       prefersReducedMotion,
-      webglSupported,
-      canRun3D: false,
-      reason: "Mobile or low-spec device - prioritizing 2D fallback for speed & battery",
+      webglSupported: true,
+      canRun3D: true,
+      instanceCount: 1200,
+      enablePostProcessing: false,
+      reason: "Mobile tier: optimized lightweight 3D scene (1,200 instances, no post-fx)",
     };
   }
 
   return {
-    isMobile,
+    isMobile: false,
     prefersReducedMotion,
-    webglSupported,
+    webglSupported: true,
     canRun3D: true,
+    instanceCount: 3200,
+    enablePostProcessing: true,
+    reason: "Desktop high-performance tier",
   };
 }
