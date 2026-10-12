@@ -4,12 +4,11 @@ import React, { useEffect, useState, useRef } from "react";
 
 export function CustomCursor() {
   const [enabled, setEnabled] = useState(false);
-  const [cursorState, setCursorState] = useState<"default" | "link" | "view">("default");
+  const [cursorState, setCursorState] = useState<"default" | "link" | "view" | "fidel">("default");
   const [position, setPosition] = useState({ x: -100, y: -100 });
   const cursorRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    // Only enable on desktop pointer devices and when reduced motion is not preferred
     const hasFinePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -22,7 +21,6 @@ export function CustomCursor() {
     const onMouseMove = (e: MouseEvent) => {
       setPosition({ x: e.clientX, y: e.clientY });
 
-      // Determine hover target state
       const target = e.target as HTMLElement | null;
       if (!target) return;
 
@@ -35,6 +33,11 @@ export function CustomCursor() {
       const interactiveTarget = target.closest("a, button, input, [role='button']");
       if (interactiveTarget) {
         setCursorState("link");
+        return;
+      }
+
+      if (target.tagName.toLowerCase() === "canvas") {
+        setCursorState("fidel");
         return;
       }
 
@@ -51,6 +54,7 @@ export function CustomCursor() {
 
   const isView = cursorState === "view";
   const isLink = cursorState === "link";
+  const isFidel = cursorState === "fidel";
 
   return (
     <div
@@ -64,9 +68,11 @@ export function CustomCursor() {
       <div
         className={`-translate-x-1/2 -translate-y-1/2 flex items-center justify-center transition-all duration-200 rounded-full ${
           isView
-            ? "w-16 h-16 bg-accent text-accent-foreground shadow-lg border border-accent-foreground/20 scale-100"
+            ? "w-16 h-16 bg-accent text-accent-foreground shadow-xl border border-accent/40 scale-100"
             : isLink
             ? "w-8 h-8 bg-accent/20 border border-accent scale-100"
+            : isFidel
+            ? "w-6 h-6 border border-accent/60 bg-accent/10 backdrop-blur-[1px] scale-100"
             : "w-3 h-3 bg-accent/80 scale-100"
         }`}
       >
@@ -74,6 +80,9 @@ export function CustomCursor() {
           <span className="font-mono text-[9px] font-bold tracking-widest uppercase">
             VIEW
           </span>
+        )}
+        {isFidel && (
+          <span className="w-1.5 h-1.5 rounded-full bg-accent animate-ping" />
         )}
       </div>
     </div>
