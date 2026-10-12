@@ -44,7 +44,7 @@ export function Header({
       }`}
     >
       {/* Clean 4-Item Flex Layout: [1. Brand] [2. Navigation] [3. Language] [4. Theme/Menu] */}
-      <div className="max-w-[1600px] mx-auto px-6 md:px-12 h-16 md:h-20 flex items-center justify-between gap-6">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 h-16 md:h-20 flex items-center justify-between gap-3 sm:gap-6">
         {/* Item 1: Brand Monogram & Name */}
         <Link
           href="/"

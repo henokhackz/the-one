@@ -283,69 +283,15 @@ export function Hero2D() {
   return (
     <section
       ref={containerRef}
-      className="relative w-full min-h-[92vh] flex flex-col justify-between overflow-hidden border-b border-border/60 bg-background"
-      aria-label="Portfolio Hero Section"
+      className="fixed inset-0 w-full h-full pointer-events-none select-none z-0 overflow-hidden bg-background"
+      aria-hidden="true"
     >
-      {/* Interactive 2D Fidel Canvas Background */}
+      {/* Interactive 2D Fidel Canvas Background Fallback */}
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 w-full h-full pointer-events-none select-none z-0"
+        className="absolute inset-0 w-full h-full pointer-events-none select-none"
         aria-hidden="true"
       />
-
-      {/* Hero Top Metadata Bar */}
-      <div className="relative z-10 w-full max-w-[1600px] mx-auto px-6 md:px-12 pt-8 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <TibebCornerStamp geezNumeral={locale === "am" ? "፩" : "01"} />
-          <span className="font-mono text-[11px] tracking-[0.25em] text-muted uppercase">
-            {locale === "am" ? "የፊደል አርክቴክቸር" : "FIDEL ARCHITECTURE"}
-          </span>
-        </div>
-
-        {/* Live Ethiopian Clock & Calendar */}
-        <EthiopianClock showDate={true} />
-      </div>
-
-      {/* Minimal Hero Core (Strictly under 25 words) */}
-      <div className="relative z-10 w-full max-w-[1600px] mx-auto px-6 md:px-12 py-12 md:py-16 flex flex-col justify-center">
-        <div className="max-w-4xl space-y-4">
-          <h1 className={`text-5xl sm:text-7xl md:text-8xl font-black tracking-tight text-foreground leading-[1.05] ${locale === "am" ? "font-ethiopic" : "font-heading"}`}>
-            {t.hero.name}
-          </h1>
-
-          <p className="font-mono text-xs sm:text-sm tracking-[0.25em] text-accent font-semibold uppercase">
-            {t.hero.role}
-          </p>
-
-          <div className="pt-4">
-            <Link
-              href="/work"
-              className="inline-flex items-center gap-3 px-8 py-4 bg-foreground text-background font-mono text-xs font-semibold tracking-[0.2em] uppercase hover:bg-accent hover:text-accent-foreground transition-all shadow-md active:scale-95"
-            >
-              <span>{t.hero.viewWork}</span>
-              <ArrowUpRight className="w-4 h-4" />
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      {/* Hero Bottom Bar */}
-      <div className="relative z-10 w-full max-w-[1600px] mx-auto px-6 md:px-12 pb-8 flex items-center justify-between text-muted text-xs font-mono">
-        <div className="flex items-center gap-6">
-          <span className="tracking-widest uppercase">{t.hero.statusRole}</span>
-          <span className="hidden sm:inline opacity-30">•</span>
-          <span className="hidden sm:inline tracking-widest uppercase">{t.hero.location}</span>
-        </div>
-
-        <a
-          href="#selected-work"
-          className="flex items-center gap-2 text-muted hover:text-foreground tracking-widest uppercase transition-colors"
-          aria-label="Scroll to selected work"
-        >
-          <span>{t.hero.scroll}</span>
-          <ArrowDown className="w-3.5 h-3.5 animate-bounce" />
-        </a>
-      </div>
     </section>
   );
 }

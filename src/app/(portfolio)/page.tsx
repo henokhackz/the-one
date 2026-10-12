@@ -90,36 +90,26 @@ export default function Home() {
         {/* Hero Core: Strictly Under 25 Words */}
         <div className="max-w-4xl space-y-4">
           <h1
-            className={`text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-tight text-foreground leading-[0.95] drop-shadow-md ${
+            className={`text-4xl sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-tight text-foreground leading-[0.95] drop-shadow-lg ${
               locale === "am" ? "font-ethiopic" : "font-heading"
-            } transition-all duration-1000 ${
-              isLoaded ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
             }`}
           >
             {locale === "am" ? "ላንቱሞ ብርሃኑ" : "Lantumo Birhanu"}
           </h1>
 
-          <p
-            className={`font-mono text-xs sm:text-sm md:text-base tracking-[0.25em] text-accent uppercase font-semibold transition-all duration-1000 delay-150 ${
-              isLoaded ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
-            }`}
-          >
+          <p className="font-mono text-xs sm:text-sm md:text-base tracking-[0.25em] text-accent uppercase font-semibold">
             {locale === "am"
               ? "ፉልስታክ እና ስሪ.ጄኤስ ፈጣሪ ኢንጂነር"
               : "Fullstack Developer & Three.js Engineer"}
           </p>
 
-          <div
-            className={`pt-4 transition-all duration-1000 delay-300 ${
-              isLoaded ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
-            }`}
-          >
+          <div className="pt-2 sm:pt-4">
             <button
               onClick={() => scrollToSection(0.32)}
-              className="pointer-events-auto group inline-flex items-center gap-3 px-8 py-4 bg-foreground text-background font-mono text-xs font-semibold tracking-[0.2em] uppercase hover:bg-accent hover:text-accent-foreground transition-all duration-300 shadow-lg active:scale-95 focus-visible:ring-2 focus-visible:ring-accent"
+              className="pointer-events-auto group inline-flex items-center gap-2.5 sm:gap-3 px-6 sm:px-8 py-3.5 sm:py-4 bg-foreground text-background font-mono text-xs font-semibold tracking-[0.2em] uppercase hover:bg-accent hover:text-accent-foreground transition-all duration-300 shadow-xl active:scale-95 focus-visible:ring-2 focus-visible:ring-accent"
             >
               <span>{locale === "am" ? "የስራ ማህደር አስስ ↓" : "Explore Architecture ↓"}</span>
-              <ArrowDown className="w-4 h-4 transition-transform group-hover:translate-y-0.5" />
+              <ArrowDown className="w-3.5 sm:w-4 h-3.5 sm:h-4 transition-transform group-hover:translate-y-0.5" />
             </button>
           </div>
         </div>
