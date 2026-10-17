@@ -172,10 +172,6 @@ body {
 }
 .card-ink:hover {
   border-color: var(--color-border-strong);
-  background-color: rgba(43, 29, 16, 0.04);
-}
-.dark .card-ink:hover {
-  background-color: rgba(232, 217, 181, 0.04);
 }
 
 /* 4. Self-drawing ruled manuscript borders */

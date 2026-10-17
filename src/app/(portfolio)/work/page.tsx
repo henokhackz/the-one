@@ -2,13 +2,13 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { ArrowUpRight, Github, ExternalLink, Filter } from "lucide-react";
 import { PROJECTS, Project } from "@/lib/projects-data";
 import { getProjects } from "@/sanity/lib/api";
 import { TibebCornerStamp, TibebDivider } from "@/components/ui/tibeb-pattern";
 import { useLocale } from "@/lib/locale-context";
 import { Reveal } from "@/components/ui/reveal";
+import { ProjectImageLightbox } from "@/components/work/project-image-lightbox";
 
 export default function WorkPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
@@ -67,7 +67,7 @@ export default function WorkPage() {
                 className={`px-4 py-2 font-mono text-xs tracking-widest uppercase transition-all border ${
                   selectedCategory === cat.key
                     ? "border-accent bg-accent text-accent-foreground font-semibold"
-                    : "border-border bg-surface/40 text-muted hover:text-foreground hover:border-accent/50"
+                    : "border-border text-muted hover:text-foreground hover:border-accent/50"
                 }`}
               >
                 {cat.label}
@@ -81,28 +81,25 @@ export default function WorkPage() {
           {filteredProjects.map((project, index) => (
             <article
               key={project.id}
-              className="group border border-border bg-surface/30 rounded-sm overflow-hidden flex flex-col justify-between hover:border-accent/80 transition-all duration-300"
+              className="group border border-border rounded-sm overflow-hidden flex flex-col justify-between hover:border-accent/80 transition-colors duration-300"
             >
               <div>
                 {/* Visual Thumbnail */}
-                <Link
-                  href={`/work/${project.slug}`}
-                  data-cursor="view"
-                  className="block relative aspect-[16/10] w-full overflow-hidden bg-background border-b border-border group-hover:opacity-95"
-                >
-                  <Image
+                <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-border">
+                  <ProjectImageLightbox
                     src={project.thumbnail}
-                    alt={project.title}
-                    fill
+                    alt={`${project.title} interface preview`}
+                    className="absolute inset-0 h-full w-full"
                     sizes="(max-width: 768px) 100vw, 50vw"
-                    className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
-                  />
+                    imageClassName="object-contain p-2 sm:p-3 transition-transform duration-300 group-hover/image:scale-[1.015]"
+                  >
                   <div className="absolute top-4 left-4 z-10">
-                    <span className="px-3 py-1 bg-background/90 backdrop-blur-md border border-border font-mono text-[10px] tracking-widest text-accent font-bold uppercase">
+                    <span className="px-3 py-1 border border-border font-mono text-[10px] tracking-widest text-accent font-bold uppercase">
                       {locale === "am" ? project.geezNumeral : `0${index + 1}`}
                     </span>
                   </div>
-                </Link>
+                  </ProjectImageLightbox>
+                </div>
 
                 {/* Content */}
                 <div className="p-6 md:p-8">
@@ -126,7 +123,7 @@ export default function WorkPage() {
                     {project.technologies.map((tech) => (
                       <span
                         key={tech}
-                        className="px-2.5 py-1 font-mono text-[10px] tracking-wider uppercase border border-border bg-background/50 text-muted"
+                        className="px-2.5 py-1 font-mono text-[10px] tracking-wider uppercase border border-border text-muted"
                       >
                         {tech}
                       </span>
@@ -136,7 +133,7 @@ export default function WorkPage() {
               </div>
 
               {/* Action Bar */}
-              <div className="p-6 md:p-8 pt-0 border-t border-border/40 mt-6 flex items-center justify-between font-mono text-xs">
+              <div className="p-6 md:p-8 pt-0 mt-6 flex items-center justify-between font-mono text-xs">
                 <div className="flex items-center gap-4">
                   {project.liveUrl && (
                     <a

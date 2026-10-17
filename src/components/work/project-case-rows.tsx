@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, Github, ExternalLink } from "lucide-react";
 import { PROJECTS, Project } from "@/lib/projects-data";
@@ -11,6 +10,7 @@ import { useLocale } from "@/lib/locale-context";
 import { Reveal } from "@/components/ui/reveal";
 import { RuledFrame } from "@/components/ui/ruled-frame";
 import { CountUp } from "@/components/ui/count-up";
+import { ProjectImageLightbox } from "@/components/work/project-image-lightbox";
 
 interface ProjectCaseRowsProps {
   highlightedProjectId?: string | null;
@@ -86,15 +86,15 @@ export function ProjectCaseRows({ highlightedProjectId, projects: initialProject
               as="article"
               delay={Math.min(index * 60, 240)}
               className={`group relative rounded-[1px] transition-colors duration-300 card-ink p-6 sm:p-8 md:p-10 ${
-                isHighlighted
-                  ? "border-2 border-accent"
+                  isHighlighted
+                  ? "border border-accent"
                   : "border border-border/80 hover:border-border-strong"
               }`}
             >
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
                 {/* 1. Browser-Frame Mockup with subtle internal parallax (6%) and overflow hidden */}
                 <div className="lg:col-span-6 flex flex-col">
-                  <div className="rounded-none bg-surface-elevated/40 border border-border border-b-0 px-4 py-2.5 flex items-center gap-3">
+                  <div className="rounded-none border border-border border-b-0 px-4 py-2.5 flex items-center gap-3">
                     <div className="flex items-center gap-1.5 shrink-0">
                       <span className="w-2.5 h-2.5 rounded-full bg-red-600/70 inline-block" />
                       <span className="w-2.5 h-2.5 rounded-full bg-amber-600/70 inline-block" />
@@ -105,17 +105,15 @@ export function ProjectCaseRows({ highlightedProjectId, projects: initialProject
                     </span>
                   </div>
 
-                  <div className="relative aspect-[16/10] w-full overflow-hidden bg-background/50 border border-border rounded-none">
-                    <div className="relative w-full h-[106%] -top-[3%] overflow-hidden transition-transform duration-700 ease-out group-hover:scale-[1.04] group-hover:-translate-y-[2%]">
-                      <Image
-                        src={project.thumbnail}
-                        alt={`${project.title} Interface Preview`}
-                        fill
-                        sizes="(max-width: 1024px) 100vw, 50vw"
-                        className="object-cover object-top transition-transform duration-700 ease-out"
-                        priority={index < 2}
-                      />
-                    </div>
+                  <div className="relative aspect-[16/10] w-full overflow-hidden border border-border rounded-none">
+                    <ProjectImageLightbox
+                      src={project.thumbnail}
+                      alt={`${project.title} interface preview`}
+                      className="absolute inset-0 h-full w-full"
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                      priority={index < 2}
+                      imageClassName="object-contain p-2 sm:p-3 transition-transform duration-300 group-hover/image:scale-[1.015]"
+                    />
                   </div>
                 </div>
 

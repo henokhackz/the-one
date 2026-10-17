@@ -2,11 +2,11 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { ArrowUpRight, Github, ExternalLink } from "lucide-react";
 import { PROJECTS, Project } from "@/lib/projects-data";
 import { TibebDivider, TibebCornerStamp } from "@/components/ui/tibeb-pattern";
 import { useLocale } from "@/lib/locale-context";
+import { ProjectImageLightbox } from "@/components/work/project-image-lightbox";
 
 export function SelectedWork() {
   const [activeProject, setActiveProject] = useState<Project | null>(PROJECTS[0]);
@@ -52,7 +52,7 @@ export function SelectedWork() {
                 key={project.id}
                 onMouseEnter={() => setActiveProject(project)}
                 className={`group relative py-10 transition-colors cursor-pointer ${
-                  isHovered ? "bg-surface/30 px-4 -mx-4 rounded-sm" : ""
+                  isHovered ? "px-4 -mx-4 rounded-sm" : ""
                 }`}
               >
                 <Link href={`/work/${project.slug}`} className="block" data-cursor="view">
@@ -79,7 +79,7 @@ export function SelectedWork() {
                     {project.technologies.slice(0, 4).map((tech) => (
                       <span
                         key={tech}
-                        className="px-2.5 py-1 font-mono text-[10px] tracking-wider uppercase border border-border/80 bg-background/50 text-muted"
+                        className="px-2.5 py-1 font-mono text-[10px] tracking-wider uppercase border border-border/80 text-muted"
                       >
                         {tech}
                       </span>
@@ -130,15 +130,15 @@ export function SelectedWork() {
 
         {/* Right: Sticky Image Preview Container (5 Columns - Desktop) */}
         <div className="hidden lg:block lg:col-span-5 relative">
-          <div className="sticky top-28 w-full border border-border p-4 bg-surface/50 rounded-sm">
-            <div className="relative aspect-[16/10] w-full overflow-hidden bg-background border border-border/60">
+          <div className="sticky top-28 w-full border border-border p-4 rounded-sm">
+            <div className="relative aspect-[16/10] w-full overflow-hidden border border-border/60">
               {activeProject && (
-                <Image
+                <ProjectImageLightbox
                   src={activeProject.thumbnail}
-                  alt={activeProject.title}
-                  fill
+                  alt={`${activeProject.title} interface preview`}
+                  className="absolute inset-0 h-full w-full"
                   sizes="(max-width: 1200px) 50vw, 33vw"
-                  className="object-cover object-top transition-all duration-500 hover:scale-105"
+                  imageClassName="object-contain p-2 sm:p-3 transition-transform duration-300 group-hover/image:scale-[1.015]"
                   priority={true}
                 />
               )}
@@ -159,7 +159,7 @@ export function SelectedWork() {
                 </p>
                 <Link
                   href={`/work/${activeProject.slug}`}
-                  className="mt-2 w-full py-2.5 text-center border border-border hover:border-accent bg-background text-foreground hover:text-accent font-mono text-[11px] tracking-widest uppercase transition-colors"
+                  className="mt-2 w-full py-2.5 text-center border border-border hover:border-accent text-foreground hover:text-accent font-mono text-[11px] tracking-widest uppercase transition-colors"
                 >
                   {t.selectedWork.exploreCaseStudy}
                 </Link>
