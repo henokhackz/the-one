@@ -1,14 +1,26 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { ArrowUpRight, Rss, Clock, Calendar } from "lucide-react";
-import { BLOG_POSTS } from "@/lib/blog-data";
+import { BLOG_POSTS, BlogPost } from "@/lib/blog-data";
+import { getBlogPosts } from "@/sanity/lib/api";
 import { TibebCornerStamp } from "@/components/ui/tibeb-pattern";
 import { useLocale } from "@/lib/locale-context";
 
-export function BlogSection() {
+export function BlogSection({ initialPosts }: { initialPosts?: BlogPost[] }) {
+  const [posts, setPosts] = useState<BlogPost[]>(initialPosts || BLOG_POSTS);
   const { locale } = useLocale();
+
+  useEffect(() => {
+    if (initialPosts) {
+      setPosts(initialPosts);
+    } else {
+      getBlogPosts().then((data) => {
+        if (data && data.length > 0) setPosts(data);
+      });
+    }
+  }, [initialPosts]);
 
   return (
     <section
@@ -47,7 +59,7 @@ export function BlogSection() {
 
       {/* 3 Articles Grid */}
       <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {BLOG_POSTS.slice(0, 3).map((post) => (
+        {posts.slice(0, 3).map((post) => (
           <article
             key={post.id}
             className="group relative p-6 sm:p-8 rounded-[1px] border border-border card-ink flex flex-col justify-between hover:border-border-strong transition-all duration-300"

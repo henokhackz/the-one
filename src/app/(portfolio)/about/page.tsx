@@ -1,15 +1,23 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, Download, MapPin, Terminal } from "lucide-react";
 import { TibebCornerStamp, TibebDivider } from "@/components/ui/tibeb-pattern";
 import { EthiopianClock } from "@/components/layout/ethiopian-clock";
 import { useLocale } from "@/lib/locale-context";
+import { getResumeData } from "@/sanity/lib/api";
 
 export default function AboutPage() {
   const { locale, t } = useLocale();
+  const [resumeUrl, setResumeUrl] = useState("/Lantumo_Birhanu_resume.pdf");
+
+  useEffect(() => {
+    getResumeData().then((r) => {
+      if (r?.fileUrl) setResumeUrl(r.fileUrl);
+    });
+  }, []);
 
   const experiences = [
     {
@@ -129,7 +137,7 @@ export default function AboutPage() {
 
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <a
-              href="/Lantumo_Birhanu_resume.pdf"
+              href={resumeUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2.5 px-6 py-3.5 bg-foreground text-background font-mono text-xs font-semibold tracking-widest uppercase hover:bg-accent hover:text-accent-foreground transition-all"

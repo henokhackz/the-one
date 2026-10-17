@@ -2,7 +2,8 @@ import React from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Clock, Calendar, Tag, ArrowUpRight } from "lucide-react";
-import { BLOG_POSTS, getBlogPostBySlug } from "@/lib/blog-data";
+import { BLOG_POSTS } from "@/lib/blog-data";
+import { getBlogPostBySlug, getBlogPosts } from "@/sanity/lib/api";
 import { TibebCornerStamp, TibebDivider } from "@/components/ui/tibeb-pattern";
 
 interface Props {
@@ -10,14 +11,15 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  return BLOG_POSTS.map((post) => ({
+  const posts = await getBlogPosts();
+  return posts.map((post) => ({
     id: post.slug,
   }));
 }
 
 export default async function BlogPostPage({ params }: Props) {
   const { id } = await params;
-  const post = getBlogPostBySlug(id);
+  const post = await getBlogPostBySlug(id);
 
   if (!post) {
     notFound();

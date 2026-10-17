@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Code2, Server, Layers, Cpu, CheckCircle2 } from "lucide-react";
 import { TibebCornerStamp } from "@/components/ui/tibeb-pattern";
 import { useLocale } from "@/lib/locale-context";
+import { getSkillCategories, SanitySkillCategory } from "@/sanity/lib/api";
 
 interface SkillItem {
   name: string;
-  level: string;
   projectIds: string[];
 }
 
@@ -22,51 +22,91 @@ interface SkillsMatrixProps {
   onHoverSkillProject?: (projectId: string | null) => void;
 }
 
+const getCategoryIcon = (iconName: string): React.ReactNode => {
+  switch (iconName) {
+    case "Server":
+      return <Server className="w-5 h-5 text-accent" />;
+    case "Layers":
+      return <Layers className="w-5 h-5 text-accent" />;
+    case "Cpu":
+      return <Cpu className="w-5 h-5 text-accent" />;
+    default:
+      return <Code2 className="w-5 h-5 text-accent" />;
+  }
+};
+
 export function SkillsMatrix({ onHoverSkillProject }: SkillsMatrixProps) {
   const [activeSkill, setActiveSkill] = useState<string | null>(null);
   const { locale } = useLocale();
 
-  const categories: SkillCategory[] = [
+  const [categories, setCategories] = useState<SkillCategory[]>([
     {
-      title: "Frontend Engineering",
+      title: "Frontend Development",
       icon: <Code2 className="w-5 h-5 text-accent" />,
-      description: "Crafting sub-second, accessible web applications with modern React and Next.js.",
+      description: "Building fast, accessible web interfaces with modern React.",
       skills: [
-        { name: "React 19 & Next.js App Router", level: "Senior", projectIds: ["1", "2"] },
-        { name: "TypeScript (Strict Mode)", level: "Production", projectIds: ["1", "2", "3", "4"] },
-        { name: "Tailwind CSS v4 & Design Tokens", level: "Advanced", projectIds: ["1", "2", "3", "4"] },
-        { name: "Three.js & WebGL Shaders (GLSL)", level: "Specialist", projectIds: ["1", "4"] },
-        { name: "Server-Sent Events & Streaming UI", level: "Production", projectIds: ["1"] },
-        { name: "WCAG AA Accessibility & Screen Readers", level: "Verified", projectIds: ["2", "4"] },
+        { name: "React & Next.js", projectIds: ["1", "2"] },
+        { name: "TypeScript & JavaScript", projectIds: ["1", "2", "3", "4"] },
+        { name: "Tailwind CSS", projectIds: ["1", "2", "3", "4"] },
+        { name: "Three.js & WebGL", projectIds: ["1", "4"] },
+        { name: "Real-time & Streaming UI", projectIds: ["1"] },
+        { name: "Responsive & Accessible UI", projectIds: ["2", "4"] },
       ],
     },
     {
-      title: "Backend & Data Architecture",
+      title: "Backend & Data",
       icon: <Server className="w-5 h-5 text-accent" />,
-      description: "Engineering scalable APIs, relational data models, and resilient checkout pipelines.",
+      description: "Engineering reliable APIs, data models, and payment flows.",
       skills: [
-        { name: "PostgreSQL & Relational Schemas", level: "Production", projectIds: ["1", "2", "3"] },
-        { name: "Prisma ORM & Migration Pipelines", level: "Advanced", projectIds: ["1", "2"] },
-        { name: "Node.js & Express API Routes", level: "Production", projectIds: ["3"] },
-        { name: "Idempotent Webhooks (Stripe / PayPal)", level: "Specialist", projectIds: ["2"] },
-        { name: "Row-Level Locks & Race-Condition Safety", level: "Verified", projectIds: ["2"] },
-        { name: "Cryptographic Tokens & Auth Guardrails", level: "Production", projectIds: ["3"] },
+        { name: "PostgreSQL", projectIds: ["1", "2", "3"] },
+        { name: "Prisma ORM", projectIds: ["1", "2"] },
+        { name: "Node.js & Express", projectIds: ["3"] },
+        { name: "Payments (Stripe & PayPal)", projectIds: ["2"] },
+        { name: "REST APIs", projectIds: ["2"] },
+        { name: "Authentication & Security", projectIds: ["3"] },
       ],
     },
     {
-      title: "Fullstack Architecture & Cloud",
+      title: "Cloud & DevOps",
       icon: <Layers className="w-5 h-5 text-accent" />,
-      description: "Connecting edge runtimes, caching layers, and CI/CD pipelines.",
+      description: "Shipping and scaling products on modern cloud infrastructure.",
       skills: [
-        { name: "React Server Components (RSC)", level: "Architect", projectIds: ["1", "2"] },
-        { name: "Vercel Edge Functions & Edge Runtime", level: "Production", projectIds: ["1", "4"] },
-        { name: "Web Workers & Background Parsing", level: "Specialist", projectIds: ["3"] },
-        { name: "OpenAI API Structured Outputs (Zod)", level: "Production", projectIds: ["1", "4"] },
-        { name: "TanStack React Query Optimistic Sync", level: "Advanced", projectIds: ["3"] },
-        { name: "Git Workflow & Automated Deployments", level: "Production", projectIds: ["1", "2", "3", "4"] },
+        { name: "AWS & Vercel Deployment", projectIds: ["1", "2", "4"] },
+        { name: "Docker & Containers", projectIds: ["3", "4"] },
+        { name: "CI/CD (GitHub Actions)", projectIds: ["1", "2", "3", "4"] },
+        { name: "Git & Version Control", projectIds: [] },
+        { name: "Edge & Serverless Functions", projectIds: ["2", "3"] },
+        { name: "Monorepo Architecture", projectIds: ["1"] },
       ],
     },
-  ];
+    {
+      title: "3D & Interactive",
+      icon: <Cpu className="w-5 h-5 text-accent" />,
+      description: "Crafting real-time 3D and WebGL experiences.",
+      skills: [
+        { name: "WebGL & GLSL Shaders", projectIds: ["1", "4"] },
+        { name: "3D Visualization", projectIds: ["4"] },
+        { name: "Interactive Animation", projectIds: ["1"] },
+        { name: "Real-time Rendering", projectIds: [] },
+        { name: "EDA / PCB Interfaces", projectIds: ["4"] },
+      ],
+    },
+  ]);
+
+  useEffect(() => {
+    getSkillCategories().then((data) => {
+      if (data && data.length > 0) {
+        setCategories(
+          data.map((cat) => ({
+            title: cat.title,
+            icon: getCategoryIcon(cat.iconName),
+            description: cat.description,
+            skills: cat.skills || [],
+          }))
+        );
+      }
+    });
+  }, []);
 
   const handleMouseEnter = (skill: SkillItem) => {
     setActiveSkill(skill.name);
@@ -90,89 +130,57 @@ export function SkillsMatrix({ onHoverSkillProject }: SkillsMatrixProps) {
     >
       {/* Header */}
       <div className="pb-8 border-b border-border/80">
-        <div className="flex items-center gap-3 mb-2">
+        <div className="flex items-center gap-4">
           <TibebCornerStamp geezNumeral={locale === "am" ? "ችሎታ" : "02"} />
-          <span className="font-mono text-xs tracking-[0.25em] text-accent uppercase font-medium">
-            {locale === "am" ? "የቴክኖሎጂ እና የስርዓት ቁጥጥር" : "Fullstack Competencies & Proof"}
-          </span>
+          <h2
+            className={`text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground ${
+              locale === "am" ? "font-ethiopic" : "font-heading"
+            }`}
+          >
+            {locale === "am" ? "የምህንድስና ችሎታዎች" : "Technical Capabilities"}
+          </h2>
         </div>
-        <h2
-          className={`text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground ${
-            locale === "am" ? "font-ethiopic" : "font-heading"
-          }`}
-        >
-          {locale === "am" ? "የምህንድስና ችሎታዎች" : "Technical Capabilities"}
-        </h2>
-        <p className="text-sm text-muted mt-2 max-w-xl">
-          {locale === "am"
-            ? "በእውነተኛ ምርቶች ላይ የተረጋገጡ የፍሮንትኤንድ፣ ባክኤንድ እና የደመና ቴክኖሎጂዎች። ማንኛውንም ችሎታ በመጫን የተገነባበትን ፕሮጀክት ይመልከቱ።"
-            : "Hover any skill pill to highlight the corresponding production project below, proving real-world implementation."}
-        </p>
       </div>
 
-      {/* 3-Column Architectural Cards */}
-      <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {/* Balanced 2x2 Category Cards */}
+      <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
         {categories.map((cat, idx) => (
           <div
             key={idx}
-            className="p-6 sm:p-8 rounded-[1px] border border-border card-ink flex flex-col justify-between hover:border-border-strong transition-colors"
+            className="p-6 sm:p-8 rounded-[1px] border border-border card-ink hover:border-border-strong transition-colors"
           >
-            <div>
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-none bg-accent/10 border border-accent/30 flex items-center justify-center">
-                  {cat.icon}
-                </div>
-                <h3 className="font-heading text-xl font-bold text-foreground">
-                  {cat.title}
-                </h3>
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 rounded-none bg-accent/10 border border-accent/30 flex items-center justify-center">
+                {cat.icon}
               </div>
-
-              <p className="text-xs text-muted leading-relaxed mb-6">
-                {cat.description}
-              </p>
-
-              {/* Skills Grid */}
-              <div className="space-y-2.5">
-                {cat.skills.map((skill, sIdx) => {
-                  const isActive = activeSkill === skill.name;
-                  return (
-                    <div
-                      key={sIdx}
-                      onMouseEnter={() => handleMouseEnter(skill)}
-                      onMouseLeave={handleMouseLeave}
-                      className={`group/skill px-3.5 py-2.5 rounded-[1px] border text-xs transition-all cursor-pointer flex items-center justify-between ${
-                        isActive
-                          ? "bg-foreground text-background border-foreground font-semibold"
-                          : "bg-transparent hover:bg-foreground/5 border-border text-foreground hover:border-foreground"
-                      }`}
-                    >
-                      <span className="flex items-center gap-2">
-                        <CheckCircle2
-                          className={`w-3.5 h-3.5 ${
-                            isActive ? "text-accent" : "text-muted group-hover/skill:text-accent"
-                          }`}
-                        />
-                        <span>{skill.name}</span>
-                      </span>
-
-                      <span
-                        className={`font-mono text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded-xs ${
-                          isActive
-                            ? "bg-background text-foreground"
-                            : "bg-surface text-muted"
-                        }`}
-                      >
-                        {skill.level}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
+              <h3 className="font-heading text-xl font-bold text-foreground">
+                {cat.title}
+              </h3>
             </div>
 
-            <div className="mt-8 pt-4 border-t border-border/50 text-[11px] font-mono text-muted flex items-center justify-between">
-              <span>Verified in Production</span>
-              <span className="text-accent">● Active</span>
+            <div className="flex flex-wrap gap-2">
+              {cat.skills.map((skill, sIdx) => {
+                const isActive = activeSkill === skill.name;
+                return (
+                  <div
+                    key={sIdx}
+                    onMouseEnter={() => handleMouseEnter(skill)}
+                    onMouseLeave={handleMouseLeave}
+                    className={`group/skill px-3 py-2 rounded-[1px] border text-xs transition-all cursor-pointer inline-flex items-center gap-2 ${
+                      isActive
+                        ? "bg-foreground text-background border-foreground font-semibold"
+                        : "bg-transparent hover:bg-foreground/5 border-border text-foreground hover:border-foreground"
+                    }`}
+                  >
+                    <CheckCircle2
+                      className={`w-3.5 h-3.5 shrink-0 ${
+                        isActive ? "text-accent" : "text-muted group-hover/skill:text-accent"
+                      }`}
+                    />
+                    <span>{skill.name}</span>
+                  </div>
+                );
+              })}
             </div>
           </div>
         ))}

@@ -204,19 +204,19 @@ export function Services() {
           <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-muted">
             Ready to build something great?
           </p>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
             <Link
               href="/contact"
-              className="group flex h-12 items-center gap-3 border border-border bg-foreground/[0.03] px-6 text-[11px] font-bold uppercase tracking-[0.2em] text-muted transition-all duration-300 hover:border-accent/40 hover:bg-accent/5 hover:text-foreground"
+              className="group flex h-12 w-full sm:w-auto items-center justify-center gap-3 border border-border bg-foreground/[0.03] px-6 text-[11px] font-bold uppercase tracking-[0.2em] text-muted transition-all duration-300 hover:border-accent/40 hover:bg-accent/5 hover:text-foreground text-center"
             >
               Start a Project
             </Link>
             <Link
               href="/projects"
-              className="flex h-12 items-center gap-3 bg-accent px-6 text-[11px] font-bold uppercase tracking-[0.2em] text-background transition-colors hover:bg-[#d97706]"
+              className="flex h-12 w-full sm:w-auto items-center justify-center gap-3 bg-accent px-6 text-[11px] font-bold uppercase tracking-[0.2em] text-background transition-colors hover:bg-[#d97706] text-center"
             >
               View Work
-              <ArrowUpRight className="h-3.5 w-3.5" />
+              <ArrowUpRight className="h-3.5 w-3.5 shrink-0" />
             </Link>
           </div>
         </div>

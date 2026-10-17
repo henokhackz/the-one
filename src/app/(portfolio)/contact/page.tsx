@@ -38,17 +38,28 @@ export default function ContactPage() {
 
     setStatus("submitting");
 
-    // Simulate submission
     try {
-      await new Promise((resolve) => setTimeout(resolve, 600));
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to send message.");
+      }
+
       setStatus("success");
       setFormData({ name: "", email: "", subject: "", message: "", honeypot: "" });
-    } catch {
+    } catch (err: any) {
       setStatus("error");
       setErrorMessage(
-        locale === "am"
-          ? "መልዕክቱ አልተላከም። እባክዎ በቀጥታ በኢሜይል ወይም በቴሌግራም ያግኙኝ።"
-          : "Failed to send message. Please reach out directly via email or Telegram."
+        err.message ||
+          (locale === "am"
+            ? "መልዕክቱ አልተላከም። እባክዎ በቀጥታ በኢሜይል ወይም በቴሌግራም ያግኙኝ።"
+            : "Failed to send message. Please reach out directly via email or Telegram.")
       );
     }
   };

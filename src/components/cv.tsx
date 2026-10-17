@@ -1,13 +1,24 @@
 "use client";
 
 import { ArrowDownToLine } from "lucide-react";
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { getResumeData } from "@/sanity/lib/api";
 
 const DownloadResumeButton = () => {
+  const [resumeUrl, setResumeUrl] = useState("/Lantumo_Birhanu_resume.pdf");
+
+  useEffect(() => {
+    getResumeData().then((r) => {
+      if (r?.fileUrl) setResumeUrl(r.fileUrl);
+    });
+  }, []);
+
   return (
     <a
-      href="/Lantumo_Birhanu_resume.pdf"
+      href={resumeUrl}
       download
+      target="_blank"
+      rel="noopener noreferrer"
       className="fixed bottom-20 lg:bottom-10 right-6 z-50 group"
     >
       <div className="relative flex items-center justify-center p-[1px] rounded-full overflow-hidden transition-transform duration-300 hover:scale-105">

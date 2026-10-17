@@ -1,14 +1,22 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { ArrowUpRight, Clock } from "lucide-react";
-import { BLOG_POSTS } from "@/lib/blog-data";
+import { BLOG_POSTS, BlogPost } from "@/lib/blog-data";
+import { getBlogPosts } from "@/sanity/lib/api";
 import { TibebCornerStamp, TibebDivider } from "@/components/ui/tibeb-pattern";
 import { useLocale } from "@/lib/locale-context";
 
 export default function BlogsPage() {
+  const [posts, setPosts] = useState<BlogPost[]>(BLOG_POSTS);
   const { locale, t } = useLocale();
+
+  useEffect(() => {
+    getBlogPosts().then((data) => {
+      if (data && data.length > 0) setPosts(data);
+    });
+  }, []);
 
   return (
     <div className="w-full min-h-screen pt-28 pb-24 text-foreground">
@@ -33,7 +41,7 @@ export default function BlogsPage() {
 
         {/* Post List */}
         <div className="divide-y divide-border/60 pt-6">
-          {BLOG_POSTS.map((post, idx) => (
+          {posts.map((post, idx) => (
             <article
               key={post.id}
               className="group py-10 transition-colors flex flex-col justify-between"

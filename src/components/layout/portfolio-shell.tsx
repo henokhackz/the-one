@@ -26,7 +26,7 @@ export function PortfolioShell({ children }: { children: React.ReactNode }) {
 
   return (
     <SmoothScrollProvider>
-      <div className="min-h-screen relative flex flex-col bg-background text-foreground selection:bg-accent selection:text-accent-foreground">
+      <div className="min-h-screen relative flex flex-col bg-background text-foreground selection:bg-accent selection:text-accent-foreground overflow-x-hidden w-full max-w-full">
         {/* Subtle Tactile Grain Overlay */}
         <GrainOverlay />
 
@@ -37,7 +37,7 @@ export function PortfolioShell({ children }: { children: React.ReactNode }) {
         <Header onOpenCommandPalette={() => setCommandPaletteOpen(true)} />
 
         {/* Content Stream */}
-        <main className="flex-1 w-full">{children}</main>
+        <main className="flex-1 w-full max-w-full overflow-x-hidden">{children}</main>
 
         {/* Footer */}
         <Footer />

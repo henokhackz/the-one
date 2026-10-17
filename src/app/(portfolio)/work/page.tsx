@@ -1,16 +1,24 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowUpRight, Github, ExternalLink, Filter } from "lucide-react";
-import { PROJECTS } from "@/lib/projects-data";
+import { PROJECTS, Project } from "@/lib/projects-data";
+import { getProjects } from "@/sanity/lib/api";
 import { TibebCornerStamp, TibebDivider } from "@/components/ui/tibeb-pattern";
 import { useLocale } from "@/lib/locale-context";
 
 export default function WorkPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const [projectsList, setProjectsList] = useState<Project[]>(PROJECTS);
   const { locale, t } = useLocale();
+
+  useEffect(() => {
+    getProjects().then((data) => {
+      if (data && data.length > 0) setProjectsList(data);
+    });
+  }, []);
 
   const categories = [
     { key: "All", label: t.workPage.allCategories },
@@ -20,8 +28,8 @@ export default function WorkPage() {
 
   const filteredProjects =
     selectedCategory === "All"
-      ? PROJECTS
-      : PROJECTS.filter((p) => p.category === selectedCategory);
+      ? projectsList
+      : projectsList.filter((p) => p.category === selectedCategory);
 
   return (
     <div className="w-full min-h-screen pt-28 pb-20">

@@ -1,20 +1,33 @@
-import { BLOG_POSTS } from "@/lib/blog-data";
+import { getBlogPosts } from "@/sanity/lib/api";
+import type { BlogPost } from "@/lib/blog-data";
+
+export const revalidate = 3600; // Cache for 1 hour
 
 export async function GET() {
-  const siteUrl = "https://lantu.pro.et";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://lantu.pro.et";
 
-  const feedItems = BLOG_POSTS.map((post) => {
-    return `
+  let posts: BlogPost[] = [];
+  try {
+    posts = await getBlogPosts();
+  } catch {
+    posts = [];
+  }
+
+  const feedItems = posts
+    .map((post) => {
+      const pubDate = post.date ? new Date(post.date).toUTCString() : new Date().toUTCString();
+      return `
       <item>
         <title><![CDATA[${post.title}]]></title>
         <link>${siteUrl}/blogs/${post.slug}</link>
         <guid isPermaLink="true">${siteUrl}/blogs/${post.slug}</guid>
-        <description><![CDATA[${post.summary}]]></description>
-        <category>${post.category}</category>
-        <pubDate>${new Date(post.date).toUTCString()}</pubDate>
+        <description><![CDATA[${post.summary || ""}]]></description>
+        <category>${post.category || "Technology"}</category>
+        <pubDate>${pubDate}</pubDate>
       </item>
     `;
-  }).join("");
+    })
+    .join("");
 
   const rss = `<?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
@@ -35,3 +48,4 @@ export async function GET() {
     },
   });
 }
+

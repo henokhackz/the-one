@@ -169,37 +169,37 @@ export function HeroWebGLCanvas() {
           </p>
         </div>
 
-        {/* Action CTAs */}
-        <div className="mt-10 flex flex-wrap items-center gap-4 sm:gap-6">
-          <Magnetic>
+        {/* Action CTAs: Equal width and aligned on mobile */}
+        <div className="mt-10 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 sm:gap-6 w-full sm:w-auto">
+          <Magnetic className="w-full sm:w-auto">
             <Link
               href="/work"
-              className="group relative inline-flex items-center gap-3 px-7 py-3.5 bg-foreground text-background font-mono text-xs font-semibold tracking-[0.2em] uppercase transition-all duration-300 hover:bg-accent hover:text-accent-foreground shadow-sm hover:shadow-lg active:scale-95"
+              className="group relative w-full sm:w-auto sm:min-w-[190px] inline-flex items-center justify-center gap-3 px-6 sm:px-7 py-3.5 bg-foreground text-background font-mono text-xs font-semibold tracking-[0.2em] uppercase transition-all duration-300 hover:bg-accent hover:text-accent-foreground shadow-sm hover:shadow-lg active:scale-95 text-center"
             >
               <span>{t.hero.viewWork}</span>
-              <ArrowUpRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              <ArrowUpRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 shrink-0" />
             </Link>
           </Magnetic>
 
-          <Magnetic>
+          <Magnetic className="w-full sm:w-auto">
             <Link
               href="/contact"
-              className="group inline-flex items-center gap-2.5 px-6 py-3.5 border border-border hover:border-accent text-foreground hover:text-accent font-mono text-xs font-semibold tracking-[0.2em] uppercase transition-all duration-300 active:scale-95 bg-surface/50 backdrop-blur-sm"
+              className="group w-full sm:w-auto sm:min-w-[190px] inline-flex items-center justify-center gap-2.5 px-6 sm:px-7 py-3.5 border border-border hover:border-accent text-foreground hover:text-accent font-mono text-xs font-semibold tracking-[0.2em] uppercase transition-all duration-300 active:scale-95 bg-surface/50 backdrop-blur-sm text-center"
             >
               <span>{t.hero.connect}</span>
-              <span className="text-accent group-hover:translate-x-1 transition-transform">→</span>
+              <span className="text-accent group-hover:translate-x-1 transition-transform shrink-0">→</span>
             </Link>
           </Magnetic>
 
-          <Magnetic>
+          <Magnetic className="w-full sm:w-auto">
             <a
               href="/Lantumo_Birhanu_resume.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden sm:inline-flex items-center gap-2 px-4 py-3 text-muted hover:text-foreground font-mono text-xs tracking-widest uppercase transition-colors"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-3 text-muted hover:text-foreground font-mono text-xs tracking-widest uppercase transition-colors text-center"
             >
               <span>{t.hero.downloadCv}</span>
-              <span className="text-[10px] text-accent">PDF</span>
+              <span className="text-[10px] text-accent shrink-0">PDF</span>
             </a>
           </Magnetic>
         </div>

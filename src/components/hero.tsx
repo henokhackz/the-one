@@ -114,22 +114,22 @@ export function Hero() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.8, ease: EASE }}
-              className="mt-10 flex flex-wrap items-center gap-5 md:gap-8"
+              className="mt-10 flex flex-col sm:flex-row items-stretch sm:items-center gap-4 sm:gap-6 w-full sm:w-auto"
             >
               <Link
                 href="/projects"
-                className="group relative inline-flex items-center gap-3 border border-border hover:border-border px-6 md:px-8 py-3.5 md:py-4 text-[11px] md:text-xs font-semibold tracking-[0.28em] uppercase text-foreground transition-colors duration-300 hover:bg-foreground hover:text-background overflow-hidden"
+                className="group relative w-full sm:w-auto sm:min-w-[200px] inline-flex items-center justify-center gap-3 border border-border hover:border-border px-6 md:px-8 py-3.5 md:py-4 text-[11px] md:text-xs font-semibold tracking-[0.28em] uppercase text-foreground transition-colors duration-300 hover:bg-foreground hover:text-background overflow-hidden text-center"
               >
                 <span className="relative z-10">View My Work</span>
-                <ArrowUpRight className="relative z-10 w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                <ArrowUpRight className="relative z-10 w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 shrink-0" />
               </Link>
 
               <Link
                 href="/contact"
-                className="group inline-flex items-center gap-2 text-[11px] md:text-xs font-semibold tracking-[0.28em] uppercase text-muted hover:text-accent transition-colors duration-300"
+                className="group w-full sm:w-auto sm:min-w-[200px] inline-flex items-center justify-center gap-2 border border-border/60 hover:border-border px-6 md:px-8 py-3.5 md:py-4 text-[11px] md:text-xs font-semibold tracking-[0.28em] uppercase text-muted hover:text-foreground transition-colors duration-300 text-center"
               >
-                Let's Talk
-                <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+                <span>Let's Talk</span>
+                <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1 shrink-0" />
               </Link>
             </motion.div>
           </div>

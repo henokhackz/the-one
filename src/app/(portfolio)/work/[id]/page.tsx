@@ -3,7 +3,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowUpRight, Github, ExternalLink, CheckCircle2, AlertCircle } from "lucide-react";
-import { PROJECTS, getProjectBySlug, getNextProject } from "@/lib/projects-data";
+import { PROJECTS, getNextProject } from "@/lib/projects-data";
+import { getProjectBySlug, getProjects } from "@/sanity/lib/api";
 import { TibebCornerStamp, TibebDivider } from "@/components/ui/tibeb-pattern";
 import { GlyphDissolve } from "@/components/ui/glyph-dissolve";
 
@@ -12,14 +13,15 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  return PROJECTS.map((project) => ({
+  const projects = await getProjects();
+  return projects.map((project) => ({
     id: project.slug,
   }));
 }
 
 export default async function CaseStudyPage({ params }: Props) {
   const { id } = await params;
-  const project = getProjectBySlug(id);
+  const project = await getProjectBySlug(id);
 
   if (!project) {
     notFound();

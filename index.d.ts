@@ -20,4 +20,15 @@ type BlogImage = {
     isFeatured: boolean
     published: boolean
   }
+
+declare module 'sanity' {
+  export const defineConfig: any;
+  export type StudioProps = any;
+  export type SingleWorkspace = any;
+  export type WorkspaceOptions = any;
+}
+
+declare module 'sanity/structure' {
+  export const structureTool: any;
+}
   

@@ -1,15 +1,23 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Mail, Check, Copy, Send, Github, Linkedin, FileText, ArrowUpRight } from "lucide-react";
 import { TibebCornerStamp } from "@/components/ui/tibeb-pattern";
 import { EthiopianClock } from "@/components/layout/ethiopian-clock";
 import { useLocale } from "@/lib/locale-context";
+import { getResumeData } from "@/sanity/lib/api";
 
 export function ContactHub() {
   const [copied, setCopied] = useState(false);
+  const [resumeUrl, setResumeUrl] = useState("/Lantumo_Birhanu_resume.pdf");
   const { locale } = useLocale();
   const email = "hbirhanu.dev@gmail.com";
+
+  useEffect(() => {
+    getResumeData().then((r) => {
+      if (r?.fileUrl) setResumeUrl(r.fileUrl);
+    });
+  }, []);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(email);
@@ -50,24 +58,24 @@ export function ContactHub() {
             <EthiopianClock showDate={true} />
           </div>
 
-          {/* Direct One-Click Actions */}
-          <div className="pt-4 flex flex-wrap items-center gap-4 sm:gap-6 font-mono text-xs">
+          {/* Direct One-Click Actions: Equal width and aligned on mobile */}
+          <div className="pt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 sm:gap-6 font-mono text-xs w-full max-w-2xl sm:max-w-none">
             {/* Copy Email Button with Toast Feedback */}
             <button
               onClick={handleCopy}
-              className="btn-ink group inline-flex items-center gap-3 px-6 sm:px-8 py-3.5 border border-foreground text-foreground font-semibold tracking-widest uppercase hover:bg-foreground/5 transition-all duration-200 active:translate-y-[1px]"
+              className="btn-ink group w-full sm:w-auto inline-flex items-center justify-center gap-2.5 sm:gap-3 px-5 sm:px-8 py-3.5 border border-foreground text-foreground font-semibold tracking-widest uppercase hover:bg-foreground/5 transition-all duration-200 active:translate-y-[1px] text-center"
               aria-label="Copy email address"
             >
               {copied ? (
                 <>
-                  <Check className="w-4 h-4 text-emerald-500" />
+                  <Check className="w-4 h-4 text-emerald-500 shrink-0" />
                   <span>Email Copied!</span>
                 </>
               ) : (
                 <>
-                  <Mail className="w-4 h-4" />
-                  <span>hbirhanu.dev@gmail.com</span>
-                  <Copy className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 transition-opacity ml-1" />
+                  <Mail className="w-4 h-4 shrink-0" />
+                  <span className="truncate">hbirhanu.dev@gmail.com</span>
+                  <Copy className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 transition-opacity ml-1 shrink-0" />
                 </>
               )}
             </button>
@@ -77,44 +85,44 @@ export function ContactHub() {
               href="https://t.me/lyzon1"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-ink inline-flex items-center gap-2 px-6 py-3.5 border border-border hover:border-foreground text-foreground font-semibold tracking-widest uppercase transition-colors active:translate-y-[1px]"
+              className="btn-ink w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-5 sm:px-8 py-3.5 border border-border hover:border-foreground text-foreground font-semibold tracking-widest uppercase transition-colors active:translate-y-[1px] text-center"
             >
               <span>Telegram (@lyzon1)</span>
-              <Send className="w-3.5 h-3.5" />
+              <Send className="w-3.5 h-3.5 shrink-0" />
             </a>
 
             {/* Resume PDF */}
             <a
-              href="/Lantumo_Birhanu_resume.pdf"
+              href={resumeUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-ink inline-flex items-center gap-2 px-6 py-3.5 border border-border hover:border-foreground text-muted hover:text-foreground font-semibold tracking-widest uppercase transition-colors active:translate-y-[1px]"
+              className="btn-ink w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-5 sm:px-8 py-3.5 border border-border hover:border-foreground text-muted hover:text-foreground font-semibold tracking-widest uppercase transition-colors active:translate-y-[1px] text-center"
             >
-              <FileText className="w-4 h-4 text-accent" />
+              <FileText className="w-4 h-4 text-accent shrink-0" />
               <span>Resume (PDF)</span>
-              <ArrowUpRight className="w-3.5 h-3.5" />
+              <ArrowUpRight className="w-3.5 h-3.5 shrink-0" />
             </a>
           </div>
 
           {/* Social Profiles */}
-          <div className="pt-4 border-t border-border/60 flex items-center gap-6 font-mono text-xs text-muted">
+          <div className="pt-4 border-t border-border/60 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 font-mono text-xs text-muted w-full overflow-hidden">
             <a
               href="https://github.com/henokhackz"
               target="_blank"
               rel="noopener noreferrer"
-              className="ink-link flex items-center gap-2 hover:text-accent transition-colors"
+              className="ink-link inline-flex items-center gap-2 hover:text-accent transition-colors truncate max-w-full"
             >
-              <Github className="w-4 h-4" />
-              <span>github.com/lyzon1</span>
+              <Github className="w-4 h-4 shrink-0" />
+              <span className="truncate">https://github.com/henokhackz1</span>
             </a>
             <a
               href="https://www.linkedin.com/in/lantumobirhanu/"
               target="_blank"
               rel="noopener noreferrer"
-              className="ink-link flex items-center gap-2 hover:text-accent transition-colors"
+              className="ink-link inline-flex items-center gap-2 hover:text-accent transition-colors truncate max-w-full"
             >
-              <Linkedin className="w-4 h-4" />
-              <span>linkedin.com/in/lantumobirhanu</span>
+              <Linkedin className="w-4 h-4 shrink-0" />
+              <span className="truncate">linkedin.com/in/lantumobirhanu</span>
             </a>
           </div>
         </div>

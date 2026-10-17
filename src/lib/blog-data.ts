@@ -8,6 +8,7 @@ export interface BlogPost {
   readingTime: string;
   category: string;
   summary: string;
+  coverImage?: string;
   content: string[];
 }
 

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { ArrowDown, ArrowUp, Send, ArrowUpRight, CheckCircle, Code2, Server } from "lucide-react";
+import { ArrowDown, ArrowUp, Send } from "lucide-react";
 import { HeroAtmosphereCanvas } from "@/components/hero/hero-atmosphere-canvas";
 import { BiranaParchmentSurface } from "@/components/ui/birana-parchment-surface";
 import { ProjectCaseRows } from "@/components/work/project-case-rows";
@@ -43,7 +43,7 @@ export default function Home() {
   };
 
   return (
-    <div className="relative w-full text-foreground bg-background selection:bg-accent selection:text-accent-foreground">
+    <div className="relative w-full max-w-full overflow-x-hidden text-foreground bg-background selection:bg-accent selection:text-accent-foreground">
       {/* =========================================================================
           LAYER 0: ATMOSPHERIC CANVAS
           Fixed, z-index 0, pointer-events limited to hero fold.
@@ -62,25 +62,25 @@ export default function Home() {
           All sections share the paper surface, WCAG AA contrast.
           Separation via thin ink rules and diamond weave dividers.
       ========================================================================= */}
-      <div className="relative z-10 w-full flex flex-col">
+      <div className="relative z-10 w-full max-w-full overflow-x-hidden flex flex-col">
         {/* =====================================================================
             1. HERO SECTION: Clean, one message, ink written on Birana parchment
         ===================================================================== */}
         <section
           id="hero"
-          className="relative min-h-[92vh] flex flex-col justify-center max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 py-16 sm:py-24"
+          className="relative min-h-[92vh] flex flex-col justify-center max-w-[1600px] w-full mx-auto px-4 sm:px-6 md:px-12 py-16 sm:py-24 overflow-x-hidden"
           aria-label="Developer Introduction"
         >
-          {/* Left-aligned text in a protected clear zone */}
-          <div className="max-w-3xl space-y-6">
+          {/* Centered text block in a protected clear zone */}
+          <div className="max-w-3xl space-y-6 w-full mx-auto md:text-center">
             {/* Status Signal: plain ink text with a small green dot before it (no container, no border, no pill) */}
-            <div className="flex items-center gap-2 font-mono text-xs tracking-wider text-muted ink-reveal">
+            <div className="flex items-center gap-2 font-mono text-[11px] sm:text-xs tracking-wider text-muted ink-reveal break-words md:justify-center">
               <span>Available for Select Roles & High-Impact Contracts</span>
             </div>
 
             {/* Name */}
             <h1
-              className={`text-5xl sm:text-7xl md:text-8xl lg:text-8xl font-bold tracking-tight text-foreground leading-[0.92] ink-reveal ${
+              className={`text-4xl sm:text-7xl md:text-8xl lg:text-8xl font-bold tracking-tight text-foreground leading-[0.92] ink-reveal break-words ${
                 locale === "am" ? "font-ethiopic" : "font-heading"
               }`}
             >
@@ -95,7 +95,7 @@ export default function Home() {
             </p>
 
             {/* One Proof Line: plain ink small caps text with middle-dot separator and NO container box */}
-            <p className="font-mono text-xs tracking-wider uppercase text-muted py-1 flex flex-wrap items-center gap-x-3 gap-y-1 ink-reveal">
+            <p className="font-mono text-xs tracking-wider uppercase text-muted py-1 flex flex-wrap items-center gap-x-2 sm:gap-x-3 gap-y-1 ink-reveal max-w-full md:justify-center">
               <span className="text-foreground font-semibold">5+ Years Experience</span>
               <span className="opacity-40">•</span>
               <span className="text-foreground font-semibold">Next.js & React 19</span>
@@ -105,25 +105,25 @@ export default function Home() {
               <span>Three.js / WebGL</span>
             </p>
 
-            {/* Two Primary Action CTAs: bordered text buttons (ink border, no fill, no shadow) */}
-            <div className="pt-2 flex flex-wrap items-center gap-4 sm:gap-6 font-mono text-xs ink-reveal">
-              <Magnetic>
+            {/* Two Primary Action CTAs: bordered text buttons with identical equal width and alignment */}
+            <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 sm:gap-6 font-mono text-xs ink-reveal w-full sm:w-auto md:justify-center">
+              <Magnetic className="w-full sm:w-auto">
                 <a
                   href="#projects"
-                  className="btn-ink inline-flex items-center gap-3 px-8 py-3.5 border border-foreground text-foreground bg-transparent font-semibold tracking-widest uppercase hover:bg-foreground/5 transition-all duration-200"
+                  className="btn-ink w-full sm:w-auto sm:min-w-[210px] inline-flex items-center justify-center gap-3 px-6 sm:px-8 py-3.5 border border-foreground text-foreground bg-transparent font-semibold tracking-widest uppercase hover:bg-foreground/5 transition-all duration-200 text-center"
                 >
                   <span>View Projects</span>
-                  <ArrowDown className="w-4 h-4" />
+                  <ArrowDown className="w-4 h-4 shrink-0" />
                 </a>
               </Magnetic>
 
-              <Magnetic>
+              <Magnetic className="w-full sm:w-auto">
                 <a
                   href="#contact"
-                  className="btn-ink inline-flex items-center gap-2.5 px-7 py-3.5 border border-foreground/60 text-foreground bg-transparent font-semibold tracking-widest uppercase hover:border-foreground hover:bg-foreground/5 transition-all duration-200"
+                  className="btn-ink w-full sm:w-auto sm:min-w-[210px] inline-flex items-center justify-center gap-3 px-6 sm:px-8 py-3.5 border border-foreground/60 hover:border-foreground text-foreground bg-transparent font-semibold tracking-widest uppercase hover:bg-foreground/5 transition-all duration-200 text-center"
                 >
                   <span>Contact Me</span>
-                  <Send className="w-3.5 h-3.5" />
+                  <Send className="w-3.5 h-3.5 shrink-0" />
                 </a>
               </Magnetic>
             </div>

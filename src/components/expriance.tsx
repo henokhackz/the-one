@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, useInView } from "motion/react";
+import { getExperiences, SanityExperience } from "@/sanity/lib/api";
 
 // ─── Data ──────────────────────────────────────────────────────────────────────
 
-const experiences = [
+const defaultExperiences: SanityExperience[] = [
   {
     id: "ideeza",
     role: "Three.js Engineer",
@@ -145,7 +146,7 @@ function ExperienceCard({
   index,
   isLast,
 }: {
-  exp: (typeof experiences)[0];
+  exp: SanityExperience;
   index: number;
   isLast: boolean;
 }) {
@@ -319,8 +320,15 @@ function ExperienceCard({
 // ─── Section ──────────────────────────────────────────────────────────────────
 
 const Experience = () => {
+  const [expList, setExpList] = useState<SanityExperience[]>(defaultExperiences);
   const headRef = useRef<HTMLDivElement>(null);
   const headInView = useInView(headRef, { once: true });
+
+  useEffect(() => {
+    getExperiences().then((data) => {
+      if (data && data.length > 0) setExpList(data);
+    });
+  }, []);
 
   return (
     <section className="relative w-full py-24 md:py-32  overflow-hidden">
@@ -356,12 +364,12 @@ const Experience = () => {
 
         {/* Timeline */}
         <div>
-          {experiences.map((exp, index) => (
+          {expList.map((exp, index) => (
             <ExperienceCard
               key={exp.id}
               exp={exp}
               index={index}
-              isLast={index === experiences.length - 1}
+              isLast={index === expList.length - 1}
             />
           ))}
         </div>
