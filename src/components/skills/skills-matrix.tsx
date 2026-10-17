@@ -5,6 +5,8 @@ import { Code2, Server, Layers, Cpu, CheckCircle2 } from "lucide-react";
 import { TibebCornerStamp } from "@/components/ui/tibeb-pattern";
 import { useLocale } from "@/lib/locale-context";
 import { getSkillCategories, SanitySkillCategory } from "@/sanity/lib/api";
+import { Reveal } from "@/components/ui/reveal";
+import { RuledFrame } from "@/components/ui/ruled-frame";
 
 interface SkillItem {
   name: string;
@@ -131,23 +133,26 @@ export function SkillsMatrix({ onHoverSkillProject }: SkillsMatrixProps) {
       {/* Header */}
       <div className="pb-8 border-b border-border/80">
         <div className="flex items-center gap-4">
-          <TibebCornerStamp geezNumeral={locale === "am" ? "ችሎታ" : "02"} />
-          <h2
-            className={`text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground ${
-              locale === "am" ? "font-ethiopic" : "font-heading"
-            }`}
-          >
-            {locale === "am" ? "የምህንድስና ችሎታዎች" : "Technical Capabilities"}
-          </h2>
+          <TibebCornerStamp geezNumeral="፪" />
+          <Reveal variant="ink" duration={900}>
+            <h2
+              className={`text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground ${
+                locale === "am" ? "font-ethiopic" : "font-heading"
+              }`}
+            >
+              {locale === "am" ? "የምህንድስና ችሎታዎች" : "Technical Capabilities"}
+            </h2>
+          </Reveal>
         </div>
       </div>
 
-      {/* Balanced 2x2 Category Cards */}
+      {/* Balanced 2x2 Category Cards with self-drawing ruled borders */}
       <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
         {categories.map((cat, idx) => (
-          <div
+          <RuledFrame
             key={idx}
-            className="p-6 sm:p-8 rounded-[1px] border border-border card-ink hover:border-border-strong transition-colors"
+            delay={idx * 100}
+            className="p-6 sm:p-8 rounded-[1px] border border-border/80 card-ink hover:border-border-strong transition-colors"
           >
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 rounded-none bg-accent/10 border border-accent/30 flex items-center justify-center">
@@ -182,7 +187,7 @@ export function SkillsMatrix({ onHoverSkillProject }: SkillsMatrixProps) {
                 );
               })}
             </div>
-          </div>
+          </RuledFrame>
         ))}
       </div>
     </section>

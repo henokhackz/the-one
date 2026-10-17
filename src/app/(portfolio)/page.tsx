@@ -13,11 +13,14 @@ import { ContactHub } from "@/components/contact/contact-hub";
 import { TibebDivider } from "@/components/ui/tibeb-pattern";
 import { Magnetic } from "@/components/ui/magnetic-button";
 import { useLocale } from "@/lib/locale-context";
+import { BindingThread } from "@/components/ui/binding-thread";
+import { GlyphDissolve } from "@/components/ui/glyph-dissolve";
 
 export default function Home() {
   const [heroFade, setHeroFade] = useState(1.0);
   const [highlightedProjectId, setHighlightedProjectId] = useState<string | null>(null);
   const [showBackToTop, setShowBackToTop] = useState(false);
+  const [heroGridLoaded, setHeroGridLoaded] = useState(false);
   const { locale, t } = useLocale();
 
   // Track hero intersection & scroll position
@@ -44,12 +47,24 @@ export default function Home() {
 
   return (
     <div className="relative w-full max-w-full overflow-x-hidden text-foreground bg-background selection:bg-accent selection:text-accent-foreground">
+      {/* Ge'ez Manuscript Initial Entry Loader (Holds gracefully until Three.js grid is ready) */}
+      <GlyphDissolve
+        geezNumeral={locale === "am" ? "ላ" : "ፊደል"}
+        title="Lantumo Birhanu"
+        subtitle={locale === "am" ? "የብራና ፊደል አርክቴክቸር" : "Creative Fullstack Engineer"}
+        isReady={heroGridLoaded}
+        minDuration={800}
+      />
+
+      {/* 2px Gold Manuscript Binding Thread on left edge */}
+      <BindingThread />
+
       {/* =========================================================================
           LAYER 0: ATMOSPHERIC CANVAS
           Fixed, z-index 0, pointer-events limited to hero fold.
           Fades to 0 and pauses rendering once hero leaves the viewport.
       ========================================================================= */}
-      <HeroAtmosphereCanvas heroFade={heroFade} />
+      <HeroAtmosphereCanvas heroFade={heroFade} onLoaded={() => setHeroGridLoaded(true)} />
 
       {/* =========================================================================
           AUTHENTIC BIRANA PARCHMENT TEXTURE LAYER
@@ -71,8 +86,8 @@ export default function Home() {
           className="relative min-h-[92vh] flex flex-col justify-center max-w-[1600px] w-full mx-auto px-4 sm:px-6 md:px-12 py-16 sm:py-24 overflow-x-hidden"
           aria-label="Developer Introduction"
         >
-          {/* Centered text block in a protected clear zone */}
-          <div className="max-w-3xl space-y-6 w-full mx-auto md:text-center">
+          {/* Centered text block drifting up ~40px as visitor scrolls past hero */}
+          <div className="max-w-3xl space-y-6 w-full mx-auto md:text-center hero-scroll-drift">
             {/* Status Signal: plain ink text with a small green dot before it (no container, no border, no pill) */}
             <div className="flex items-center gap-2 font-mono text-[11px] sm:text-xs tracking-wider text-muted ink-reveal break-words md:justify-center">
               <span>Available for Select Roles & High-Impact Contracts</span>
@@ -175,11 +190,11 @@ export default function Home() {
       {showBackToTop && (
         <button
           onClick={scrollToTop}
-          className="btn-ink fixed bottom-6 right-6 z-40 p-3 rounded-[1px] border border-border hover:border-foreground bg-background text-foreground transition-all duration-200 active:translate-y-[1px] animate-in fade-in"
+          className="group btn-ink fixed bottom-6 right-6 z-40 p-3 rounded-[1px] border border-border hover:border-foreground bg-background text-foreground transition-all duration-200 active:translate-y-[1px] animate-in fade-in"
           aria-label="Back to top"
           title="Back to top"
         >
-          <ArrowUp className="w-4 h-4" />
+          <ArrowUp className="w-4 h-4 transition-transform duration-200 group-hover:-translate-y-1" />
         </button>
       )}
     </div>

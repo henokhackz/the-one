@@ -19,6 +19,7 @@ interface FidelStaticGridProps {
   heroFade: number;
   isMobile: boolean;
   isDebug: boolean;
+  onLoaded?: () => void;
 }
 
 export function FidelStaticGrid({
@@ -26,9 +27,11 @@ export function FidelStaticGrid({
   heroFade,
   isMobile,
   isDebug,
+  onLoaded,
 }: FidelStaticGridProps) {
   const meshRef = useRef<THREE.InstancedMesh | null>(null);
   const materialRef = useRef<THREE.ShaderMaterial | null>(null);
+  const hasNotifiedLoadedRef = useRef(false);
   const wakeTimeRef = useRef(0);
   const hoverSpringRef = useRef(0);
   const springVelRef = useRef(0);
@@ -97,6 +100,7 @@ export function FidelStaticGrid({
     () => new THREE.Color(isDark ? "#E8D9B5" : "#3B2A1A"),
     [isDark]
   );
+  const goldColor = useMemo(() => new THREE.Color("#E5A93C"), []);
   const restOpacity = isDark ? 0.15 : 0.17;
   const hoverOpacity = 0.55;
 
@@ -104,6 +108,11 @@ export function FidelStaticGrid({
   const flagGreen = useMemo(() => new THREE.Color("#078930"), []);
   const flagAmber = useMemo(() => new THREE.Color("#FCDD09"), []);
   const flagRed = useMemo(() => new THREE.Color("#DA121A"), []);
+
+  // Scroll reaction state held in refs to prevent React re-renders
+  const scrollDampedRef = useRef(0);
+  const scrollVelRef = useRef(0);
+  const lastScrollYRef = useRef(0);
 
   const shaderMaterial = useMemo(() => {
     if (!atlas) return null;
@@ -122,12 +131,15 @@ export function FidelStaticGrid({
         uWakeTime: { value: 0.0 },
         uWakeDone: { value: 0.0 },
         uInkColor: { value: inkColor },
+        uGoldColor: { value: goldColor },
         uRestOpacity: { value: restOpacity },
         uHoverOpacity: { value: hoverOpacity },
         uFlagGreen: { value: flagGreen },
         uFlagAmber: { value: flagAmber },
         uFlagRed: { value: flagRed },
         uHeroFade: { value: 1.0 },
+        uScroll: { value: 0.0 },
+        uVel: { value: 0.0 },
         uDebug: { value: isDebug ? 1.0 : 0.0 },
         uVignetteCenter: {
           value: isMobile ? new THREE.Vector2(0.5, 0.48) : new THREE.Vector2(0.26, 0.52),
@@ -140,7 +152,7 @@ export function FidelStaticGrid({
       depthWrite: false,
       blending: THREE.NormalBlending,
     });
-  }, [atlas, cellSize, inkColor, restOpacity, hoverOpacity, flagGreen, flagAmber, flagRed, isDebug, isMobile]);
+  }, [atlas, cellSize, inkColor, goldColor, restOpacity, hoverOpacity, flagGreen, flagAmber, flagRed, isDebug, isMobile]);
 
   // Sync theme changes
   useEffect(() => {
@@ -160,9 +172,36 @@ export function FidelStaticGrid({
   }, [shaderMaterial]);
 
   useFrame((_, delta) => {
+    // Pause rendering when the tab is hidden or the canvas is scrolled off-screen
+    if (typeof document !== "undefined" && document.hidden) return;
+    if (heroFade <= 0.005) return;
     if (!materialRef.current) return;
 
-    // 1. Separate, finite wake wave (0.0 to 1.2s max on load, then hands 100% control to hover)
+    // Signal that Three.js glyph atlas and shader have rendered first frame
+    if (!hasNotifiedLoadedRef.current) {
+      hasNotifiedLoadedRef.current = true;
+      onLoaded?.();
+    }
+
+    // 1. Damped scroll tracking (lerp ~0.06) without triggering React re-renders
+    const currentScrollY = typeof window !== "undefined" ? window.scrollY : 0;
+    const scrollDiff = currentScrollY - scrollDampedRef.current;
+    scrollDampedRef.current += scrollDiff * 0.06;
+
+    // Scroll velocity tracking with slight decay
+    const deltaY = Math.abs(currentScrollY - lastScrollYRef.current);
+    lastScrollYRef.current = currentScrollY;
+    const rawVel = Math.min(1.0, deltaY / 40);
+    scrollVelRef.current += (rawVel - scrollVelRef.current) * 0.12;
+
+    materialRef.current.uniforms.uScroll.value = isMobile
+      ? scrollDampedRef.current * 0.25
+      : scrollDampedRef.current;
+    materialRef.current.uniforms.uVel.value = isMobile
+      ? scrollVelRef.current * 0.35
+      : scrollVelRef.current;
+
+    // 2. Separate, finite wake wave (0.0 to 1.2s max on load, then hands 100% control to hover)
     if (wakeTimeRef.current < 1.25) {
       wakeTimeRef.current += delta;
       materialRef.current.uniforms.uWakeTime.value = Math.min(1.2, wakeTimeRef.current);
@@ -171,10 +210,10 @@ export function FidelStaticGrid({
       }
     }
 
-    // 2. Sync hero fade
+    // 3. Sync hero fade
     materialRef.current.uniforms.uHeroFade.value = heroFade;
 
-    // 3. Critically damped spring for hover (~400ms settling time)
+    // 4. Critically damped spring for hover (~400ms settling time)
     const ptr = pointerRef.current;
     const targetHover = ptr.active && heroFade > 0.05 ? 1.0 : 0.0;
     const omega = 12.0; // Critically damped natural frequency for ~400ms settle

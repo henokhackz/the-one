@@ -7,16 +7,19 @@ import { detectDeviceTier } from "@/lib/gpu-tier";
 
 interface HeroAtmosphereCanvasProps {
   heroFade: number; // 1.0 = full hero, 0.0 = scrolled past
+  onLoaded?: () => void;
 }
 
 function SceneContent({
   heroFade,
   isMobile,
   isDebug,
+  onLoaded,
 }: {
   heroFade: number;
   isMobile: boolean;
   isDebug: boolean;
+  onLoaded?: () => void;
 }) {
   const pointerRef = useRef({
     x: 0,
@@ -105,11 +108,12 @@ function SceneContent({
       heroFade={heroFade}
       isMobile={isMobile}
       isDebug={isDebug}
+      onLoaded={onLoaded}
     />
   );
 }
 
-export function HeroAtmosphereCanvas({ heroFade }: HeroAtmosphereCanvasProps) {
+export function HeroAtmosphereCanvas({ heroFade, onLoaded }: HeroAtmosphereCanvasProps) {
   const [canRun, setCanRun] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const [isDebug, setIsDebug] = useState(false);
@@ -120,10 +124,13 @@ export function HeroAtmosphereCanvas({ heroFade }: HeroAtmosphereCanvasProps) {
     const tier = detectDeviceTier();
     setCanRun(tier.canRun3D);
     setIsMobile(tier.isMobile);
+    if (!tier.canRun3D) {
+      onLoaded?.();
+    }
     if (typeof window !== "undefined") {
       setIsDebug(window.location.search.includes("debug=grid"));
     }
-  }, []);
+  }, [onLoaded]);
 
   useEffect(() => {
     if (!isDebug) return;
@@ -168,7 +175,7 @@ export function HeroAtmosphereCanvas({ heroFade }: HeroAtmosphereCanvasProps) {
           depth: false,
         }}
       >
-        <SceneContent heroFade={heroFade} isMobile={isMobile} isDebug={isDebug} />
+        <SceneContent heroFade={heroFade} isMobile={isMobile} isDebug={isDebug} onLoaded={onLoaded} />
       </Canvas>
 
       {/* Visual Debug Radius Ring for ?debug=grid */}

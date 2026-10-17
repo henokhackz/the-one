@@ -5,6 +5,7 @@ import { Send, CheckCircle2, AlertCircle, Mail, Linkedin, Github, MessageSquare,
 import { TibebCornerStamp, TibebDivider } from "@/components/ui/tibeb-pattern";
 import { EthiopianClock } from "@/components/layout/ethiopian-clock";
 import { useLocale } from "@/lib/locale-context";
+import { Reveal } from "@/components/ui/reveal";
 
 export default function ContactPage() {
   const { locale, t } = useLocale();
@@ -70,15 +71,17 @@ export default function ContactPage() {
         {/* Header */}
         <div className="pb-12 border-b border-border">
           <div className="flex items-center gap-3 mb-4">
-            <TibebCornerStamp geezNumeral={locale === "am" ? "አድራሻ" : "MSG"} />
+            <TibebCornerStamp geezNumeral="፭" />
             <span className="font-mono text-xs tracking-[0.25em] text-muted uppercase">
               {t.contactPage.tag}
             </span>
           </div>
 
-          <h1 className={`text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight leading-tight ${locale === "am" ? "font-ethiopic" : "font-heading"}`}>
-            {t.contactPage.title}
-          </h1>
+          <Reveal variant="ink" duration={900}>
+            <h1 className={`text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight leading-tight ${locale === "am" ? "font-ethiopic" : "font-heading"}`}>
+              {t.contactPage.title}
+            </h1>
+          </Reveal>
 
           <p className="max-w-2xl text-base sm:text-lg text-muted font-light mt-6 leading-relaxed">
             {t.contactPage.description}

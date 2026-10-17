@@ -8,6 +8,7 @@ import { TibebCornerStamp, TibebDivider } from "@/components/ui/tibeb-pattern";
 import { EthiopianClock } from "@/components/layout/ethiopian-clock";
 import { useLocale } from "@/lib/locale-context";
 import { getResumeData } from "@/sanity/lib/api";
+import { Reveal } from "@/components/ui/reveal";
 
 export default function AboutPage() {
   const { locale, t } = useLocale();
@@ -131,9 +132,11 @@ export default function AboutPage() {
             </span>
           </div>
 
-          <h1 className={`text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight leading-tight ${locale === "am" ? "font-ethiopic" : "font-heading"}`}>
-            {t.aboutPage.title}
-          </h1>
+          <Reveal variant="ink" duration={900}>
+            <h1 className={`text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight leading-tight ${locale === "am" ? "font-ethiopic" : "font-heading"}`}>
+              {t.aboutPage.title}
+            </h1>
+          </Reveal>
 
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <a

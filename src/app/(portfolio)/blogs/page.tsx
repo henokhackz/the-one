@@ -7,6 +7,7 @@ import { BLOG_POSTS, BlogPost } from "@/lib/blog-data";
 import { getBlogPosts } from "@/sanity/lib/api";
 import { TibebCornerStamp, TibebDivider } from "@/components/ui/tibeb-pattern";
 import { useLocale } from "@/lib/locale-context";
+import { Reveal } from "@/components/ui/reveal";
 
 export default function BlogsPage() {
   const [posts, setPosts] = useState<BlogPost[]>(BLOG_POSTS);
@@ -24,15 +25,17 @@ export default function BlogsPage() {
         {/* Header */}
         <div className="pb-12 border-b border-border">
           <div className="flex items-center gap-3 mb-4">
-            <TibebCornerStamp geezNumeral={locale === "am" ? "ጽሑፍ" : "DOC"} />
+            <TibebCornerStamp geezNumeral="፬" />
             <span className="font-mono text-xs tracking-[0.25em] text-muted uppercase">
               {t.blogPage.tag}
             </span>
           </div>
 
-          <h1 className={`text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight leading-tight ${locale === "am" ? "font-ethiopic" : "font-heading"}`}>
-            {t.blogPage.title}
-          </h1>
+          <Reveal variant="ink" duration={900}>
+            <h1 className={`text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight leading-tight ${locale === "am" ? "font-ethiopic" : "font-heading"}`}>
+              {t.blogPage.title}
+            </h1>
+          </Reveal>
 
           <p className="max-w-2xl text-base sm:text-lg text-muted font-light mt-6 leading-relaxed">
             {t.blogPage.description}

@@ -7,6 +7,8 @@ import { BLOG_POSTS, BlogPost } from "@/lib/blog-data";
 import { getBlogPosts } from "@/sanity/lib/api";
 import { TibebCornerStamp } from "@/components/ui/tibeb-pattern";
 import { useLocale } from "@/lib/locale-context";
+import { Reveal } from "@/components/ui/reveal";
+import { RuledFrame } from "@/components/ui/ruled-frame";
 
 export function BlogSection({ initialPosts }: { initialPosts?: BlogPost[] }) {
   const [posts, setPosts] = useState<BlogPost[]>(initialPosts || BLOG_POSTS);
@@ -32,37 +34,41 @@ export function BlogSection({ initialPosts }: { initialPosts?: BlogPost[] }) {
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 pb-8 border-b border-border/80">
         <div>
           <div className="flex items-center gap-3 mb-2">
-            <TibebCornerStamp geezNumeral={locale === "am" ? "ጽሁፍ" : "04"} />
+            <TibebCornerStamp geezNumeral="፬" />
             <span className="font-mono text-xs tracking-[0.25em] text-accent uppercase font-medium">
               {locale === "am" ? "የቴክኒክ ማስታወሻዎች" : "Technical Writing & Architecture"}
             </span>
           </div>
-          <h2
-            className={`text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground ${
-              locale === "am" ? "font-ethiopic" : "font-heading"
-            }`}
-          >
-            {locale === "am" ? "ጽሁፎች እና ጥናቶች" : "Engineering Journal"}
-          </h2>
+          <Reveal variant="ink" duration={900}>
+            <h2
+              className={`text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground ${
+                locale === "am" ? "font-ethiopic" : "font-heading"
+              }`}
+            >
+              {locale === "am" ? "ጽሁፎች እና ጥናቶች" : "Engineering Journal"}
+            </h2>
+          </Reveal>
         </div>
 
         <a
           href="/rss.xml"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 font-mono text-xs text-muted hover:text-accent uppercase tracking-wider transition-colors"
+          className="btn-ink inline-flex items-center gap-2 px-4 py-2 font-mono text-xs text-muted hover:text-accent uppercase tracking-wider transition-colors"
         >
           <Rss className="w-3.5 h-3.5 text-accent" />
           <span>RSS Feed</span>
         </a>
       </div>
 
-      {/* 3 Articles Grid */}
+      {/* 3 Articles Grid with RuledFrame borders */}
       <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {posts.slice(0, 3).map((post) => (
-          <article
+        {posts.slice(0, 3).map((post, idx) => (
+          <RuledFrame
             key={post.id}
-            className="group relative p-6 sm:p-8 rounded-[1px] border border-border card-ink flex flex-col justify-between hover:border-border-strong transition-all duration-300"
+            as="article"
+            delay={idx * 100}
+            className="group relative p-6 sm:p-8 rounded-[1px] border border-border/80 card-ink flex flex-col justify-between hover:border-border-strong transition-all duration-300"
           >
             <div>
               <div className="flex items-center justify-between font-mono text-xs text-muted mb-4">
@@ -100,7 +106,7 @@ export function BlogSection({ initialPosts }: { initialPosts?: BlogPost[] }) {
                 <ArrowUpRight className="w-3.5 h-3.5" />
               </Link>
             </div>
-          </article>
+          </RuledFrame>
         ))}
       </div>
     </section>

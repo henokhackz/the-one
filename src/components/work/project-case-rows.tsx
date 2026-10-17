@@ -8,6 +8,9 @@ import { PROJECTS, Project } from "@/lib/projects-data";
 import { getProjects } from "@/sanity/lib/api";
 import { TibebCornerStamp } from "@/components/ui/tibeb-pattern";
 import { useLocale } from "@/lib/locale-context";
+import { Reveal } from "@/components/ui/reveal";
+import { RuledFrame } from "@/components/ui/ruled-frame";
+import { CountUp } from "@/components/ui/count-up";
 
 interface ProjectCaseRowsProps {
   highlightedProjectId?: string | null;
@@ -43,17 +46,19 @@ export function ProjectCaseRows({ highlightedProjectId, projects: initialProject
       {/* Section Header with Filters */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b border-border/80">
         <div className="flex items-center gap-4 mb-3 md:mb-0">
-          <TibebCornerStamp geezNumeral={locale === "am" ? "ሥራ" : "01"} />
-          <h2
-            className={`text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground ${
-              locale === "am" ? "font-ethiopic" : "font-heading"
-            }`}
-          >
-            {locale === "am" ? "የተመረጡ ስራዎች" : "Featured Projects"}
-          </h2>
+          <TibebCornerStamp geezNumeral="፩" />
+          <Reveal variant="ink" duration={900}>
+            <h2
+              className={`text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground ${
+                locale === "am" ? "font-ethiopic" : "font-heading"
+              }`}
+            >
+              {locale === "am" ? "የተመረጡ ስራዎች" : "Featured Projects"}
+            </h2>
+          </Reveal>
         </div>
 
-        {/* Filter Pills */}
+        {/* Filter Pills with self-drawing ruled accents */}
         <div className="flex flex-wrap items-center gap-2">
           {(["All", "Fullstack", "Frontend", "Backend"] as const).map((cat) => (
             <button
@@ -76,16 +81,18 @@ export function ProjectCaseRows({ highlightedProjectId, projects: initialProject
         {filteredProjects.map((project, index) => {
           const isHighlighted = highlightedProjectId === project.id;
           return (
-            <article
+            <RuledFrame
               key={project.id}
-              className={`group relative rounded-[1px] transition-all duration-300 card-ink p-6 sm:p-8 md:p-10 ${
+              as="article"
+              delay={Math.min(index * 60, 240)}
+              className={`group relative rounded-[1px] transition-colors duration-300 card-ink p-6 sm:p-8 md:p-10 ${
                 isHighlighted
                   ? "border-2 border-accent"
-                  : "border border-border hover:border-border-strong"
+                  : "border border-border/80 hover:border-border-strong"
               }`}
             >
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-                {/* 1. Browser-Frame Mockup (Straight, Unskewed, Sheet laid on parchment with thin ink frame) */}
+                {/* 1. Browser-Frame Mockup with subtle internal parallax (6%) and overflow hidden */}
                 <div className="lg:col-span-6 flex flex-col">
                   <div className="rounded-none bg-surface-elevated/40 border border-border border-b-0 px-4 py-2.5 flex items-center gap-3">
                     <div className="flex items-center gap-1.5 shrink-0">
@@ -99,14 +106,16 @@ export function ProjectCaseRows({ highlightedProjectId, projects: initialProject
                   </div>
 
                   <div className="relative aspect-[16/10] w-full overflow-hidden bg-background/50 border border-border rounded-none">
-                    <Image
-                      src={project.thumbnail}
-                      alt={`${project.title} Interface Preview`}
-                      fill
-                      sizes="(max-width: 1024px) 100vw, 50vw"
-                      className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.01]"
-                      priority={index < 2}
-                    />
+                    <div className="relative w-full h-[106%] -top-[3%] overflow-hidden transition-transform duration-700 ease-out group-hover:scale-[1.04] group-hover:-translate-y-[2%]">
+                      <Image
+                        src={project.thumbnail}
+                        alt={`${project.title} Interface Preview`}
+                        fill
+                        sizes="(max-width: 1024px) 100vw, 50vw"
+                        className="object-cover object-top transition-transform duration-700 ease-out"
+                        priority={index < 2}
+                      />
+                    </div>
                   </div>
                 </div>
 
@@ -138,36 +147,42 @@ export function ProjectCaseRows({ highlightedProjectId, projects: initialProject
                     </p>
                   </div>
 
-                  {/* Story: Problem -> Stack -> Result */}
+                  {/* Story: Problem -> Stack -> Result (Staggered automatically ~120ms with no click) */}
                   <div className="space-y-4">
-                    <div>
-                      <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted mb-1">
-                        The Problem
-                      </div>
-                      <p className="text-sm text-foreground/90 leading-relaxed">
-                        {project.oneLineProblem}
-                      </p>
-                    </div>
-
-                    {project.technologies && project.technologies.length > 0 && (
+                    <Reveal variant="rise" delay={0} duration={700}>
                       <div>
                         <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted mb-1">
-                          Tech Stack
+                          The Problem
                         </div>
-                        <p className="font-mono text-xs text-foreground/80 leading-relaxed">
-                          {project.technologies.join("  ·  ")}
+                        <p className="text-sm text-foreground/90 leading-relaxed">
+                          {project.oneLineProblem}
                         </p>
                       </div>
+                    </Reveal>
+
+                    {project.technologies && project.technologies.length > 0 && (
+                      <Reveal variant="rise" delay={120} duration={700}>
+                        <div>
+                          <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted mb-1">
+                            Tech Stack
+                          </div>
+                          <p className="font-mono text-xs text-foreground/80 leading-relaxed">
+                            {project.technologies.join("  ·  ")}
+                          </p>
+                        </div>
+                      </Reveal>
                     )}
 
-                    <div>
-                      <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent mb-1">
-                        Result
+                    <Reveal variant="rise" delay={240} duration={700}>
+                      <div>
+                        <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent mb-1">
+                          Result
+                        </div>
+                        <p className="text-sm font-medium text-foreground leading-relaxed">
+                          <CountUp text={project.keyResult} duration={1100} />
+                        </p>
                       </div>
-                      <p className="text-sm font-medium text-foreground leading-relaxed">
-                        {project.keyResult}
-                      </p>
-                    </div>
+                    </Reveal>
                   </div>
 
                   {/* Action CTAs: Live Demo + Code + Case Study (Equal width and aligned on mobile) */}
@@ -204,7 +219,7 @@ export function ProjectCaseRows({ highlightedProjectId, projects: initialProject
                   </div>
                 </div>
               </div>
-            </article>
+            </RuledFrame>
           );
         })}
       </div>

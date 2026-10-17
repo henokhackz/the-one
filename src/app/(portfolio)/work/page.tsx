@@ -8,6 +8,7 @@ import { PROJECTS, Project } from "@/lib/projects-data";
 import { getProjects } from "@/sanity/lib/api";
 import { TibebCornerStamp, TibebDivider } from "@/components/ui/tibeb-pattern";
 import { useLocale } from "@/lib/locale-context";
+import { Reveal } from "@/components/ui/reveal";
 
 export default function WorkPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
@@ -37,15 +38,17 @@ export default function WorkPage() {
         {/* Header */}
         <div className="pb-12 border-b border-border">
           <div className="flex items-center gap-3 mb-4">
-            <TibebCornerStamp geezNumeral={locale === "am" ? "ሥራ" : "01"} />
+            <TibebCornerStamp geezNumeral="፩" />
             <span className="font-mono text-xs tracking-[0.25em] text-muted uppercase">
               {t.workPage.tag}
             </span>
           </div>
 
-          <h1 className={`text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-foreground leading-tight ${locale === "am" ? "font-ethiopic" : "font-heading"}`}>
-            {t.workPage.title}
-          </h1>
+          <Reveal variant="ink" duration={900}>
+            <h1 className={`text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-foreground leading-tight ${locale === "am" ? "font-ethiopic" : "font-heading"}`}>
+              {t.workPage.title}
+            </h1>
+          </Reveal>
 
           <p className="max-w-2xl text-base sm:text-lg text-muted font-light mt-6 leading-relaxed">
             {t.workPage.description}

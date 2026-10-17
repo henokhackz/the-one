@@ -6,6 +6,8 @@ import { TibebCornerStamp } from "@/components/ui/tibeb-pattern";
 import { EthiopianClock } from "@/components/layout/ethiopian-clock";
 import { useLocale } from "@/lib/locale-context";
 import { getResumeData } from "@/sanity/lib/api";
+import { Reveal } from "@/components/ui/reveal";
+import { RuledFrame } from "@/components/ui/ruled-frame";
 
 export function ContactHub() {
   const [copied, setCopied] = useState(false);
@@ -31,22 +33,24 @@ export function ContactHub() {
       className="relative z-10 w-full max-w-[1600px] mx-auto px-4 sm:px-6 md:px-12 py-24 scroll-mt-20 bg-background"
       aria-label="Direct Contact and Hiring Hub"
     >
-      <div className="relative border-2 border-double border-border bg-transparent p-8 sm:p-12 md:p-16 rounded-[1px]">
+      <RuledFrame className="relative border border-border/80 bg-transparent p-8 sm:p-12 md:p-16 rounded-[1px]">
         <div className="max-w-4xl space-y-6">
           <div className="flex items-center gap-3">
-            <TibebCornerStamp geezNumeral={locale === "am" ? "መልዕክት" : "05"} />
+            <TibebCornerStamp geezNumeral="፭" />
             <span className="font-mono text-xs tracking-[0.25em] text-accent uppercase font-medium">
               {locale === "am" ? "ግንኙነት እና ቅጥር" : "Available for Select Contracts & Full-Time Roles"}
             </span>
           </div>
 
-          <h2
-            className={`text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground leading-tight ${
-              locale === "am" ? "font-ethiopic" : "font-heading"
-            }`}
-          >
-            {locale === "am" ? "አብረን እንገንባ" : "Let's Build Something Exceptional"}
-          </h2>
+          <Reveal variant="ink" duration={900}>
+            <h2
+              className={`text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground leading-tight ${
+                locale === "am" ? "font-ethiopic" : "font-heading"
+              }`}
+            >
+              {locale === "am" ? "አብረን እንገንባ" : "Let's Build Something Exceptional"}
+            </h2>
+          </Reveal>
 
           <p className="text-base sm:text-lg text-muted font-light max-w-2xl leading-relaxed">
             {locale === "am"
@@ -126,7 +130,7 @@ export function ContactHub() {
             </a>
           </div>
         </div>
-      </div>
+      </RuledFrame>
     </section>
   );
 }

@@ -4,6 +4,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import { TibebCornerStamp } from "@/components/ui/tibeb-pattern";
 import { useLocale } from "@/lib/locale-context";
+import { Reveal } from "@/components/ui/reveal";
+import { RuledFrame } from "@/components/ui/ruled-frame";
 
 interface Testimonial {
   id: string;
@@ -111,29 +113,31 @@ export function TestimonialsCarousel() {
       {/* Header */}
       <div className="pb-8 border-b border-border/80">
         <div className="flex items-center gap-3 mb-2">
-          <TibebCornerStamp geezNumeral={locale === "am" ? "ምስክር" : "03"} />
+          <TibebCornerStamp geezNumeral="፫" />
           <span className="font-mono text-xs tracking-[0.25em] text-accent uppercase font-medium">
             {locale === "am" ? "የስራ ባልደረቦች እና ደንበኞች" : "Client & Engineering Endorsements"}
           </span>
         </div>
-        <h2
-          className={`text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground ${
-            locale === "am" ? "font-ethiopic" : "font-heading"
-          }`}
-        >
-          {locale === "am" ? "የስራ ምስክርነቶች" : "Recommendations"}
-        </h2>
+        <Reveal variant="ink" duration={900}>
+          <h2
+            className={`text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-foreground ${
+              locale === "am" ? "font-ethiopic" : "font-heading"
+            }`}
+          >
+            {locale === "am" ? "የስራ ምስክርነቶች" : "Recommendations"}
+          </h2>
+        </Reveal>
       </div>
 
-      {/* Carousel Card */}
-      <div
+      {/* Carousel Card with RuledFrame border */}
+      <RuledFrame
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
         onKeyDown={handleKeyDown}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
         tabIndex={0}
-        className="mt-12 relative p-8 sm:p-12 md:p-16 rounded-[1px] border-2 border-double border-border bg-transparent outline-none focus-visible:ring-1 focus-visible:ring-accent"
+        className="mt-12 relative p-8 sm:p-12 md:p-16 rounded-[1px] border border-border/80 bg-transparent outline-none focus-visible:ring-1 focus-visible:ring-accent"
         aria-roledescription="carousel"
         aria-label="Testimonials Carousel"
       >
@@ -199,7 +203,7 @@ export function TestimonialsCarousel() {
             </div>
           </div>
         </div>
-      </div>
+      </RuledFrame>
     </section>
   );
 }

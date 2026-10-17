@@ -21,6 +21,8 @@ uniform float uHoverSpring;
 uniform float uWakeTime; // 0.0 to 1.2s once on load, never loops
 uniform float uWakeDone; // 1.0 when wake ends, hands 100% control to hover
 
+uniform float uScroll;      // Damped scroll offset in pixels
+
 varying vec2 vUv;
 varying vec2 vGridNorm;
 varying float vHover;
@@ -29,7 +31,6 @@ varying vec2 vWorldPos;
 
 void main() {
   vGridNorm = aGridNorm;
-  vWorldPos = aBasePos.xy;
 
   // 1. Separate, finite wake wave (0.0 to 1.2s duration once on load)
   float wake = 0.0;
@@ -57,7 +58,10 @@ void main() {
   float scale = uCellSize * 0.72 * (1.0 + hover * 0.35 + wake * 0.18);
   float rise = hover * 4.0 + wake * 2.0;
 
-  vec3 worldPos = aBasePos + vec3(0.0, rise, 0.0);
+  // Gentle parallax to glyph layer (about 0.15x scroll speed)
+  float parallaxY = uScroll * 0.15;
+  vec3 worldPos = aBasePos + vec3(0.0, rise + parallaxY, 0.0);
+  vWorldPos = worldPos.xy;
 
   // 4. Camera-facing billboard sizing in orthographic pixel space
   vec4 mvPosition = modelViewMatrix * vec4(worldPos, 1.0);
@@ -77,6 +81,7 @@ precision highp float;
 
 uniform sampler2D uAtlas;
 uniform vec3 uInkColor;
+uniform vec3 uGoldColor;
 uniform float uRestOpacity;
 uniform float uHoverOpacity;
 uniform vec3 uFlagGreen;
@@ -88,6 +93,7 @@ uniform vec2 uPointer;
 uniform float uPointerActive;
 uniform vec2 uVignetteCenter;
 uniform vec2 uVignetteRadius;
+uniform float uVel;      // Damped scroll velocity (0.0 to 1.0)
 
 varying vec2 vUv;
 varying vec2 vGridNorm;
@@ -117,10 +123,17 @@ void main() {
   vec3 tintedInk = mix(colFlag, uInkColor, 0.60);
 
   // At rest: ink color with very faint cultural tint; hovered: full local tint color
-  vec3 finalColor = mix(uInkColor, tintedInk, clamp(0.18 + vHover * 0.82, 0.0, 1.0));
+  vec3 baseColor = mix(uInkColor, tintedInk, clamp(0.18 + vHover * 0.82, 0.0, 1.0));
 
-  // 2. Opacity: rest opacity (14-20% light, 12-18% dark), rising up to ~55% on hover
-  float targetOpacity = mix(uRestOpacity, uHoverOpacity, clamp(vHover * 1.25 + vWake * 0.7, 0.0, 1.0));
+  // Soft band of glyphs near viewport center warms toward gold as it moves, like ink soaking in
+  float distFromCenter = abs(vWorldPos.y) / 450.0;
+  float goldBand = smoothstep(1.0, 0.0, distFromCenter);
+  float scrollWarm = goldBand * (0.15 + clamp(uVel * 1.8, 0.0, 0.75));
+  vec3 finalColor = mix(baseColor, uGoldColor, clamp(scrollWarm, 0.0, 0.70));
+
+  // 2. Opacity: rest opacity (14-20% light, 12-18% dark), rising up to ~55% on hover, plus slight scroll brightening
+  float scrollBrightness = clamp(uVel * 0.12, 0.0, 0.15);
+  float targetOpacity = mix(uRestOpacity, uHoverOpacity, clamp(vHover * 1.25 + vWake * 0.7, 0.0, 1.0)) + scrollBrightness;
 
   // 3. Soft radial vignette protecting headline & CTA zone so text stays clean
   vec2 toVignette = (vGridNorm - uVignetteCenter) / uVignetteRadius;
